@@ -24,12 +24,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, isMobileMenuOpen, setI
 
   return (
     <aside className={`
-      fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-br from-primary-400 to-primary-600 text-white transform transition-transform duration-300 ease-in-out overflow-y-auto
+      fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-br from-primary-400 to-primary-600 text-white transform transition-transform duration-300 ease-in-out overflow-y-auto sidebar-scroll
       lg:translate-x-0 lg:static lg:h-screen lg:flex-shrink-0 shadow-2xl
       ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       print:hidden
     `}>
-      <div className="p-8 flex flex-col h-full relative overflow-hidden">
+      <div className="p-8 flex flex-col min-h-full relative overflow-hidden">
         
         {/* Decorative background circle */}
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl pointer-events-none"></div>
