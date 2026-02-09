@@ -24,6 +24,13 @@ export interface PortfolioItem {
   category: string;
 }
 
+export interface CertificateItem {
+  id: number;
+  title: string;
+  issuer: string;
+  link: string; // The preview link
+}
+
 export interface SkillCategory {
   title: string;
   skills: string[];

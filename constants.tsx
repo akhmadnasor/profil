@@ -9,9 +9,10 @@ import {
   Globe,
   Database,
   Cpu,
-  BookOpen
+  BookOpen,
+  FileText
 } from 'lucide-react';
-import { ExperienceItem, EducationItem, PortfolioItem, SkillCategory, AwardItem, NavItem } from './types';
+import { ExperienceItem, EducationItem, PortfolioItem, SkillCategory, AwardItem, NavItem, CertificateItem } from './types';
 
 export const PROFILE_IMAGE_URL = "https://lh3.googleusercontent.com/d/1RTNNgb3DpDV-vws_ZHeDNsTAsWqUyvUe";
 
@@ -30,6 +31,7 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'education', label: 'Pendidikan', icon: GraduationCap },
   { id: 'skills', label: 'Keahlian', icon: Code },
   { id: 'portfolio', label: 'Portofolio', icon: Layout },
+  { id: 'certificates', label: 'Sertifikat', icon: FileText },
   { id: 'awards', label: 'Penghargaan', icon: Award },
 ];
 
@@ -157,6 +159,30 @@ export const PORTFOLIO_DATA: PortfolioItem[] = [
     category: "Web Profile"
   }
 ];
+
+// Helper to convert Google Drive 'view' links to 'preview' links
+const getPreviewLink = (id: string) => `https://drive.google.com/file/d/${id}/preview`;
+
+export const CERTIFICATES_DATA: CertificateItem[] = [
+  { id: 1, title: "Sertifikat Guru Penggerak / Pendidik", issuer: "Kemdikbudristek", link: getPreviewLink("1exvRWt0ve9YjUH00gKkwlS1w0iKrDBNR") },
+  { id: 2, title: "Sertifikat Pelatihan Inovasi", issuer: "Lembaga Pelatihan", link: getPreviewLink("1Mb2rlg6Hqf6or9_j4WgVzNq4ATzvg7ER") },
+  { id: 3, title: "Sertifikat Kompetensi Teknis", issuer: "Penyelenggara Teknis", link: getPreviewLink("1AHym_vd4kHiewfg4hilYZIh4nd0wfDjZ") },
+  { id: 4, title: "Sertifikat Pengembangan Diri", issuer: "Institusi Pendidikan", link: getPreviewLink("1pWaclk7MSTJ17CACtr3m-D7pK5OihMmH") },
+  { id: 5, title: "Piagam Penghargaan Pendidikan", issuer: "Dinas Pendidikan", link: getPreviewLink("1rRicJXgAP_bwWaVcoaOxUy6AKENV6oPa") },
+  { id: 6, title: "Sertifikat Workshop Digital", issuer: "Platform Merdeka Mengajar", link: getPreviewLink("1LR2UpootbMnL1O_vaNpWm0FbSnZnfDqZ") },
+  { id: 7, title: "Sertifikat Seminar Nasional", issuer: "Universitas Penyelenggara", link: getPreviewLink("1BR2MbTK-UVGVsHH5cJxBK5aGvv4w-YWS") },
+  { id: 8, title: "Sertifikat Pelatihan Manajemen", issuer: "Badan Diklat", link: getPreviewLink("1_rf2VV6a08cRYTijBi9EtyfX5-vdugVk") },
+  { id: 9, title: "Sertifikat Kursus Mahir Dasar", issuer: "Pramuka / Organisasi", link: getPreviewLink("19nRNWd9gXvTndmGug6u1baO2ZbRCk0c9") },
+  { id: 10, title: "Sertifikat Literasi Digital", issuer: "Kominfo / Siberkreasi", link: getPreviewLink("1N3hDmqJw8qaCsZB4ufhlVlcOjp_0gvKv") },
+  { id: 11, title: "Sertifikat Pengembangan Kurikulum", issuer: "Pusat Kurikulum", link: getPreviewLink("1l_8cO8lITiOCF6bMjpJgDoG7CIHj96ro") },
+  { id: 12, title: "Sertifikat Asesmen Kompetensi", issuer: "Kemdikbud", link: getPreviewLink("1IqZvvX170GRDpthoxTZL1RWW8DuoyU8g") },
+  { id: 13, title: "Sertifikat Kepemimpinan", issuer: "Lembaga Administrasi Negara", link: getPreviewLink("1_EKzlovAtjciyy5v_nAVmXMDetvmtYh7") },
+  { id: 14, title: "Sertifikat Karya Ilmiah", issuer: "Jurnal Pendidikan", link: getPreviewLink("1npBrC4Urk_p72kK3xjO_zAHWvvRoSc71") },
+  { id: 15, title: "Sertifikat Pemanfaatan AI", issuer: "Google for Education", link: getPreviewLink("1WytK0guhbBblzGJ9yU_s7D8t5rEDqy9t") },
+  { id: 16, title: "Sertifikat Pengabdian Masyarakat", issuer: "Pemerintah Daerah", link: getPreviewLink("19nHJtwBpcrmD7qUhIE66q8r_Pamppp8f") },
+];
+
+export const GOOGLE_DRIVE_FOLDER = "https://drive.google.com/drive/folders/1nQOwjRwjHBCz0S8qSmugeHE444KXKCg5";
 
 export const AWARDS_DATA: AwardItem[] = [
   {

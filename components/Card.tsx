@@ -1,6 +1,6 @@
 import React from 'react';
-import { ExternalLink, Calendar, MapPin } from 'lucide-react';
-import { PortfolioItem, ExperienceItem, AwardItem } from '../types';
+import { ExternalLink, Calendar, MapPin, Eye, FileText, ChevronRight } from 'lucide-react';
+import { PortfolioItem, ExperienceItem, AwardItem, CertificateItem } from '../types';
 
 interface PortfolioCardProps {
   item: PortfolioItem;
@@ -95,6 +95,31 @@ export const AwardCard: React.FC<AwardCardProps> = ({ item }) => (
           </p>
         </div>
       )}
+    </div>
+  </div>
+);
+
+interface CertificateCardProps {
+  item: CertificateItem;
+  onClick: (item: CertificateItem) => void;
+}
+
+export const CertificateCard: React.FC<CertificateCardProps> = ({ item, onClick }) => (
+  <div 
+    onClick={() => onClick(item)}
+    className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg hover:border-primary-200 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex items-center gap-4 print:break-inside-avoid print:border-slate-300"
+  >
+    <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-primary-500 group-hover:text-white transition-colors shrink-0 print:hidden">
+      <FileText className="w-6 h-6" />
+    </div>
+    <div className="flex-1 min-w-0">
+      <h4 className="font-bold text-slate-800 text-sm md:text-base leading-tight group-hover:text-primary-700 transition-colors truncate print:text-black">
+        {item.title}
+      </h4>
+      <p className="text-xs text-slate-500 mt-1 truncate print:text-black">{item.issuer}</p>
+    </div>
+    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-primary-50 group-hover:text-primary-500 transition-colors print:hidden">
+      <Eye className="w-4 h-4" />
     </div>
   </div>
 );

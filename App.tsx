@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Menu, X, GraduationCap, CheckCircle2, Users, Phone, Mail, MapPin,
-  User, Briefcase, Code, Layout, Award
+  User, Briefcase, Code, Layout, Award, FileText, ChevronRight, Download
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Section from './components/Section';
-import { PortfolioCard, ExperienceCard, AwardCard } from './components/Card';
+import { PortfolioCard, ExperienceCard, AwardCard, CertificateCard } from './components/Card';
 import { 
   CONTACT_INFO, 
   EXPERIENCE_DATA, 
@@ -14,17 +14,21 @@ import {
   PORTFOLIO_DATA, 
   AWARDS_DATA, 
   ORGANIZATION_DATA,
-  PROFILE_IMAGE_URL
+  PROFILE_IMAGE_URL,
+  CERTIFICATES_DATA,
+  GOOGLE_DRIVE_FOLDER
 } from './constants';
+import { CertificateItem } from './types';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState('about');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [selectedCertificate, setSelectedCertificate] = useState<CertificateItem | null>(null);
 
   // Scroll spy to update active section
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['about', 'experience', 'education', 'skills', 'portfolio', 'awards'];
+      const sections = ['about', 'experience', 'education', 'skills', 'portfolio', 'certificates', 'awards'];
       const scrollPosition = window.scrollY + 200; // Offset
 
       for (const section of sections) {
@@ -41,6 +45,15 @@ const App: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Handle closing modal with Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedCertificate(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   return (
@@ -63,6 +76,56 @@ const App: React.FC = () => {
           className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden transition-opacity print:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
+      )}
+
+      {/* Certificate Preview Modal */}
+      {selectedCertificate && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
+              <div>
+                <h3 className="font-bold text-lg text-slate-800 line-clamp-1">{selectedCertificate.title}</h3>
+                <p className="text-xs text-slate-500">{selectedCertificate.issuer}</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <a 
+                  href={selectedCertificate.link.replace('/preview', '/view')} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="p-2 text-slate-500 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-colors hidden sm:flex"
+                  title="Buka di tab baru"
+                >
+                  <Download className="w-5 h-5" />
+                </a>
+                <button 
+                  onClick={() => setSelectedCertificate(null)}
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-sm transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                  Kembali
+                </button>
+              </div>
+            </div>
+            
+            {/* Iframe Content */}
+            <div className="flex-1 bg-slate-100 relative">
+              <iframe 
+                src={selectedCertificate.link}
+                className="w-full h-full border-0"
+                title="Certificate Preview"
+                allow="autoplay"
+              ></iframe>
+              {/* Loading Indicator (hidden by iframe if loads fast) */}
+              <div className="absolute inset-0 flex items-center justify-center z-0 text-slate-400">
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin mb-3"></div>
+                  <span className="text-sm">Memuat Sertifikat...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Sidebar Navigation - Controlled by CSS to be hidden on print */}
@@ -219,6 +282,30 @@ const App: React.FC = () => {
               {PORTFOLIO_DATA.map((item) => (
                 <PortfolioCard key={item.id} item={item} />
               ))}
+            </div>
+          </Section>
+
+           {/* Certificates Section (NEW) */}
+           <Section id="certificates" title="Sertifikat & Pelatihan" icon={FileText}>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-8 print:grid-cols-2 print:gap-2">
+              {CERTIFICATES_DATA.slice(0, 12).map((cert) => (
+                <CertificateCard 
+                  key={cert.id} 
+                  item={cert} 
+                  onClick={setSelectedCertificate}
+                />
+              ))}
+            </div>
+            <div className="flex justify-center mt-6 print:hidden">
+              <a 
+                href={GOOGLE_DRIVE_FOLDER}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-slate-600 hover:text-primary-600 hover:border-primary-200 hover:shadow-md transition-all group"
+              >
+                Lihat Seluruh Sertifikat di Google Drive
+                <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </a>
             </div>
           </Section>
 
