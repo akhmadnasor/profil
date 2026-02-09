@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Download } from 'lucide-react';
+import { Mail, Phone, MapPin, Download, Printer } from 'lucide-react';
 import { CONTACT_INFO, NAV_ITEMS, PROFILE_IMAGE_URL } from '../constants';
 
 interface SidebarProps {
@@ -18,11 +18,16 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, isMobileMenuOpen, setI
     }
   };
 
+  const handleDownloadPDF = () => {
+    window.print();
+  };
+
   return (
     <aside className={`
       fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-br from-primary-400 to-primary-600 text-white transform transition-transform duration-300 ease-in-out overflow-y-auto
       lg:translate-x-0 lg:static lg:h-screen lg:flex-shrink-0 shadow-2xl
       ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      print:hidden
     `}>
       <div className="p-8 flex flex-col h-full relative overflow-hidden">
         
@@ -94,9 +99,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, isMobileMenuOpen, setI
         </div>
 
         {/* CV Download Button */}
-        <button className="mt-8 w-full flex items-center justify-center bg-white text-primary-600 py-3.5 px-4 rounded-xl font-bold text-sm hover:bg-primary-50 hover:shadow-xl transition-all transform hover:-translate-y-1 active:translate-y-0 relative z-10">
-          <Download className="w-4 h-4 mr-2" />
-          Unduh CV PDF
+        <button 
+          onClick={handleDownloadPDF}
+          className="mt-8 w-full flex items-center justify-center bg-white text-primary-600 py-3.5 px-4 rounded-xl font-bold text-sm hover:bg-primary-50 hover:shadow-xl transition-all transform hover:-translate-y-1 active:translate-y-0 relative z-10"
+        >
+          <Printer className="w-4 h-4 mr-2" />
+          Simpan PDF / Cetak
         </button>
       </div>
     </aside>

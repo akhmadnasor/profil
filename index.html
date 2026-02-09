@@ -12,6 +12,9 @@
       tailwind.config = {
         theme: {
           extend: {
+            screens: {
+              'print': {'raw': 'print'},
+            },
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
             },
@@ -50,6 +53,33 @@
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
+      }
+      
+      /* Print specific styles for PDF generation */
+      @media print {
+        @page {
+          margin: 0.5cm;
+          size: A4;
+        }
+        body {
+          background: white !important;
+          color: black !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        /* Hide scrollbars and ensure full height */
+        html, body, #root, main {
+          height: auto !important;
+          width: 100% !important;
+          overflow: visible !important;
+          display: block !important;
+        }
+        
+        /* Ensure links are readable */
+        a {
+          text-decoration: none !important;
+          color: #0284c7 !important; /* primary-600 */
+        }
       }
     </style>
   <script type="importmap">
