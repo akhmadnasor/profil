@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, GraduationCap, CheckCircle2, Users, Phone, Mail, MapPin } from 'lucide-react';
+import { 
+  Menu, X, GraduationCap, CheckCircle2, Users, Phone, Mail, MapPin,
+  User, Briefcase, Code, Layout, Award
+} from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Section from './components/Section';
 import { PortfolioCard, ExperienceCard, AwardCard } from './components/Card';
@@ -104,7 +107,7 @@ const App: React.FC = () => {
           </div>
 
           {/* About Section */}
-          <Section id="about" title="Profil Profesional">
+          <Section id="about" title="Profil Profesional" icon={User}>
             <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100 hover:shadow-md transition-shadow print:shadow-none print:border-none print:p-0">
                <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                   <div className="md:hidden w-full flex justify-center mb-4 relative print:hidden">
@@ -143,7 +146,7 @@ const App: React.FC = () => {
           </Section>
 
           {/* Experience Section */}
-          <Section id="experience" title="Pengalaman Kerja">
+          <Section id="experience" title="Pengalaman Kerja" icon={Briefcase}>
             <div className="space-y-6 print:space-y-4">
               {EXPERIENCE_DATA.map((item) => (
                 <ExperienceCard key={item.id} item={item} />
@@ -152,7 +155,7 @@ const App: React.FC = () => {
           </Section>
 
           {/* Education Section */}
-          <Section id="education" title="Pendidikan">
+          <Section id="education" title="Pendidikan" icon={GraduationCap}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:gap-4">
               {EDUCATION_DATA.map((edu) => (
                 <div key={edu.id} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary-200 hover:shadow-lg transition-all duration-300 group print:border-slate-300 print:shadow-none print:p-4 print:break-inside-avoid">
@@ -182,7 +185,7 @@ const App: React.FC = () => {
           </Section>
 
           {/* Skills Section */}
-          <Section id="skills" title="Keahlian Utama">
+          <Section id="skills" title="Keahlian Utama" icon={Code}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 print:grid-cols-2 print:gap-4">
               {SKILLS_DATA.map((category, idx) => (
                 <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-shadow print:shadow-none print:border-slate-300 print:break-inside-avoid">
@@ -210,7 +213,7 @@ const App: React.FC = () => {
           </Section>
 
           {/* Portfolio Section */}
-          <Section id="portfolio" title="Portofolio Inovasi Digital">
+          <Section id="portfolio" title="Portofolio Inovasi Digital" icon={Layout}>
             <p className="text-slate-600 mb-10 max-w-2xl text-lg print:text-black print:text-sm print:mb-4">Berikut adalah beberapa solusi digital yang telah saya kembangkan:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 print:grid-cols-2 print:gap-4">
               {PORTFOLIO_DATA.map((item) => (
@@ -220,7 +223,7 @@ const App: React.FC = () => {
           </Section>
 
           {/* Awards & Organization Section */}
-          <Section id="awards" title="Penghargaan & Organisasi">
+          <Section id="awards" title="Penghargaan & Organisasi" icon={Award}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 print:grid-cols-2 print:gap-6">
               <div className="lg:col-span-2 space-y-5 print:space-y-4 print:col-span-1">
                 <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center print:mb-2 print:text-black">
