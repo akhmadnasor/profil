@@ -6,6 +6,7 @@ export interface ExperienceItem {
   institution: string;
   period: string;
   description: string[];
+  tag?: string;
 }
 
 export interface EducationItem {
@@ -21,26 +22,32 @@ export interface PortfolioItem {
   title: string;
   description: string;
   link: string;
-  category: string;
+  category: 'AI Tool' | 'Manajemen Sekolah' | 'Asesmen & CBT' | 'Web Edukasi';
+  badge?: string;
+  features?: string[];
+  techStack?: string[];
+  isHighlighted?: boolean;
 }
 
 export interface CertificateItem {
   id: number;
   title: string;
   issuer: string;
-  link: string; // The preview link
+  link: string;
+  year?: string;
 }
 
 export interface SkillCategory {
   title: string;
   skills: string[];
   icon: LucideIcon;
+  description?: string;
 }
 
 export interface NavItem {
   id: string;
   label: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
 }
 
 export interface AwardItem {
@@ -49,4 +56,6 @@ export interface AwardItem {
   issuer: string;
   year: string;
   description?: string;
+  isSpecial?: boolean;
+  highlightText?: string;
 }

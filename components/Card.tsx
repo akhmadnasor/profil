@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Calendar, MapPin, Eye, FileText, ChevronRight } from 'lucide-react';
+import { ExternalLink, Calendar, Eye, FileText, CheckCircle2, Trophy, Award, ArrowUpRight } from 'lucide-react';
 import { PortfolioItem, ExperienceItem, AwardItem, CertificateItem } from '../types';
 
 interface PortfolioCardProps {
@@ -7,35 +7,91 @@ interface PortfolioCardProps {
 }
 
 export const PortfolioCard: React.FC<PortfolioCardProps> = ({ item }) => (
-  <a 
-    href={item.link} 
-    target="_blank" 
-    rel="noopener noreferrer"
-    className="group block bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-slate-100 overflow-hidden h-full flex flex-col print:break-inside-avoid print:border-slate-300 print:shadow-none"
-  >
-    <div className="h-2 bg-gradient-to-r from-primary-400 to-primary-600 w-full print:bg-primary-600"></div>
-    <div className="p-7 flex-grow flex flex-col print:p-4">
-      <div className="flex justify-between items-start mb-4">
-        <span className="text-xs font-bold px-3 py-1 bg-primary-50 text-primary-600 rounded-full border border-primary-100 print:border-slate-300 print:bg-transparent print:text-black">
-          {item.category}
-        </span>
-        <div className="p-1.5 rounded-full bg-slate-50 group-hover:bg-primary-50 transition-colors print:hidden">
-          <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-primary-600 transition-colors" />
+  <div className={`
+    group relative bg-white rounded-2xl border-2 border-stone-200 flex flex-col justify-between overflow-hidden transition-all duration-200
+    shadow-[0_6px_0_0_#e7e5e4,0_12px_24px_-4px_rgba(28,25,23,0.05)] 
+    hover:shadow-[0_10px_0_0_#d6d3d1,0_20px_30px_-6px_rgba(28,25,23,0.09)] 
+    hover:-translate-y-1.5 
+    ${item.isHighlighted ? 'border-stone-300 ring-1 ring-emerald-100' : ''}
+  `}>
+    {/* Subtle 3D Top Accent Line */}
+    <div className={`h-1.5 w-full ${item.isHighlighted ? 'bg-gradient-to-r from-emerald-800 via-teal-600 to-amber-500' : 'bg-stone-200'}`}></div>
+
+    <div className="p-6 md:p-7 flex-1 flex flex-col">
+      {/* Category & Badge */}
+      <div className="flex items-center justify-between gap-3 mb-3 text-xs text-stone-500">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-emerald-800 uppercase tracking-wider text-[11px]">{item.category}</span>
+          {item.badge && (
+            <>
+              <span aria-hidden="true" className="text-stone-300">·</span>
+              <span className="text-stone-600 font-medium">{item.badge}</span>
+            </>
+          )}
         </div>
+        <a 
+          href={item.link} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="p-1 rounded-md text-stone-400 hover:text-stone-900 hover:bg-stone-100 transition-colors"
+          title="Buka Langsung"
+        >
+          <ExternalLink className="w-4 h-4" />
+        </a>
       </div>
-      <h3 className="text-xl font-bold text-slate-800 mb-3 group-hover:text-primary-600 transition-colors print:text-black">
-        {item.title}
+
+      {/* Title */}
+      <h3 className="text-lg md:text-xl font-extrabold text-stone-900 mb-2 leading-snug">
+        <a 
+          href={item.link} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="hover:text-emerald-800 transition-colors inline-flex items-center gap-1 group/title"
+        >
+          <span>{item.title}</span>
+          <ArrowUpRight className="w-4 h-4 opacity-0 group-hover/title:opacity-100 group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5 transition-all text-emerald-700" />
+        </a>
       </h3>
-      <p className="text-slate-600 text-sm leading-relaxed mb-4 print:text-black">
+
+      {/* Description */}
+      <p className="text-stone-600 text-sm leading-relaxed mb-5">
         {item.description}
       </p>
-      <div className="mt-auto text-primary-500 text-sm font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 print:opacity-100 print:translate-y-0 print:text-blue-700">
-        <span className="print:hidden">Kunjungi Project</span>
-        <span className="hidden print:inline text-xs underline">{item.link}</span>
-        <span className="ml-1 print:hidden">→</span>
-      </div>
+
+      {/* Features List */}
+      {item.features && item.features.length > 0 && (
+        <div className="mt-auto pt-4 border-t border-stone-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-stone-600">
+            {item.features.map((feat, idx) => (
+              <div key={idx} className="flex items-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-2 shrink-0"></span>
+                <span className="truncate">{feat}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
-  </a>
+
+    {/* Bottom 3D Action Footer */}
+    <div className="px-6 md:px-7 py-3.5 bg-stone-50/70 border-t border-stone-200/80 flex items-center justify-between text-xs">
+      {/* 3D "Buka" Button */}
+      <a 
+        href={item.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-800 hover:bg-emerald-900 active:bg-emerald-950 text-white font-bold rounded-lg shadow-[0_3px_0_0_#064e3b] hover:shadow-[0_2px_0_0_#064e3b] active:shadow-none hover:translate-y-[1px] active:translate-y-[3px] transition-all text-xs"
+      >
+        <span>Buka</span>
+        <span>→</span>
+      </a>
+
+      {/* URL indicator */}
+      <span className="text-stone-400 font-mono text-[11px] truncate max-w-[170px] select-all">
+        {item.link.replace('https://', '')}
+      </span>
+    </div>
+  </div>
 );
 
 interface ExperienceCardProps {
@@ -43,29 +99,35 @@ interface ExperienceCardProps {
 }
 
 export const ExperienceCard: React.FC<ExperienceCardProps> = ({ item }) => (
-  <div className="relative pl-10 border-l-[3px] border-primary-100 last:border-0 pb-12 last:pb-0 group print:break-inside-avoid print:pb-6 print:border-l-2 print:border-slate-300">
-    {/* Timeline Dot */}
-    <div className="absolute -left-[11px] top-0 w-[19px] h-[19px] rounded-full bg-white border-[5px] border-primary-400 group-hover:border-primary-600 group-hover:scale-110 transition-all shadow-sm z-10 print:border-black print:bg-black print:w-4 print:h-4 print:-left-[9px]"></div>
+  <div className="relative pl-6 md:pl-8 border-l-2 border-stone-200 pb-8 last:pb-0 group">
+    {/* Clean 3D Minimalist Dot */}
+    <div className="absolute -left-[7px] top-1.5 w-3.5 h-3.5 rounded-full bg-white border-2 border-stone-400 group-hover:border-emerald-800 group-hover:bg-emerald-800 shadow-[0_2px_0_0_#d6d3d1] transition-all"></div>
     
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-primary-200 hover:shadow-md transition-all duration-300 relative print:shadow-none print:border-slate-300 print:p-4">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-        <h3 className="text-lg font-bold text-slate-800 group-hover:text-primary-700 transition-colors print:text-black">{item.role}</h3>
-        <div className="flex items-center text-xs font-semibold px-2.5 py-1 bg-primary-50 text-primary-600 rounded-md w-fit mt-2 sm:mt-0 print:bg-transparent print:text-black print:p-0 print:border print:border-slate-300 print:px-2">
-          <Calendar className="w-3.5 h-3.5 mr-1.5" />
+    <div>
+      <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
+        <h3 className="text-base font-bold text-stone-900 group-hover:text-emerald-800 transition-colors">
+          {item.role}
+        </h3>
+        <div className="text-xs font-mono text-stone-500 font-medium">
           {item.period}
         </div>
       </div>
       
-      <div className="text-primary-600 font-medium mb-4 text-sm flex items-center print:text-black print:font-bold">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary-400 mr-2 print:hidden"></span>
-        {item.institution}
+      <div className="text-xs font-semibold text-emerald-800 mb-3 flex items-center gap-2">
+        <span>{item.institution}</span>
+        {item.tag && (
+          <>
+            <span aria-hidden="true" className="text-stone-300">·</span>
+            <span className="text-stone-500 font-normal">{item.tag}</span>
+          </>
+        )}
       </div>
       
-      <ul className="space-y-3 print:space-y-1">
+      <ul className="space-y-1.5">
         {item.description.map((desc, idx) => (
-          <li key={idx} className="flex items-start text-sm text-slate-600 leading-relaxed print:text-black">
-            <span className="mr-3 mt-1.5 w-1.5 h-1.5 bg-slate-300 rounded-full flex-shrink-0 group-hover:bg-primary-400 transition-colors print:bg-black"></span>
-            {desc}
+          <li key={idx} className="flex items-start text-xs sm:text-sm text-stone-600 leading-relaxed">
+            <span className="mr-2 text-stone-300">•</span>
+            <span>{desc}</span>
           </li>
         ))}
       </ul>
@@ -77,27 +139,48 @@ interface AwardCardProps {
   item: AwardItem;
 }
 
-export const AwardCard: React.FC<AwardCardProps> = ({ item }) => (
-  <div className="flex items-start bg-white p-5 rounded-xl border border-slate-100 hover:border-primary-200 hover:shadow-lg transition-all duration-300 group print:break-inside-avoid print:shadow-none print:border-slate-300 print:p-3">
-    <div className="flex-shrink-0 mr-5">
-      <div className="w-12 h-12 bg-primary-50 rounded-2xl flex items-center justify-center text-primary-600 group-hover:bg-primary-600 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-primary-200 print:bg-slate-100 print:text-black print:border print:border-slate-200">
-        <span className="font-bold text-lg">#{item.id}</span>
-      </div>
-    </div>
-    <div>
-      <h4 className="font-bold text-slate-800 text-lg group-hover:text-primary-700 transition-colors print:text-black">{item.title}</h4>
-      <div className="text-sm text-primary-600 font-medium mb-1 print:text-black">{item.issuer}</div>
-      <div className="text-xs text-slate-400 font-medium uppercase tracking-wider print:text-slate-600">{item.year}</div>
-      {item.description && (
-        <div className="mt-3 pt-3 border-t border-slate-100 print:border-slate-200">
-          <p className="text-sm text-slate-600 italic print:text-black">
-            "{item.description}"
-          </p>
+export const AwardCard: React.FC<AwardCardProps> = ({ item }) => {
+  const isSpecial = item.isSpecial;
+
+  return (
+    <div className={`
+      p-5 md:p-6 rounded-2xl border-2 transition-all duration-200
+      ${isSpecial 
+        ? 'bg-[#0f241e] text-white border-[#173a31] shadow-[0_5px_0_0_#071612] hover:shadow-[0_7px_0_0_#071612] hover:-translate-y-0.5' 
+        : 'bg-white text-stone-900 border-stone-200 shadow-[0_4px_0_0_#e7e5e4] hover:shadow-[0_6px_0_0_#d6d3d1] hover:-translate-y-0.5'}
+    `}>
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-2">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className={`text-xs font-mono font-bold ${isSpecial ? 'text-amber-400' : 'text-stone-500'}`}>
+              {item.year}
+            </span>
+            {item.highlightText && (
+              <>
+                <span aria-hidden="true" className="text-stone-500">·</span>
+                <span className={`text-xs font-semibold ${isSpecial ? 'text-emerald-300' : 'text-emerald-800'}`}>
+                  {item.highlightText}
+                </span>
+              </>
+            )}
+          </div>
+          <h4 className={`text-base md:text-lg font-bold ${isSpecial ? 'text-white' : 'text-stone-900'}`}>
+            {item.title}
+          </h4>
         </div>
+        <span className={`text-xs ${isSpecial ? 'text-stone-300' : 'text-stone-500'} shrink-0 font-medium`}>
+          {item.issuer}
+        </span>
+      </div>
+
+      {item.description && (
+        <p className={`text-xs sm:text-sm leading-relaxed mt-2 ${isSpecial ? 'text-stone-300' : 'text-stone-600'}`}>
+          {item.description}
+        </p>
       )}
     </div>
-  </div>
-);
+  );
+};
 
 interface CertificateCardProps {
   item: CertificateItem;
@@ -107,18 +190,15 @@ interface CertificateCardProps {
 export const CertificateCard: React.FC<CertificateCardProps> = ({ item, onClick }) => (
   <div 
     onClick={() => onClick(item)}
-    className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg hover:border-primary-200 hover:-translate-y-1 transition-all duration-300 cursor-pointer group flex items-center gap-4 print:break-inside-avoid print:border-slate-300"
+    className="bg-white p-4 rounded-xl border-2 border-stone-200 shadow-[0_3px_0_0_#e7e5e4] hover:shadow-[0_5px_0_0_#d6d3d1] hover:border-emerald-300 hover:-translate-y-0.5 active:translate-y-0 active:shadow-none transition-all cursor-pointer group flex items-center justify-between gap-3"
   >
-    <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-primary-500 group-hover:text-white transition-colors shrink-0 print:hidden">
-      <FileText className="w-6 h-6" />
-    </div>
     <div className="flex-1 min-w-0">
-      <h4 className="font-bold text-slate-800 text-sm md:text-base leading-tight group-hover:text-primary-700 transition-colors truncate print:text-black">
+      <h4 className="font-semibold text-stone-800 text-xs sm:text-sm truncate group-hover:text-emerald-800 transition-colors">
         {item.title}
       </h4>
-      <p className="text-xs text-slate-500 mt-1 truncate print:text-black">{item.issuer}</p>
+      <p className="text-[11px] text-stone-400 truncate mt-0.5">{item.issuer}</p>
     </div>
-    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-primary-50 group-hover:text-primary-500 transition-colors print:hidden">
+    <div className="text-stone-300 group-hover:text-emerald-700 transition-colors shrink-0">
       <Eye className="w-4 h-4" />
     </div>
   </div>

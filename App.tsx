@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Menu, X, GraduationCap, CheckCircle2, Users, Phone, Mail, MapPin,
-  User, Briefcase, Code, Layout, Award, FileText, ChevronRight, Download
+  X, GraduationCap, Users, Phone, Mail, MapPin,
+  Briefcase, Code, Layout, Award, FileText, Download,
+  ExternalLink, Trophy, MessageCircle, ArrowRight
 } from 'lucide-react';
-import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
 import Section from './components/Section';
 import { PortfolioCard, ExperienceCard, AwardCard, CertificateCard } from './components/Card';
 import { 
@@ -22,14 +23,14 @@ import { CertificateItem } from './types';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState('about');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedCertificate, setSelectedCertificate] = useState<CertificateItem | null>(null);
+  const [portfolioFilter, setPortfolioFilter] = useState<string>('all');
 
-  // Scroll spy to update active section
+  // Scroll spy to update active section in navbar
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['about', 'experience', 'education', 'skills', 'portfolio', 'certificates', 'awards'];
-      const scrollPosition = window.scrollY + 200; // Offset
+      const sections = ['about', 'portfolio', 'awards', 'experience', 'education', 'skills', 'certificates'];
+      const scrollPosition = window.scrollY + 180;
 
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -56,300 +57,414 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  return (
-    <div className="flex min-h-screen bg-slate-50 font-sans selection:bg-primary-200 selection:text-primary-900 print:bg-white print:block">
-      
-      {/* Mobile Header Toggle - Hidden on Print */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white/90 backdrop-blur-md shadow-sm z-40 flex items-center justify-between px-6 border-b border-slate-100 print:hidden">
-        <span className="font-bold text-primary-600 text-lg">CV Akhmad Nasor</span>
-        <button 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 -mr-2 text-slate-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors focus:outline-none"
-        >
-          {isMobileMenuOpen ? <X /> : <Menu />}
-        </button>
-      </div>
+  // Filtered portfolio
+  const filteredPortfolio = PORTFOLIO_DATA.filter(item => {
+    if (portfolioFilter === 'all') return true;
+    if (portfolioFilter === 'ai') return item.category === 'AI Tool';
+    if (portfolioFilter === 'management') return item.category === 'Manajemen Sekolah';
+    if (portfolioFilter === 'assessment') return item.category === 'Asesmen & CBT';
+    return true;
+  });
 
-      {/* Overlay for mobile menu - Hidden on Print */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 lg:hidden transition-opacity print:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
-        ></div>
-      )}
+  return (
+    <div className="min-h-screen bg-[#FAF9F6] font-sans selection:bg-emerald-100 selection:text-emerald-950 text-stone-800">
+      
+      {/* Top Navigation */}
+      <Navbar activeSection={activeSection} />
 
       {/* Certificate Preview Modal */}
       {selectedCertificate && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden relative animate-in zoom-in-95 duration-200">
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="bg-white w-full max-w-4xl h-[82vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden border-2 border-stone-200">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200 bg-[#FAF9F6]">
               <div>
-                <h3 className="font-bold text-lg text-slate-800 line-clamp-1">{selectedCertificate.title}</h3>
-                <p className="text-xs text-slate-500">{selectedCertificate.issuer}</p>
+                <h3 className="font-bold text-base text-stone-900 line-clamp-1">{selectedCertificate.title}</h3>
+                <p className="text-xs text-stone-500">{selectedCertificate.issuer}</p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <a 
                   href={selectedCertificate.link.replace('/preview', '/view')} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="p-2 text-slate-500 hover:text-primary-600 hover:bg-primary-50 rounded-full transition-colors hidden sm:flex"
-                  title="Buka di tab baru"
+                  className="p-1.5 text-stone-400 hover:text-stone-700 rounded-lg hover:bg-stone-200/60 transition-colors hidden sm:flex"
+                  title="Buka tab baru"
                 >
-                  <Download className="w-5 h-5" />
+                  <Download className="w-4 h-4" />
                 </a>
                 <button 
                   onClick={() => setSelectedCertificate(null)}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-sm transition-colors"
+                  className="p-1.5 text-stone-500 hover:text-stone-900 hover:bg-stone-200/60 rounded-lg transition-colors"
+                  aria-label="Tutup Pratinjau"
                 >
-                  <X className="w-4 h-4" />
-                  Kembali
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
             
-            {/* Iframe Content */}
-            <div className="flex-1 bg-slate-100 relative">
+            {/* Modal Content */}
+            <div className="flex-1 bg-stone-100 relative">
               <iframe 
                 src={selectedCertificate.link}
                 className="w-full h-full border-0"
-                title="Certificate Preview"
+                title="Pratinjau Sertifikat"
                 allow="autoplay"
               ></iframe>
-              {/* Loading Indicator (hidden by iframe if loads fast) */}
-              <div className="absolute inset-0 flex items-center justify-center z-0 text-slate-400">
-                <div className="flex flex-col items-center">
-                  <div className="w-8 h-8 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin mb-3"></div>
-                  <span className="text-sm">Memuat Sertifikat...</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Sidebar Navigation - Controlled by CSS to be hidden on print */}
-      <Sidebar 
-        activeSection={activeSection} 
-        isMobileMenuOpen={isMobileMenuOpen} 
-        setIsMobileMenuOpen={setIsMobileMenuOpen} 
-      />
+      {/* Main Content Container */}
+      <main className="max-w-5xl mx-auto px-6 py-12 md:py-16">
+        
+        {/* Hero Section */}
+        <section id="about" className="pt-4 pb-16 border-b border-stone-200">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 items-center">
+            
+            {/* Left Column: Headline & Bio (7 cols) */}
+            <div className="md:col-span-7">
+              {/* Quiet Kicker with Motto */}
+              <div className="flex flex-wrap items-center gap-2 mb-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200/90 rounded-lg text-xs font-bold tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                  Motto: "NGALAH BAROKAH"
+                </span>
+                <span className="text-xs font-medium text-stone-500 hidden sm:inline">
+                  · Juara 1 INOPAMAS 2026 · Top 5 BRIDA Jatim
+                </span>
+              </div>
 
-      {/* Main Content */}
-      <main className="flex-1 lg:h-screen lg:overflow-y-auto scroll-smooth print:h-auto print:overflow-visible print:w-full print:block">
-        <div className="max-w-5xl mx-auto px-6 py-24 lg:py-20 lg:px-12 print:max-w-none print:w-full print:px-0 print:py-0">
-          
-          {/* Header ONLY for Print (Because sidebar is hidden) */}
-          <div className="hidden print:flex flex-row items-center gap-6 mb-8 border-b-2 border-slate-800 pb-6">
-             <div className="w-24 h-24 shrink-0 rounded-full overflow-hidden border-2 border-slate-300">
-                <img 
-                  src={PROFILE_IMAGE_URL} 
-                  alt={CONTACT_INFO.name}
-                  className="w-full h-full object-cover"
-                />
-             </div>
-             <div className="flex-1">
-                <h1 className="text-3xl font-bold text-slate-900 mb-1 uppercase tracking-wide leading-tight">{CONTACT_INFO.name}</h1>
-                <p className="text-lg text-primary-700 font-bold mb-3">{CONTACT_INFO.role}</p>
-                
-                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-700">
-                  <div className="flex items-center">
-                    <Phone className="w-3 h-3 mr-1.5" />
-                    {CONTACT_INFO.phone}
+              {/* Title & Name */}
+              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-stone-950 leading-tight mb-3">
+                {CONTACT_INFO.name}
+              </h1>
+
+              {/* Role */}
+              <p className="text-lg md:text-xl font-semibold text-emerald-900 mb-6">
+                {CONTACT_INFO.role}
+              </p>
+
+              {/* Executive Summary */}
+              <p className="text-stone-600 text-sm md:text-base leading-relaxed mb-8">
+                {CONTACT_INFO.about}
+              </p>
+
+              {/* Key Trust Stats (Tactile 3D boxes) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8 text-left">
+                <div className="p-3.5 bg-white rounded-xl border-2 border-stone-200 shadow-[0_3px_0_0_#e7e5e4]">
+                  <div className="text-lg font-extrabold text-emerald-800">Juara 1</div>
+                  <div className="text-[11px] text-stone-500 font-medium mt-0.5">INOPAMAS 2026</div>
+                </div>
+                <div className="p-3.5 bg-white rounded-xl border-2 border-stone-200 shadow-[0_3px_0_0_#e7e5e4]">
+                  <div className="text-lg font-extrabold text-amber-700">Top 5</div>
+                  <div className="text-[11px] text-stone-500 font-medium mt-0.5">BRIDA Jatim 2026</div>
+                </div>
+                <div className="p-3.5 bg-white rounded-xl border-2 border-stone-200 shadow-[0_3px_0_0_#e7e5e4]">
+                  <div className="text-lg font-extrabold text-stone-900">Fasda</div>
+                  <div className="text-[11px] text-stone-500 font-medium mt-0.5">BPPMP Prov. Jatim</div>
+                </div>
+                <div className="p-3.5 bg-white rounded-xl border-2 border-stone-200 shadow-[0_3px_0_0_#e7e5e4]">
+                  <div className="text-lg font-extrabold text-teal-800">5+ Alat AI</div>
+                  <div className="text-[11px] text-stone-500 font-medium mt-0.5">Solusi Terapan</div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href="#portfolio"
+                  className="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 active:bg-emerald-950 text-white rounded-lg text-xs font-bold shadow-[0_3px_0_0_#064e3b] hover:shadow-[0_2px_0_0_#064e3b] hover:translate-y-[1px] active:translate-y-[3px] active:shadow-none transition-all inline-flex items-center gap-2"
+                >
+                  <span>Lihat Inovasi & Portofolio</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href={CONTACT_INFO.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-2.5 bg-white hover:bg-stone-50 text-stone-800 border-2 border-stone-200 rounded-lg text-xs font-bold shadow-[0_3px_0_0_#e7e5e4] hover:shadow-[0_2px_0_0_#e7e5e4] hover:translate-y-[1px] active:translate-y-[3px] active:shadow-none transition-all inline-flex items-center gap-2"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Kontak WhatsApp</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Right Column: Editorial Portrait Card (5 cols) */}
+            <div className="md:col-span-5 flex justify-center md:justify-end">
+              <div className="w-full max-w-sm bg-white rounded-2xl p-6 border-2 border-stone-200 shadow-[0_8px_0_0_#e7e5e4] hover:shadow-[0_12px_0_0_#d6d3d1] hover:-translate-y-1 transition-all duration-200">
+                <div className="aspect-square w-full rounded-xl overflow-hidden mb-5 bg-stone-100 border-2 border-stone-200 shadow-inner">
+                  <img
+                    src={PROFILE_IMAGE_URL}
+                    alt={CONTACT_INFO.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-extrabold text-stone-900 text-sm">
+                    {CONTACT_INFO.name}
+                  </h3>
+                  <p className="text-xs text-emerald-800 mt-0.5 font-bold tracking-wide">
+                    KEPALA SEKOLAH SDN BAUJENG I BEJI
+                  </p>
+                  
+                  {/* Motto Badge */}
+                  <div className="mt-2 mb-3 inline-block px-3 py-1 bg-amber-50 text-amber-900 border border-amber-200 rounded-md text-[11px] font-extrabold tracking-widest uppercase">
+                    "NGALAH BAROKAH"
                   </div>
-                  <div className="flex items-center">
-                    <Mail className="w-3 h-3 mr-1.5" />
-                    {CONTACT_INFO.email}
-                  </div>
-                  <div className="flex items-center">
-                    <MapPin className="w-3 h-3 mr-1.5" />
-                    {CONTACT_INFO.location}
+                  
+                  <div className="pt-3 border-t border-stone-100 space-y-1.5 text-xs text-stone-600 text-left">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                      <span className="truncate">{CONTACT_INFO.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                      <span className="truncate">{CONTACT_INFO.email}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                      <span className="font-mono">{CONTACT_INFO.phone}</span>
+                    </div>
                   </div>
                 </div>
-             </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* Portfolio Section */}
+        <Section
+          id="portfolio"
+          title="Inovasi & Produk Terapan"
+          subtitle="Aplikasi sederhana untuk mendukung pengelolaan sekolah dan memudahkan guru dalam kegiatan belajar mengajar."
+          icon={Layout}
+          badge="Katalog Solusi"
+        >
+          {/* Segmented Filter Control with 3D tactile buttons */}
+          <div className="flex flex-wrap items-center gap-2.5 mb-8">
+            <button
+              onClick={() => setPortfolioFilter('all')}
+              className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                portfolioFilter === 'all'
+                  ? 'bg-emerald-900 text-white shadow-[0_2px_0_0_#064e3b]'
+                  : 'bg-white text-stone-600 border-2 border-stone-200 shadow-[0_2px_0_0_#e7e5e4] hover:bg-stone-50'
+              }`}
+            >
+              Semua Solusi ({PORTFOLIO_DATA.length})
+            </button>
+            <button
+              onClick={() => setPortfolioFilter('ai')}
+              className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                portfolioFilter === 'ai'
+                  ? 'bg-emerald-900 text-white shadow-[0_2px_0_0_#064e3b]'
+                  : 'bg-white text-stone-600 border-2 border-stone-200 shadow-[0_2px_0_0_#e7e5e4] hover:bg-stone-50'
+              }`}
+            >
+              AI Generator Pembelajaran
+            </button>
+            <button
+              onClick={() => setPortfolioFilter('management')}
+              className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                portfolioFilter === 'management'
+                  ? 'bg-emerald-900 text-white shadow-[0_2px_0_0_#064e3b]'
+                  : 'bg-white text-stone-600 border-2 border-stone-200 shadow-[0_2px_0_0_#e7e5e4] hover:bg-stone-50'
+              }`}
+            >
+              Manajemen Sekolah
+            </button>
+            <button
+              onClick={() => setPortfolioFilter('assessment')}
+              className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                portfolioFilter === 'assessment'
+                  ? 'bg-emerald-900 text-white shadow-[0_2px_0_0_#064e3b]'
+                  : 'bg-white text-stone-600 border-2 border-stone-200 shadow-[0_2px_0_0_#e7e5e4] hover:bg-stone-50'
+              }`}
+            >
+              Asesmen & CBT
+            </button>
           </div>
 
-          {/* About Section */}
-          <Section id="about" title="Profil Profesional" icon={User}>
-            <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-slate-100 hover:shadow-md transition-shadow print:shadow-none print:border-none print:p-0">
-               <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-                  <div className="md:hidden w-full flex justify-center mb-4 relative print:hidden">
-                    <div className="absolute inset-0 bg-primary-200 blur-2xl opacity-20 rounded-full"></div>
-                     <img 
-                      src={PROFILE_IMAGE_URL} 
-                      alt={CONTACT_INFO.name}
-                      className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg relative z-10"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="mb-6 print:mb-2">
-                      <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-light print:text-sm print:text-justify print:text-black">
-                        {CONTACT_INFO.about}
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 print:grid-cols-2 print:gap-4 print:mt-4">
-                      <div className="bg-blue-50/50 p-6 rounded-2xl border border-blue-100 hover:bg-blue-50 transition-colors print:bg-transparent print:border print:border-slate-300 print:p-3">
-                        <h4 className="font-bold text-blue-700 text-sm mb-2 uppercase tracking-wider flex items-center print:text-black">
-                          <span className="w-2 h-2 rounded-full bg-blue-500 mr-2 print:bg-black"></span>
-                          Bidang Keahlian
-                        </h4>
-                        <p className="text-slate-700 font-medium print:text-black print:text-sm">Teknologi Pendidikan, Inovasi Pembelajaran & Manajemen Pendidikan</p>
-                      </div>
-                      <div className="bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100 hover:bg-emerald-50 transition-colors print:bg-transparent print:border print:border-slate-300 print:p-3">
-                        <h4 className="font-bold text-emerald-700 text-sm mb-2 uppercase tracking-wider flex items-center print:text-black">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2 print:bg-black"></span>
-                          Fokus Saat Ini
-                        </h4>
-                        <p className="text-slate-700 font-medium print:text-black print:text-sm">Pengembangan Solusi Digital & Kepemimpinan Sekolah</p>
-                      </div>
-                    </div>
-                  </div>
-               </div>
-            </div>
-          </Section>
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredPortfolio.map((item) => (
+              <PortfolioCard key={item.id} item={item} />
+            ))}
+          </div>
+        </Section>
 
-          {/* Experience Section */}
-          <Section id="experience" title="Pengalaman Kerja" icon={Briefcase}>
-            <div className="space-y-6 print:space-y-4">
-              {EXPERIENCE_DATA.map((item) => (
-                <ExperienceCard key={item.id} item={item} />
-              ))}
-            </div>
-          </Section>
+        {/* Awards & Recognition Section */}
+        <Section
+          id="awards"
+          title="Penghargaan & Apresiasi"
+          subtitle="Amanah dan apresiasi yang menjadi pengingat diri untuk terus berbenah dan memberi manfaat."
+          icon={Award}
+          badge="Apresiasi & Amanah"
+        >
+          <div className="space-y-3.5 mb-10">
+            {AWARDS_DATA.map((award) => (
+              <AwardCard key={award.id} item={award} />
+            ))}
+          </div>
 
-          {/* Education Section */}
-          <Section id="education" title="Pendidikan" icon={GraduationCap}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:gap-4">
-              {EDUCATION_DATA.map((edu) => (
-                <div key={edu.id} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:border-primary-200 hover:shadow-lg transition-all duration-300 group print:border-slate-300 print:shadow-none print:p-4 print:break-inside-avoid">
-                  <div className="w-14 h-14 bg-primary-50 rounded-2xl flex items-center justify-center text-primary-500 mb-6 group-hover:bg-primary-500 group-hover:text-white transition-colors duration-300 shadow-sm print:hidden">
-                    <GraduationCap className="w-7 h-7" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-1 group-hover:text-primary-700 transition-colors print:text-black print:text-lg">{edu.degree}</h3>
-                  <div className="text-primary-600 font-medium text-sm mb-4 print:text-black print:font-bold">{edu.institution}</div>
-                  
-                  {edu.period && (
-                    <div className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full mb-6 print:bg-transparent print:border print:border-slate-300 print:px-0 print:py-0 print:text-black print:mb-2 print:inline">
-                      {edu.period}
-                    </div>
-                  )}
-                  
-                  <div className="space-y-3 pt-4 border-t border-slate-50 print:border-slate-200">
-                    {edu.details.map((detail, idx) => (
-                      <div key={idx} className="text-sm text-slate-600 flex items-start leading-relaxed print:text-black">
-                        <span className="mr-3 text-primary-400 mt-1 print:text-black">•</span>
-                        {detail}
-                      </div>
-                    ))}
-                  </div>
+          {/* Organization & Social Contribution */}
+          <div className="bg-white rounded-2xl p-6 border-2 border-stone-200 shadow-[0_4px_0_0_#e7e5e4]">
+            <h3 className="text-sm font-extrabold text-stone-900 mb-3 flex items-center gap-2">
+              <Users className="w-4 h-4 text-emerald-800" />
+              <span>Amanah Organisasi & Pengabdian</span>
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {ORGANIZATION_DATA.map((org, idx) => (
+                <div key={idx} className="p-3 bg-stone-50 rounded-xl text-xs text-stone-700 font-medium flex items-start gap-2 border border-stone-200/70">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5 shrink-0"></span>
+                  <span className="leading-relaxed">{org}</span>
                 </div>
               ))}
             </div>
-          </Section>
+          </div>
+        </Section>
 
-          {/* Skills Section */}
-          <Section id="skills" title="Keahlian Utama" icon={Code}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 print:grid-cols-2 print:gap-4">
-              {SKILLS_DATA.map((category, idx) => (
-                <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-shadow print:shadow-none print:border-slate-300 print:break-inside-avoid">
-                  <div className="bg-gradient-to-r from-slate-50 to-white p-5 border-b border-slate-100 flex items-center print:bg-slate-100">
-                    <div className="p-2 bg-primary-100 text-primary-600 rounded-lg mr-4 print:bg-transparent print:text-black">
-                      <category.icon className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-slate-800 text-lg print:text-black">{category.title}</h3>
-                  </div>
-                  <div className="p-8 print:p-4">
-                    <div className="flex flex-wrap gap-3">
-                      {category.skills.map((skill, sIdx) => (
-                        <span 
-                          key={sIdx} 
-                          className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:border-primary-300 hover:text-primary-700 hover:bg-primary-50 transition-all cursor-default shadow-sm print:shadow-none print:border-slate-400 print:text-black print:py-1"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+        {/* Experience Section */}
+        <Section
+          id="experience"
+          title="Pengalaman Pengabdian"
+          subtitle="Perjalanan bertugas di dunia pendidikan dan pendampingan rekan-rekan guru."
+          icon={Briefcase}
+          badge="Riwayat Singkat"
+        >
+          <div className="space-y-4">
+            {EXPERIENCE_DATA.map((item) => (
+              <ExperienceCard key={item.id} item={item} />
+            ))}
+          </div>
+        </Section>
+
+        {/* Education Section */}
+        <Section
+          id="education"
+          title="Pendidikan"
+          subtitle="Riwayat studi dan riset yang pernah ditempuh."
+          icon={GraduationCap}
+          badge="Latar Belakang"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {EDUCATION_DATA.map((edu) => (
+              <div key={edu.id} className="bg-white p-6 rounded-2xl border-2 border-stone-200 shadow-[0_4px_0_0_#e7e5e4]">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center mb-4">
+                  <GraduationCap className="w-5 h-5" />
                 </div>
-              ))}
-            </div>
-          </Section>
-
-          {/* Portfolio Section */}
-          <Section id="portfolio" title="Portofolio Inovasi Digital" icon={Layout}>
-            <p className="text-slate-600 mb-10 max-w-2xl text-lg print:text-black print:text-sm print:mb-4">Berikut adalah beberapa solusi digital yang telah saya kembangkan:</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 print:grid-cols-2 print:gap-4">
-              {PORTFOLIO_DATA.map((item) => (
-                <PortfolioCard key={item.id} item={item} />
-              ))}
-            </div>
-          </Section>
-
-           {/* Certificates Section (NEW) */}
-           <Section id="certificates" title="Sertifikat & Pelatihan" icon={FileText}>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-8 print:grid-cols-2 print:gap-2">
-              {CERTIFICATES_DATA.slice(0, 12).map((cert) => (
-                <CertificateCard 
-                  key={cert.id} 
-                  item={cert} 
-                  onClick={setSelectedCertificate}
-                />
-              ))}
-            </div>
-            <div className="flex justify-center mt-6 print:hidden">
-              <a 
-                href={GOOGLE_DRIVE_FOLDER}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-white border border-slate-200 rounded-full font-semibold text-slate-600 hover:text-primary-600 hover:border-primary-200 hover:shadow-md transition-all group"
-              >
-                Lihat Seluruh Sertifikat di Google Drive
-                <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
-          </Section>
-
-          {/* Awards & Organization Section */}
-          <Section id="awards" title="Penghargaan & Organisasi" icon={Award}>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 print:grid-cols-2 print:gap-6">
-              <div className="lg:col-span-2 space-y-5 print:space-y-4 print:col-span-1">
-                <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center print:mb-2 print:text-black">
-                  <div className="w-10 h-1 bg-gradient-to-r from-primary-500 to-primary-300 mr-4 rounded-full print:bg-black"></div>
-                  Pencapaian & Sertifikasi
+                <h3 className="text-base font-extrabold text-stone-900 mb-1">
+                  {edu.degree}
                 </h3>
-                {AWARDS_DATA.map((award) => (
-                  <AwardCard key={award.id} item={award} />
-                ))}
-              </div>
-              
-              <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-8 rounded-3xl h-fit shadow-xl relative overflow-hidden print:bg-transparent print:text-black print:shadow-none print:p-0 print:border print:border-slate-300 print:p-4 print:col-span-1 print:break-inside-avoid">
-                 <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full blur-2xl -mr-10 -mt-10 print:hidden"></div>
-                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary-500 opacity-10 rounded-full blur-2xl -ml-10 -mb-10 print:hidden"></div>
-                
-                <h3 className="text-xl font-bold mb-8 flex items-center relative z-10 print:text-black print:mb-4">
-                  <Users className="w-6 h-6 mr-3 text-primary-400 print:text-black" />
-                  Organisasi
-                </h3>
-                <ul className="space-y-8 relative z-10 print:space-y-4">
-                  {ORGANIZATION_DATA.map((org, idx) => (
-                    <li key={idx} className="flex items-start group">
-                      <div className="mt-1 mr-4 flex-shrink-0">
-                        <CheckCircle2 className="w-5 h-5 text-primary-500 group-hover:text-primary-400 transition-colors print:text-black" />
-                      </div>
-                      <span className="text-sm text-slate-300 leading-relaxed font-medium group-hover:text-white transition-colors print:text-black">{org}</span>
-                    </li>
+                <div className="text-xs text-emerald-800 font-bold mb-3">
+                  {edu.institution} {edu.period && `· ${edu.period}`}
+                </div>
+                <div className="space-y-2 pt-3 border-t border-stone-100">
+                  {edu.details.map((detail, idx) => (
+                    <p key={idx} className="text-xs text-stone-600 leading-relaxed">
+                      • {detail}
+                    </p>
                   ))}
-                </ul>
+                </div>
               </div>
-            </div>
-          </Section>
+            ))}
+          </div>
+        </Section>
 
-          {/* Footer */}
-          <footer className="mt-24 pt-10 border-t border-slate-200 text-center text-slate-400 text-sm pb-10 print:hidden">
-            <p className="font-medium text-slate-500">&copy; {new Date().getFullYear()} Akhmad Nasor, S.Pd., M.Pd.</p>
-            <p className="mt-2 opacity-80">Designed with modern technologies for better education</p>
-          </footer>
-        </div>
+        {/* Skills Section */}
+        <Section
+          id="skills"
+          title="Bidang Peminatan & Keahlian"
+          subtitle="Hal-hal yang terus dipelajari dan dipraktikkan dalam kegiatan mengajar serta mengelola sekolah."
+          icon={Code}
+          badge="Fokus Minat"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {SKILLS_DATA.map((category, idx) => (
+              <div key={idx} className="bg-white rounded-2xl p-6 border-2 border-stone-200 shadow-[0_4px_0_0_#e7e5e4]">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 bg-emerald-50 text-emerald-800 border border-emerald-100 rounded-lg">
+                    <category.icon className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-sm text-stone-900">{category.title}</h3>
+                    {category.description && (
+                      <p className="text-xs text-stone-500">{category.description}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-stone-100">
+                  {category.skills.map((skill, sIdx) => (
+                    <span
+                      key={sIdx}
+                      className="px-3 py-1 bg-stone-50 border border-stone-200 rounded-lg text-xs text-stone-700 font-medium"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Certificates Section */}
+        <Section
+          id="certificates"
+          title="Sertifikat & Pelatihan"
+          subtitle="Arsip sertifikat pelatihan dan kegiatan yang pernah diikuti."
+          icon={FileText}
+          badge="Dokumen Pendukung"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-6">
+            {CERTIFICATES_DATA.slice(0, 12).map((cert) => (
+              <CertificateCard
+                key={cert.id}
+                item={cert}
+                onClick={setSelectedCertificate}
+              />
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <a
+              href={GOOGLE_DRIVE_FOLDER}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-stone-200 hover:border-emerald-300 text-stone-700 hover:text-emerald-900 rounded-lg text-xs font-bold shadow-[0_2px_0_0_#e7e5e4] transition-all"
+            >
+              <span>Buka Repositori Dokumen di Google Drive</span>
+              <ExternalLink className="w-3.5 h-3.5 text-stone-400" />
+            </a>
+          </div>
+        </Section>
+
+        {/* Footer */}
+        <footer className="mt-20 pt-8 border-t border-stone-200 text-center text-xs text-stone-500 pb-12">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-3 font-semibold text-stone-600">
+            <a href="#about" className="hover:text-emerald-900 transition-colors">Profil</a>
+            <span>·</span>
+            <a href="#portfolio" className="hover:text-emerald-900 transition-colors">Inovasi</a>
+            <span>·</span>
+            <a href="#awards" className="hover:text-emerald-900 transition-colors">Penghargaan</a>
+            <span>·</span>
+            <a href="#experience" className="hover:text-emerald-900 transition-colors">Pengalaman</a>
+            <span>·</span>
+            <a href={CONTACT_INFO.whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-emerald-700 hover:underline">WhatsApp</a>
+          </div>
+          <p className="font-bold text-stone-800">
+            &copy; {new Date().getFullYear()} Akhmad Nasor, S.Pd., M.Pd.
+          </p>
+          <p className="mt-1 text-stone-500 font-medium">
+            "NGALAH BAROKAH" · SDN BAUJENG I BEJI
+          </p>
+          <p className="mt-0.5 text-stone-400 text-[11px]">
+            Juara 1 INOPAMAS 2026 · Top 5 BRIDA Jawa Timur 2026 · Fasda Digitalisasi BPPMP Jawa Timur
+          </p>
+        </footer>
+
       </main>
     </div>
   );

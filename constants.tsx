@@ -6,62 +6,91 @@ import {
   User, 
   Layout, 
   Layers,
-  Globe,
   Database,
   Cpu,
-  BookOpen,
   FileText
 } from 'lucide-react';
-import { ExperienceItem, EducationItem, PortfolioItem, SkillCategory, AwardItem, NavItem, CertificateItem } from './types';
+import { 
+  ExperienceItem, 
+  EducationItem, 
+  PortfolioItem, 
+  SkillCategory, 
+  AwardItem, 
+  NavItem, 
+  CertificateItem 
+} from './types';
 
 export const PROFILE_IMAGE_URL = "https://lh3.googleusercontent.com/d/1RTNNgb3DpDV-vws_ZHeDNsTAsWqUyvUe";
 
 export const CONTACT_INFO = {
   name: "AKHMAD NASOR, S.Pd., M.Pd.",
   role: "Kepala Sekolah & Inovator Teknologi Pendidikan",
+  specialBadges: [
+    "Juara 1 INOPAMAS 2026",
+    "Top 5 BRIDA JATIM 2026",
+    "Fasilitator Daerah Digitalisasi BPPMP Jatim 2026"
+  ],
   location: "Beji, Pasuruan, Jawa Timur, Indonesia",
   phone: "085749662221",
+  whatsappUrl: "https://wa.me/6285749662221",
   email: "akhmadnasor@gmail.com",
-  about: "Kepala Sekolah yang berdedikasi dan Inovator Teknologi Pendidikan dengan latar belakang yang kuat dalam pedagogi sains dan manajemen sekolah. Memiliki pengalaman sukses bertransisi dari peran guru (2019-2024) menjadi pemimpin satuan pendidikan. Memiliki spesialisasi dalam pengembangan solusi digital untuk pendidikan, termasuk pembuatan aplikasi ujian berbasis web, integrasi kecerdasan buatan (AI Gemini/AI Studio) dalam kurikulum, dan manajemen database. Berkomitmen memajukan metodologi pengajaran melalui riset terapan dan implementasi teknologi tepat guna."
+  motto: "NGALAH BAROKAH",
+  about: "Pendidik yang saat ini bertugas sebagai Kepala Sekolah di SDN BAUJENG I BEJI, Pasuruan. Senang belajar dan berbagi pemanfaatan teknologi sederhana untuk membantu rekan guru mengajar serta memotivasi anak-anak belajar—mulai dari sistem sekolah Bisma hingga alat bantu perangkat ajar. Dalam berkarya dan melayani, selalu memegang prinsip hidup: \"NGALAH BAROKAH\"."
 };
 
 export const NAV_ITEMS: NavItem[] = [
   { id: 'about', label: 'Profil', icon: User },
+  { id: 'portfolio', label: 'Inovasi & Produk', icon: Layout },
+  { id: 'awards', label: 'Penghargaan', icon: Award },
   { id: 'experience', label: 'Pengalaman', icon: Briefcase },
   { id: 'education', label: 'Pendidikan', icon: GraduationCap },
   { id: 'skills', label: 'Keahlian', icon: Code },
-  { id: 'portfolio', label: 'Portofolio', icon: Layout },
   { id: 'certificates', label: 'Sertifikat', icon: FileText },
-  { id: 'awards', label: 'Penghargaan', icon: Award },
 ];
 
 export const EXPERIENCE_DATA: ExperienceItem[] = [
   {
     id: 1,
-    role: "Kepala Sekolah",
-    institution: "UPT Satuan Pendidikan SDN Baujeng 1",
-    period: "2025 – Sekarang",
+    role: "Fasilitator Daerah (Fasda) Bidang Digitalisasi",
+    institution: "BPPMP Provinsi Jawa Timur",
+    period: "2026 – Sekarang",
+    tag: "Kepemimpinan Daerah",
     description: [
-      "Bertanggung jawab penuh atas manajemen operasional, akademik, dan pengembangan strategis sekolah.",
-      "Memimpin implementasi inovasi pembelajaran digital dan sistem manajemen sekolah berbasis teknologi."
+      "Mengawal dan mendampingi percepatan transformasi digital pembelajaran serta pemanfaatan platform teknologi pendidikan di satuan pendidikan Jawa Timur.",
+      "Memfasilitasi pelatihan pendidik dalam integrasi kecerdasan buatan (Gen AI), perangkat asesmen digital, dan sistem data pembelajaran bermutu."
     ]
   },
   {
     id: 2,
-    role: "Kepala Pengembang Sistem Inovasi Pendidikan",
-    institution: "Kecamatan Beji",
+    role: "Kepala Sekolah",
+    institution: "SDN BAUJENG I BEJI",
     period: "2025 – Sekarang",
+    tag: "Manajemen Sekolah",
     description: [
-      "Memimpin pengembangan dan penerapan solusi teknologi pendidikan untuk meningkatkan efisiensi administrasi dan kualitas pembelajaran di tingkat kecamatan."
+      "Memimpin kepemimpinan instruksional, tata kelola manajerial, dan kemitraan strategis dengan komitmen digitalisasi menyeluruh.",
+      "Menginisiasi dan mengimplementasikan Bisma App sebagai platform sentral presensi siswa, jurnal guru, dan monitoring kinerja real-time.",
+      "Membawa SDN BAUJENG I BEJI menjadi pionir sekolah berbasis inovasi digital di Kabupaten Pasuruan."
     ]
   },
   {
     id: 3,
-    role: "Guru Mata Pelajaran",
+    role: "Kepala Pengembang Sistem Inovasi Pendidikan",
+    institution: "Kecamatan Beji, Kab. Pasuruan",
+    period: "2025 – Sekarang",
+    tag: "Pengembang Solusi",
+    description: [
+      "Mengarsiteki solusi teknologi pendidikan antar-sekolah guna standarisasi administrasi digital, bank soal terpusat, dan sharing karya guru."
+    ]
+  },
+  {
+    id: 4,
+    role: "Guru Mata Pelajaran IPA & Pegiat Inovasi",
     institution: "SMPN 2 Sukorejo",
     period: "2019 – 2024",
+    tag: "Pedagogi & Riset",
     description: [
-      "Melaksanakan kegiatan pembelajaran aktif dan inovatif, serta terlibat dalam pengembangan perangkat ajar digital."
+      "Mendesain pembelajaran sains aktif interaktif dan menelurkan riset aplikasi literasi sains 'Gesit App' yang memenangkan penghargaan daerah.",
+      "Terpilih sebagai Guru Penggerak Angkatan IV dan Pengajar Praktik Angkatan X Kemdikbudristek."
     ]
   }
 ];
@@ -73,44 +102,48 @@ export const EDUCATION_DATA: EducationItem[] = [
     institution: "Universitas Negeri Surabaya (UNESA)",
     period: "2022 – 2024",
     details: [
-      "Penerima Beasiswa Pendidikan Indonesia (BPI) Kemdikbudristek.",
-      "Fokus Penelitian: Inovasi Pembelajaran Literasi Sains melalui pengembangan 'Gesit App'."
+      "Penerima Beasiswa Pendidikan Indonesia (BPI) Kemdikbudristek RI.",
+      "Fokus Tesis & Riset: Pengembangan Media & Aplikasi Literasi Sains Terintegrasi Berbasis Mobile (Gesit App).",
+      "Publikasi ilmiah terindeks di bidang inovasi pedagogi sains dan media pembelajaran digital."
     ]
   },
   {
     id: 2,
     degree: "Sarjana Pendidikan (S.Pd.) – Pendidikan Biologi",
     institution: "Universitas Negeri Malang (UM)",
-    period: "",
+    period: "Lulus",
     details: [
-      "Fokus: Pengembangan metode pengajaran, kompetensi pedagogik, dan alat bantu belajar digital."
+      "Fokus: Metodologi pengajaran sains, kompetensi pedagogik modern, dan pemanfaatan media instruksional interaktif.",
+      "Aktif dalam organisasi kemahasiswaan dan riset sains terapan."
     ]
   }
 ];
 
 export const SKILLS_DATA: SkillCategory[] = [
   {
-    title: "Teknologi & Inovasi",
+    title: "AI & Arsitektur Solusi Digital",
     icon: Cpu,
+    description: "Pengembangan generator cerdas, workflow otomasi & integrasi model AI",
     skills: [
-      "Google Apps Script (Advanced)",
-      "Integrasi AI Education (Gemini/AI Studio)",
-      "Database Management (Firebase/Supabase)",
-      "Game Generator Learning",
-      "SEO & Content Strategy",
-      "Web Development Basics"
+      "Gemini AI & Google AI Studio Integration",
+      "Game Generator & Gamifikasi Pembelajaran",
+      "Prompt Engineering untuk Dokumen Kurikulum (RPP, LKPD, Soal)",
+      "Google Apps Script (Advanced Automation)",
+      "Database Cloud (Firebase / Supabase)",
+      "Web App Prototyping & Modern Frontend"
     ]
   },
   {
-    title: "Manajemen & Pedagogi",
+    title: "Kepemimpinan & Tata Kelola Pendidikan",
     icon: Layers,
+    description: "Strategi manajerial sekolah, kurikulum merdeka & penjaminan mutu",
     skills: [
-      "Manajemen Satuan Pendidikan",
-      "Penyusunan RPP Inovatif (AI Integrated)",
-      "Pengembangan Asesmen Digital (CBT)",
-      "Manajemen Jurnal Pembelajaran",
-      "Evaluasi Kinerja Guru",
-      "Kepemimpinan Instruksional"
+      "Manajemen Satuan Pendidikan & Budaya Inovasi",
+      "Fasilitasi Daerah Digitalisasi (BPPMP Jatim)",
+      "Sistem CBT & Asesmen Berbasis Komputer",
+      "Penyusunan Perangkat Ajar Berdiferensiasi",
+      "Evaluasi Kinerja Pendidik & Supervisi Klinis",
+      "Kemitraan Komite, Riset BRIDA & Pemerintah Daerah"
     ]
   }
 ];
@@ -118,45 +151,91 @@ export const SKILLS_DATA: SkillCategory[] = [
 export const PORTFOLIO_DATA: PortfolioItem[] = [
   {
     id: 1,
-    title: "Perpustakaan Digital",
-    description: "Sistem perpustakaan berbasis web untuk manajemen buku dan peminjaman.",
-    link: "https://perpusbaujeng1.netlify.app/",
-    category: "Web App"
+    title: "Bisma APP",
+    description: "Sistem informasi manajemen sekolah terpadu untuk presensi digital siswa, jurnal pembelajaran guru, absensi RFID/online, dan pelaporan otomatis.",
+    link: "https://bisma.web.id/",
+    category: "Manajemen Sekolah",
+    badge: "Core Ecosystem",
+    features: ["Presensi Siswa Real-Time", "Jurnal Mengajar Digital", "Dashboard Kepala Sekolah", "Laporan Rekapitulasi Otomatis"],
+    techStack: ["Web App", "Cloud DB", "PWA Ready"],
+    isHighlighted: true
   },
   {
     id: 2,
-    title: "RPP Gen AI",
-    description: "Platform penyusunan RPP Inovatif yang terintegrasi dengan kecerdasan buatan.",
-    link: "https://sigmabai.netlify.app/",
-    category: "AI Integration"
+    title: "Game Generator",
+    description: "Platform pembuat game edukasi interaktif cerdas bertenaga AI Studio untuk menciptakan kuis gamifikasi, arcade belajar, dan visual matching di kelas.",
+    link: "https://gamegenerator.ai.studio/",
+    category: "AI Tool",
+    badge: "AI Studio Powered",
+    features: ["Instant Game Logic Generator", "Multiple Quiz Mechanics", "Interactive Audio & Visuals", "Shareable Game Pin"],
+    techStack: ["Gemini AI", "Google AI Studio", "HTML5 Canvas"],
+    isHighlighted: true
   },
   {
     id: 3,
-    title: "Digital Asesmen Test",
-    description: "Database ujian berbasis Computer Based Test (CBT) dengan fitur keamanan.",
-    link: "https://digitalasesemensystem.netlify.app/",
-    category: "Assessment"
+    title: "RPP Generator",
+    description: "Generator Modul Ajar dan Rencana Pelaksanaan Pembelajaran (RPP) inovatif bertenaga AI yang selaras dengan Capaian Pembelajaran Kurikulum Merdeka.",
+    link: "https://sites.google.com/view/akhmadnasor/rpp-generator",
+    category: "AI Tool",
+    badge: "Kurikulum Merdeka",
+    features: ["Format Resmi Kemdikbudristek", "Diferensiasi Konten Otomatis", "Rubrik Asesmen Terintegrasi", "Export Dokumen Siap Cetak"],
+    techStack: ["Gen AI Pipeline", "Google Workspace", "Prompt Engineering"],
+    isHighlighted: true
   },
   {
     id: 4,
-    title: "Bisma App",
-    description: "Sistem manajemen sekolah untuk presensi digital dan laporan pembelajaran harian.",
-    link: "https://sdnbaujeng1.github.io/bismaapp/",
-    category: "Management System"
+    title: "LKPD Generator",
+    description: "Aplikasi asisten cerdas untuk merancang Lembar Kerja Peserta Didik (LKPD) yang kontekstual, menarik, berbasis studi kasus, dan terstruktur.",
+    link: "https://sites.google.com/view/akhmadnasor/cheat-ai",
+    category: "AI Tool",
+    badge: "Pedagogi Cerdas",
+    features: ["Penyesuaian Level Kognitif", "Instruksi Kerja Bertahap", "Pertanyaan Pemantik Cerdas", "Template Siap Cetak A4"],
+    techStack: ["Cheat AI Assistant", "Web Platform", "AI Prompting"],
+    isHighlighted: true
   },
   {
     id: 5,
-    title: "Game Builder Generator",
-    description: "Alat pembuat game edukasi interaktif untuk pembelajaran di kelas.",
-    link: "https://sdnbaujeng1.github.io/gamegenerator/",
-    category: "Gamification"
+    title: "Soal Generator",
+    description: "Generator bank soal HOTS (Higher Order Thinking Skills) dan AKM otomatis berdasarkan kompetensi dasar, tingkat kesulitan, dan kisi-kisi terukur.",
+    link: "https://sites.google.com/view/akhmadnasor/soal-generator",
+    category: "AI Tool",
+    badge: "Asesmen Adaptif",
+    features: ["Pembuatan Soal Pilihan Ganda & Uraian", "Kunci Jawaban & Pembahasan Detail", "Distribusi Taksonomi Bloom", "Export Format Ujian CBT"],
+    techStack: ["Prompt Engine", "Assessment Matrix", "Web App"],
+    isHighlighted: true
   },
   {
     id: 6,
-    title: "Website Sekolah Resmi",
-    description: "Pengembangan website profil dan informasi resmi SDN Baujeng 1.",
+    title: "Digital Asesmen Test (CBT)",
+    description: "Sistem ujian berbasis komputer (CBT) dengan sistem anti-curang, bank soal terenkripsi, pengacakan butir soal, dan analisis daya pembeda.",
+    link: "https://digitalasesemensystem.netlify.app/",
+    category: "Asesmen & CBT",
+    badge: "High Security",
+    features: ["Lockdown Screen Protection", "Realtime Timer & Autosave", "Analisis Butir Soal Cepat", "Export Nilai ke Excel"],
+    techStack: ["React", "Cloud Storage", "Netlify"],
+    isHighlighted: false
+  },
+  {
+    id: 7,
+    title: "Perpustakaan Digital",
+    description: "Sistem manajemen katalog buku daring, pencarian koleksi literasi, peminjaman digital, dan rekapitulasi minat baca siswa sekolah dasar.",
+    link: "https://perpusbaujeng1.netlify.app/",
+    category: "Manajemen Sekolah",
+    badge: "Literasi Digital",
+    features: ["Katalog Online Interaktif", "Barcode Tracking Buku", "Statistik Kunjungan Siswa", "E-Book Repositori"],
+    techStack: ["Web Database", "Responsive UI", "Netlify"],
+    isHighlighted: false
+  },
+  {
+    id: 8,
+    title: "Website Resmi SDN BAUJENG I BEJI",
+    description: "Portal web profil resmi untuk publikasi kegiatan sekolah, pengumuman, galeri prestasi, PPDB daring, dan transparansi tata kelola satuan pendidikan SDN BAUJENG I BEJI.",
     link: "https://www.sdnbaujeng1.sch.id/",
-    category: "Web Profile"
+    category: "Web Edukasi",
+    badge: "Official Portal",
+    features: ["Portal Informasi Resmi", "Sistem PPDB Online", "Galeri Prestasi & Berita", "Integrasi Media Sekolah"],
+    techStack: ["Domain .sch.id", "SEO Optimized", "Mobile Friendly"],
+    isHighlighted: false
   }
 ];
 
@@ -187,39 +266,70 @@ export const GOOGLE_DRIVE_FOLDER = "https://drive.google.com/drive/folders/1nQOw
 export const AWARDS_DATA: AwardItem[] = [
   {
     id: 1,
-    title: "Guru Pejuang Digital (GPD)",
-    issuer: "Kemdikbudristek",
-    year: "2025 – Sekarang"
+    title: "Juara 1 INOPAMAS 2026",
+    issuer: "Pemerintah Kabupaten Pasuruan",
+    year: "2026",
+    isSpecial: true,
+    highlightText: "Peringkat 1 Tingkat Kabupaten",
+    description: "Anugerah INOPAMAS 2026 (Inovasi Kabupaten Pasuruan Maju Sejahtera, dan Berkeadilan) dalam kategori inovasi pendidikan dan pelayanan publik berbasis transformasi digital."
   },
   {
     id: 2,
-    title: "Top Ten Inovasi Pasuruan Maslahat (GESIT)",
-    issuer: "Pemerintah Kab. Pasuruan",
-    year: "2023",
-    description: "Inovasi GESIT (Gemar Literasi Sains Terpadu)"
+    title: "Top 5 Inovasi BRIDA Jawa Timur 2026",
+    issuer: "Badan Riset dan Inovasi Daerah (BRIDA) Provinsi Jawa Timur",
+    year: "2026",
+    isSpecial: true,
+    highlightText: "Top 5 Tingkat Provinsi",
+    description: "Terpilih dalam jajaran 5 karya inovasi terbaik se-Provinsi Jawa Timur atas kebaruan solusi, implementasi nyata, dan replikabilitas dalam meningkatkan kualitas pendidikan."
   },
   {
     id: 3,
-    title: "Top Ten Inovasi Pasuruan Maslahat (SAKERA)",
-    issuer: "Pemerintah Kab. Pasuruan",
-    year: "2023",
-    description: "Inovasi Sakera (Sistem Administrasi Kinerja dan Pembelajaran)"
+    title: "Fasilitator Daerah (Fasda) Bidang Digitalisasi",
+    issuer: "BPPMP Provinsi Jawa Timur (Kemdikbudristek)",
+    year: "2026",
+    isSpecial: true,
+    highlightText: "Amanah Strategis Jawa Timur",
+    description: "Penetapan resmi sebagai Fasilitator Daerah untuk mendampingi satuan pendidikan di Jawa Timur dalam penguatan ekosistem digital sekolah."
   },
   {
     id: 4,
-    title: "Pengajar Praktik Angkatan X",
-    issuer: "Kemdikbudristek",
-    year: "2023"
+    title: "Guru Pejuang Digital (GPD)",
+    issuer: "Kemdikbudristek RI",
+    year: "2025 – Sekarang",
+    description: "Penghargaan dan penugasan nasional dalam gerakan pemberdayaan pemanfaatan teknologi digital pembelajaran di daerah."
   },
   {
     id: 5,
+    title: "Top Ten Inovasi Pasuruan Maslahat (GESIT)",
+    issuer: "Pemerintah Kab. Pasuruan",
+    year: "2023",
+    description: "Inovasi GESIT (Gemar Literasi Sains Terpadu) yang dikembangkan sebagai aplikasi penguatan kompetensi literasi sains berbasis penelitian terapan."
+  },
+  {
+    id: 6,
+    title: "Top Ten Inovasi Pasuruan Maslahat (SAKERA)",
+    issuer: "Pemerintah Kab. Pasuruan",
+    year: "2023",
+    description: "Inovasi SAKERA (Sistem Administrasi Kinerja dan Pembelajaran Terintegrasi) untuk efisiensi birokrasi dan asesmen pendidik."
+  },
+  {
+    id: 7,
+    title: "Pengajar Praktik Pendidikan Guru Penggerak (PP PGP) Angkatan X",
+    issuer: "Kemdikbudristek RI",
+    year: "2023",
+    description: "Mendampingi calon guru penggerak dalam lokakarya kepemimpinan pembelajaran dan aksi nyata transformasi kelas."
+  },
+  {
+    id: 8,
     title: "Guru Penggerak Angkatan IV",
-    issuer: "Kemdikbudristek",
-    year: "2022"
+    issuer: "Kemdikbudristek RI",
+    year: "2022",
+    description: "Lulusan program pendidikan kepemimpinan pembelajaran nasional dengan predikat amat baik."
   }
 ];
 
 export const ORGANIZATION_DATA = [
   "Sekretaris PGRI Cabang Kecamatan Beji (2025 – Sekarang)",
+  "Fasilitator Komunitas Belajar Kepala Sekolah & Pendidik Kabupaten Pasuruan",
   "Pengurus GP Ansor Desa Baujeng Kecamatan Beji"
 ];
