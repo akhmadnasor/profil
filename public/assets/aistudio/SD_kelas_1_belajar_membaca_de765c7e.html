@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MPI — Petualangan Huruf | Membaca dan Memahami Huruf (Fase A)</title>
+<style>
+  :root{
+    --bg:#FFFBF5;
+    --card:#FFFFFF;
+    --ink:#403A5C;
+    --muted:#7C7A96;
+    --line:#F2E8DC;
+    --pink:#FB7185;   --pink-soft:#FFE4E6;
+    --amber:#FBBF24;  --amber-soft:#FEF3C7;
+    --mint:#34D399;   --mint-soft:#D1FAE5;
+    --sky:#60A5FA;    --sky-soft:#DBEAFE;
+    --violet:#A78BFA; --violet-soft:#EDE9FE;
+    --shadow:0 12px 28px -14px rgba(84,60,120,.35);
+    --shadow-sm:0 6px 16px -10px rgba(84,60,120,.4);
+    --radius:24px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Segoe UI Rounded","Nunito","Trebuchet MS",system-ui,-apple-system,sans-serif;
+    background:
+      radial-gradient(900px 500px at 8% -8%, #FFE4E6 0%, transparent 60%),
+      radial-gradient(800px 500px at 100% 0%, #DBEAFE 0%, transparent 55%),
+      radial-gradient(700px 500px at 50% 110%, #FEF3C7 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    line-height:1.65;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{line-height:1.25;margin:0 0 .5em}
+  p{margin:0 0 1em}
+  button{font-family:inherit}
+
+  .topbar{
+    position:sticky;top:0;z-index:60;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:10px 16px;background:rgba(255,255,255,.82);
+    backdrop-filter:blur(14px);border-bottom:2px solid var(--line);
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+  .brand-emoji{
+    font-size:28px;background:var(--amber-soft);border-radius:16px;
+    padding:6px 10px;box-shadow:var(--shadow-sm);animation:bob 2.4s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .brand strong{display:block;font-size:18px;letter-spacing:.2px}
+  .brand small{display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+  .nav{display:flex;gap:8px;overflow-x:auto;padding:4px;scrollbar-width:none;max-width:100%}
+  .nav::-webkit-scrollbar{display:none}
+  .nav-btn{
+    border:2px solid transparent;background:#fff;color:var(--ink);
+    padding:9px 15px;border-radius:999px;font-weight:800;font-size:13.5px;
+    cursor:pointer;white-space:nowrap;box-shadow:var(--shadow-sm);transition:.18s;
+  }
+  .nav-btn:hover{transform:translateY(-2px)}
+  .nav-btn.active{background:var(--pink);color:#fff;border-color:#fff}
+
+  .btn{
+    border:none;border-radius:18px;padding:12px 20px;font-weight:800;font-size:15px;
+    cursor:pointer;transition:.18s;box-shadow:var(--shadow-sm);color:#fff;
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(1px) scale(.98)}
+  .btn.primary{background:linear-gradient(135deg,#FB7185,#F472B6)}
+  .btn.amber{background:linear-gradient(135deg,#FBBF24,#F59E0B)}
+  .btn.mint{background:linear-gradient(135deg,#34D399,#10B981)}
+  .btn.sky{background:linear-gradient(135deg,#60A5FA,#3B82F6)}
+  .btn.violet{background:linear-gradient(135deg,#A78BFA,#8B5CF6)}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line)}
+  .btn.small{padding:8px 14px;font-size:13px;border-radius:14px}
+  .btn.big{padding:15px 26px;font-size:16.5px;border-radius:22px}
+  .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+  main{max-width:1180px;margin:0 auto;padding:18px 16px 60px}
+  .page{display:none;animation:fade .35s ease}
+  .page.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .card{
+    background:var(--card);border-radius:var(--radius);padding:22px;
+    box-shadow:var(--shadow);border:2px solid var(--line);margin-bottom:18px;
+  }
+  .section-title{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:900;margin-bottom:6px}
+  .section-title .dot{width:12px;height:12px;border-radius:50%;background:var(--pink)}
+  .lead{color:var(--muted);font-weight:600;margin-bottom:16px}
+
+  .hero{
+    position:relative;overflow:hidden;text-align:center;
+    background:linear-gradient(160deg,#FFF7ED 0%,#FFE4E6 45%,#DBEAFE 100%);
+    border-radius:32px;padding:36px 22px 30px;box-shadow:var(--shadow);
+    border:3px solid #fff;margin-bottom:20px;
+  }
+  .hero-deco{font-size:30px;letter-spacing:10px;margin-bottom:6px;animation:bob 3s ease-in-out infinite}
+  .hero h1{font-size:clamp(26px,5vw,44px);font-weight:900;margin-bottom:10px}
+  .hero h1 span{background:linear-gradient(90deg,#FB7185,#FBBF24,#34D399);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{max-width:720px;margin:0 auto 20px;font-size:16.5px;font-weight:600;color:#5B5478}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+
+  .menu-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:16px;margin-bottom:18px}
+  .menu-card{background:#fff;border-radius:24px;padding:20px;text-align:center;cursor:pointer;border:3px solid var(--line);box-shadow:var(--shadow);transition:.2s}
+  .menu-card:hover{transform:translateY(-6px) rotate(-1deg);border-color:var(--pink)}
+  .menu-card .ico{font-size:40px;display:block;margin-bottom:8px}
+  .menu-card h3{font-size:17px;margin-bottom:4px}
+  .menu-card p{font-size:13px;color:var(--muted);font-weight:600;margin:0}
+
+  .info-strip{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;background:#fff;border-radius:22px;padding:14px;border:2px dashed var(--line)}
+  .info-strip span{font-size:13.5px;font-weight:800;color:var(--muted)}
+
+  .goal-box{background:linear-gradient(135deg,#EDE9FE,#DBEAFE);border-radius:22px;padding:20px;border:2px solid #fff;margin-bottom:16px}
+  .goal-box h3{font-size:19px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  .chip{background:#fff;border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:800;box-shadow:var(--shadow-sm)}
+  .question-list{counter-reset:q;list-style:none;padding:0;margin:0}
+  .question-list li{counter-increment:q;background:#FFFBF5;border-left:6px solid var(--amber);border-radius:14px;padding:12px 14px 12px 46px;position:relative;margin-bottom:10px;font-weight:600}
+  .question-list li::before{content:"?";position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px}
+
+  .materi-body{font-size:16px;color:#4B4568}
+  .materi-body h3{font-size:19px;margin-top:26px;padding-bottom:8px;border-bottom:3px dotted var(--line);display:flex;align-items:center;gap:8px}
+  .materi-body h4{font-size:16.5px;color:var(--pink);margin-top:18px}
+  .materi-body ul,.materi-body ol{padding-left:22px;margin:0 0 14px}
+  .materi-body li{margin-bottom:6px}
+  .materi-body strong{color:#322C4C}
+  .hl{background:var(--amber-soft);border-left:6px solid var(--amber);border-radius:14px;padding:14px 16px;margin:16px 0;font-weight:600}
+  .hl.mint{background:var(--mint-soft);border-color:var(--mint)}
+  .hl.sky{background:var(--sky-soft);border-color:var(--sky)}
+  .hl.pink{background:var(--pink-soft);border-color:var(--pink)}
+  .letter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:10px;margin:14px 0}
+  .letter-tile{background:linear-gradient(160deg,#fff,#FFF7ED);border:2px solid var(--line);border-radius:16px;text-align:center;padding:10px 4px;font-weight:900;box-shadow:var(--shadow-sm);transition:.18s;cursor:pointer}
+  .letter-tile:hover{transform:translateY(-4px) scale(1.05);border-color:var(--pink)}
+  .letter-tile .big{font-size:24px;display:block;color:var(--pink)}
+  .letter-tile .small{font-size:15px;color:var(--muted)}
+  .vocab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:14px 0}
+  .vocab{background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px;box-shadow:var(--shadow-sm)}
+  .vocab b{display:block;font-size:16px;color:var(--pink)}
+  .vocab span{font-size:13.5px;color:var(--muted);font-weight:600}
+  .summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:14px}
+  .sum-card{border-radius:20px;padding:16px;border:2px solid #fff;box-shadow:var(--shadow-sm);font-weight:600;font-size:14.5px}
+  .sum-card b{display:block;font-size:15px;margin-bottom:4px}
+  .c1{background:var(--pink-soft)} .c2{background:var(--amber-soft)}
+  .c3{background:var(--mint-soft)} .c4{background:var(--sky-soft)} .c5{background:var(--violet-soft)}
+  .read-progress{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:14px}
+  .read-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#34D399,#60A5FA);transition:width .2s}
+
+  /* LAB */
+  .lab-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+  @media(max-width:900px){.lab-grid{grid-template-columns:1fr}}
+  .lab-canvas-wrap{background:linear-gradient(160deg,#FFFDF8,#F5F3FF);border-radius:22px;padding:10px;border:2px solid var(--line);box-shadow:inset 0 0 0 3px #fff;position:relative}
+  canvas{display:block;width:100%;border-radius:16px;touch-action:none}
+  .canvas-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-radius:999px;padding:6px 14px;font-size:11.5px;font-weight:800;color:var(--muted);box-shadow:var(--shadow-sm);pointer-events:none;white-space:nowrap;border:1px solid var(--line)}
+  .control{margin-bottom:16px}
+  .control label{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px;gap:8px}
+  .control .val{background:var(--violet-soft);color:#6D28D9;border-radius:999px;padding:2px 12px;font-size:13px;font-weight:900;white-space:nowrap}
+  .control small{display:block;color:var(--muted);font-weight:600;font-size:12px;margin-bottom:6px}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:12px;border-radius:99px;background:linear-gradient(90deg,#FB7185,#FBBF24,#34D399);outline:none;margin-top:8px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:4px solid var(--pink);cursor:pointer;box-shadow:var(--shadow-sm)}
+  input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--pink);cursor:pointer}
+  .meters{display:grid;gap:10px;margin-top:14px}
+  .meter{background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 12px;box-shadow:var(--shadow-sm)}
+  .meter .mtop{display:flex;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:6px}
+  .bar{height:12px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .25s}
+  .b1 i{background:linear-gradient(90deg,#FB7185,#F472B6)}
+  .b2 i{background:linear-gradient(90deg,#FBBF24,#F59E0B)}
+  .b3 i{background:linear-gradient(90deg,#34D399,#10B981)}
+  .verdict{margin-top:14px;background:var(--sky-soft);border-left:6px solid var(--sky);border-radius:14px;padding:12px 14px;font-weight:700;font-size:14px}
+  .obs-list{list-style:none;padding:0;margin:12px 0 0}
+  .obs-list li{display:flex;gap:10px;align-items:flex-start;background:#FFFBF5;border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:13.5px;font-weight:600;border:2px solid var(--line)}
+  .obs-list li input{width:20px;height:20px;accent-color:var(--mint);margin-top:2px;flex-shrink:0}
+  .vocab-lab{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .vocab-item{background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 10px;box-shadow:var(--shadow-sm);cursor:pointer;transition:.18s;position:relative;text-align:left;font-family:inherit;color:var(--ink)}
+  .vocab-item:hover{transform:translateY(-3px);border-color:var(--violet);box-shadow:var(--shadow)}
+  .vocab-item b{display:block;font-size:14px;color:var(--pink);letter-spacing:.6px;font-weight:900}
+  .vocab-item span{display:block;font-size:11px;color:var(--muted);font-weight:600;line-height:1.3}
+  .vocab-item .vw-ico{position:absolute;top:6px;right:8px;font-size:13px;opacity:.55}
+  .vocab-item.hi{border-color:var(--mint);background:var(--mint-soft)}
+  .vocab-item.lo{border-color:var(--pink);background:var(--pink-soft)}
+
+  /* READING MODE */
+  .reading-mode{position:fixed;inset:0;z-index:180;background:rgba(52,40,80,.62);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:16px;animation:fadeIn .25s ease}
+  .reading-mode.show{display:flex}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .reading-card{background:linear-gradient(165deg,#FFFFFF 0%,#FFF7ED 50%,#F5F3FF 100%);border-radius:36px;padding:36px 28px 28px;max-width:560px;width:100%;box-shadow:0 40px 80px -24px rgba(40,20,80,.6);border:4px solid #fff;text-align:center;position:relative;animation:pop .38s cubic-bezier(.2,1.3,.4,1)}
+  @keyframes pop{from{transform:scale(.86) translateY(20px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+  .reading-close{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:none;background:var(--pink-soft);color:var(--pink);font-size:20px;font-weight:900;cursor:pointer;transition:.18s}
+  .reading-close:hover{transform:rotate(90deg) scale(1.08);background:var(--pink);color:#fff}
+  .reading-badge{display:inline-block;background:var(--amber-soft);color:#B45309;border-radius:999px;padding:5px 16px;font-size:12px;font-weight:900;letter-spacing:.5px;margin-bottom:14px}
+  .reading-emoji{font-size:88px;line-height:1;margin:6px 0 10px;display:block;animation:bob 2.2s ease-in-out infinite}
+  .reading-word{font-size:clamp(58px,15vw,96px);font-weight:900;letter-spacing:6px;background:linear-gradient(120deg,#FB7185,#FBBF24,#34D399);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.05;margin:6px 0 10px;word-break:break-word}
+  .reading-syllables{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 16px}
+  .syl-chip{background:#fff;border:3px solid var(--violet-soft);border-radius:16px;padding:8px 18px;font-size:22px;font-weight:900;color:#6D28D9;box-shadow:var(--shadow-sm);letter-spacing:1px}
+  .syl-dot{font-size:22px;font-weight:900;color:#C4B5FD;align-self:center}
+  .reading-meaning{background:#fff;border-radius:20px;padding:14px 18px;margin:0 auto 18px;max-width:420px;font-size:15.5px;font-weight:700;color:#4B4568;border:2px dashed var(--line)}
+  .reading-meaning small{display:block;font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.5px;margin-bottom:4px}
+  .reading-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+  .reading-actions .btn{padding:12px 20px;font-size:14.5px;border-radius:18px}
+  .speak-status{margin-top:14px;font-size:12.5px;font-weight:800;color:var(--muted);min-height:18px;letter-spacing:.3px}
+  .speak-status.playing{color:var(--mint)}
+  .reading-card.speaking .reading-emoji{animation:bob 1s ease-in-out infinite}
+  @media(max-width:520px){
+    .reading-card{padding:28px 18px 22px;border-radius:28px}
+    .reading-emoji{font-size:66px}
+    .syl-chip{font-size:18px;padding:6px 14px}
+    .reading-actions .btn{flex:1;min-width:130px}
+  }
+
+  /* PUZZLE */
+  .puzzle-slots{display:grid;gap:12px;margin-bottom:20px}
+  .puzzle-slot{display:flex;align-items:center;gap:12px;min-height:74px;background:#FFFBF5;border:3px dashed #E3D6C8;border-radius:20px;padding:10px 14px;transition:.2s}
+  .puzzle-slot .num{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;box-shadow:var(--shadow-sm)}
+  .puzzle-slot .ph{color:#B9B2CC;font-weight:700;font-size:14px}
+  .puzzle-slot.over{border-color:var(--sky);background:var(--sky-soft);transform:scale(1.015)}
+  .puzzle-slot.filled{border-style:solid;border-color:var(--mint);background:var(--mint-soft)}
+  .puzzle-slot.wrong{animation:shake .45s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+  .puzzle-tray{display:flex;flex-wrap:wrap;gap:12px;min-height:70px;padding:12px;border-radius:20px;background:#F8F5FF;border:2px solid var(--line)}
+  .puzzle-chip{background:#fff;border:3px solid var(--violet);border-radius:16px;padding:10px 14px;font-weight:800;font-size:14px;cursor:grab;touch-action:none;user-select:none;box-shadow:var(--shadow-sm);transition:transform .15s, box-shadow .15s;max-width:100%}
+  .puzzle-chip:hover{transform:translateY(-3px)}
+  .puzzle-chip.dragging{opacity:.32}
+  .puzzle-chip.placed{border-color:var(--mint);background:#fff;cursor:default;box-shadow:none;flex:1}
+  .puzzle-chip.ghost{position:fixed;z-index:999;pointer-events:none;transform:rotate(-3deg) scale(1.05);box-shadow:0 18px 30px -12px rgba(84,60,120,.5);opacity:.96}
+  .puzzle-feedback{margin-top:14px;border-radius:16px;padding:12px 16px;font-weight:800;font-size:14px;display:none}
+  .puzzle-feedback.ok{display:block;background:var(--mint-soft);border-left:6px solid var(--mint)}
+  .puzzle-feedback.no{display:block;background:var(--pink-soft);border-left:6px solid var(--pink)}
+
+  /* QUIZ SETUP FORM */
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .field label{display:block;font-weight:800;font-size:13.5px;margin-bottom:6px}
+  .field input,.field select{width:100%;padding:13px 15px;border-radius:16px;border:2px solid var(--line);font-size:15px;font-family:inherit;font-weight:700;color:var(--ink);background:#FFFDF9;outline:none;transition:.18s}
+  .field input:focus,.field select:focus{border-color:var(--pink);background:#fff}
+  .field small{display:block;color:var(--muted);font-size:11.5px;font-weight:600;margin-top:4px}
+
+  /* =========== ADVENTURE MAP =========== */
+  .players-panel-map{display:grid;gap:14px;margin-bottom:16px}
+  .players-panel-map.duel{grid-template-columns:1fr 1fr}
+  @media(max-width:600px){.players-panel-map.duel{grid-template-columns:1fr}}
+
+  .player-card{background:#fff;border:3px solid var(--line);border-radius:22px;padding:14px;box-shadow:var(--shadow-sm);transition:.25s}
+  .player-card.active{border-color:var(--pink);background:linear-gradient(160deg,#fff,#FFE4E6);box-shadow:var(--shadow)}
+  .player-card.waiting{opacity:.55;filter:grayscale(.35)}
+  .pc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .pc-avatar{font-size:26px}
+  .pc-head strong{display:block;font-size:15px}
+  .pc-head small{display:block;font-size:11.5px;color:var(--muted);font-weight:700}
+  .pc-stats{display:flex;gap:10px;flex-wrap:wrap;font-weight:900;font-size:13.5px;margin-bottom:6px}
+  .pc-status{display:block;font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px}
+
+  .map-wrapper{
+    background:linear-gradient(160deg,#FFF9F0,#F0F9FF 55%,#F5F3FF);
+    border-radius:28px;padding:18px;border:3px solid #fff;
+    box-shadow:var(--shadow);
+  }
+  .map-header{text-align:center;margin-bottom:12px}
+  .map-header h3{font-size:clamp(18px,4vw,22px);margin-bottom:4px}
+  .map-header p{color:var(--muted);font-weight:700;font-size:13.5px;margin:0}
+
+  .adventure-map{
+    position:relative;width:100%;aspect-ratio:16/10;min-height:340px;
+    background:
+      radial-gradient(circle at 25% 20%, rgba(255,228,230,.85) 0%, transparent 45%),
+      radial-gradient(circle at 78% 82%, rgba(219,234,254,.85) 0%, transparent 45%),
+      radial-gradient(circle at 55% 55%, rgba(254,243,199,.6) 0%, transparent 50%),
+      linear-gradient(180deg,#FEF3C7 0%,#FFF7ED 45%,#D1FAE5 100%);
+    border-radius:22px;overflow:hidden;border:2px solid var(--line);
+  }
+  .adventure-map::before{
+    content:"🌳 🌼 🌿 🌸 🦋 🌻 🍄 🌺 🌱 🐝";
+    position:absolute;inset:auto 0 6px 0;text-align:center;font-size:16px;
+    letter-spacing:14px;opacity:.45;pointer-events:none;white-space:nowrap;overflow:hidden;
+  }
+  .adventure-map::after{
+    content:"☁️ ☁️ ☁️";
+    position:absolute;top:8px;left:0;right:0;text-align:center;font-size:20px;
+    letter-spacing:60px;opacity:.5;pointer-events:none;
+  }
+
+  .map-path{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+  .map-node{
+    position:absolute;transform:translate(-50%,-50%);
+    width:56px;height:56px;border-radius:50%;border:4px solid #fff;
+    background:#E5E7EB;color:#9CA3AF;font-weight:900;font-size:19px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 18px -8px rgba(84,60,120,.5);
+    transition:transform .22s, box-shadow .22s, background .22s;
+    z-index:2;padding:0;font-family:inherit;
+  }
+  .map-node .node-ico{display:block;line-height:1}
+  .map-node:hover:not(:disabled){transform:translate(-50%,-50%) scale(1.14)}
+  .map-node:disabled{cursor:not-allowed}
+
+  .map-node.locked{background:#E5E7EB;color:#9CA3AF;opacity:.85}
+  .map-node.current{
+    background:linear-gradient(135deg,#FB7185,#F472B6);color:#fff;
+    animation:pulseNode 1.7s ease-in-out infinite;z-index:3;
+  }
+  .map-node.completed{background:linear-gradient(135deg,#34D399,#10B981);color:#fff}
+  .map-node.failed{background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#fff}
+  .map-node.boss{
+    width:72px;height:72px;font-size:30px;
+    background:linear-gradient(135deg,#A78BFA,#8B5CF6);color:#fff;
+    animation:pulseNode 1.3s ease-in-out infinite;z-index:5;
+  }
+  .map-node.boss.done{
+    background:linear-gradient(135deg,#FBBF24,#F59E0B);animation:none;
+  }
+
+  @keyframes pulseNode{
+    0%,100%{box-shadow:0 0 0 0 rgba(251,113,133,.62), 0 8px 18px -8px rgba(84,60,120,.5)}
+    70%{box-shadow:0 0 0 16px rgba(251,113,133,0), 0 8px 18px -8px rgba(84,60,120,.5)}
+  }
+
+  .map-node .node-label{
+    position:absolute;top:100%;left:50%;transform:translateX(-50%);
+    font-size:9.5px;font-weight:900;color:var(--ink);background:#fff;
+    padding:2px 8px;border-radius:8px;box-shadow:var(--shadow-sm);
+    white-space:nowrap;margin-top:4px;letter-spacing:.2px;
+  }
+  .map-node .node-badge{
+    position:absolute;top:-6px;right:-6px;font-size:14px;
+  }
+
+  .map-legend{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+    margin-top:14px;padding-top:12px;border-top:2px dashed var(--line);
+  }
+  .map-legend span{
+    background:#fff;border-radius:999px;padding:5px 12px;font-size:11.5px;
+    font-weight:800;color:var(--muted);box-shadow:var(--shadow-sm);
+  }
+
+  /* QUESTION OVERLAY */
+  .q-overlay{
+    position:fixed;inset:0;background:rgba(52,40,80,.7);backdrop-filter:blur(8px);
+    display:none;align-items:center;justify-content:center;padding:14px;z-index:190;
+  }
+  .q-overlay.show{display:flex;animation:fadeIn .22s ease}
+
+  .q-overlay-card{
+    background:linear-gradient(160deg,#fff,#FFF9F0);
+    border-radius:30px;padding:22px;max-width:640px;width:100%;
+    max-height:92vh;overflow-y:auto;border:4px solid #fff;
+    box-shadow:0 30px 60px -20px rgba(40,20,80,.7);
+    animation:pop .34s cubic-bezier(.2,1.3,.4,1);position:relative;
+  }
+
+  .q-top-bar{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .quiz-badges{display:flex;gap:8px;flex-wrap:wrap}
+  .qbadge{
+    background:#fff;border:2px solid var(--line);border-radius:999px;
+    padding:5px 12px;font-weight:900;font-size:12.5px;box-shadow:var(--shadow-sm);
+  }
+  .qbadge.time{background:var(--sky-soft);border-color:var(--sky)}
+  .qbadge.lives{background:var(--pink-soft);border-color:var(--pink)}
+  .qbadge.score{background:var(--amber-soft);border-color:var(--amber)}
+  .qbadge.coins{background:var(--mint-soft);border-color:var(--mint)}
+
+  .qmeta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .tag{font-size:11.5px;font-weight:900;padding:4px 12px;border-radius:999px;background:var(--violet-soft);color:#6D28D9}
+  .tag.lv{background:var(--mint-soft);color:#047857}
+  .qtext{font-size:19px;font-weight:900;margin:8px 0 16px;display:flex;gap:10px;align-items:flex-start}
+  .qtext .qico{font-size:26px;flex-shrink:0}
+  .options{display:grid;gap:11px}
+  .opt{
+    display:flex;align-items:center;gap:12px;background:#fff;border:3px solid var(--line);
+    border-radius:18px;padding:13px 16px;font-weight:800;font-size:15.5px;cursor:pointer;
+    transition:.16s;text-align:left;color:var(--ink);font-family:inherit;
+  }
+  .opt:hover:not(:disabled){border-color:var(--sky);transform:translateX(4px);background:#F8FBFF}
+  .opt .letter{
+    width:34px;height:34px;flex-shrink:0;border-radius:12px;background:var(--sky-soft);
+    display:flex;align-items:center;justify-content:center;font-weight:900;color:#1D4ED8;
+  }
+  .opt.correct{background:var(--mint-soft);border-color:var(--mint)}
+  .opt.correct .letter{background:var(--mint);color:#fff}
+  .opt.wrong{background:var(--pink-soft);border-color:var(--pink)}
+  .opt.wrong .letter{background:var(--pink);color:#fff}
+  .opt:disabled{cursor:default;transform:none}
+
+  .feedback{margin-top:14px;border-radius:18px;padding:14px 16px;font-weight:700;font-size:14.5px;display:none}
+  .feedback.ok{display:block;background:var(--mint-soft);border-left:6px solid var(--mint)}
+  .feedback.no{display:block;background:var(--pink-soft);border-left:6px solid var(--pink)}
+
+  /* RESULT */
+  .result-hero{text-align:center;background:linear-gradient(160deg,#FEF3C7,#FFE4E6,#EDE9FE);border-radius:28px;padding:28px 18px;border:3px solid #fff;margin-bottom:16px}
+  .result-hero .medal{font-size:64px;display:block;animation:bob 2s infinite}
+  .result-hero h2{font-size:26px;margin:8px 0}
+  .result-stats{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:14px}
+  .rstat{background:#fff;border-radius:18px;padding:12px 20px;box-shadow:var(--shadow-sm);font-weight:900;font-size:15px;min-width:110px}
+  .rstat small{display:block;font-size:11.5px;color:var(--muted);font-weight:700}
+  .review-item{border:2px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px;background:#fff}
+  .review-item .rq{font-weight:900;margin-bottom:8px}
+  .review-item .ra{font-weight:800;color:#047857;margin-bottom:4px}
+  .review-item .rx{font-size:13.5px;color:var(--muted);font-weight:600}
+  .review-item .rh{font-size:13px;color:#B45309;font-weight:700;margin-top:6px}
+
+  /* MODAL */
+  .modal{position:fixed;inset:0;background:rgba(52,40,80,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:200}
+  .modal.show{display:flex}
+  .modal-card{background:#fff;border-radius:26px;max-width:820px;width:100%;max-height:88vh;overflow-y:auto;padding:24px;box-shadow:0 30px 60px -20px rgba(40,20,80,.55);position:relative;animation:pop .28s ease}
+  .modal-close{position:absolute;top:14px;right:14px;border:none;background:var(--pink-soft);color:var(--pink);width:38px;height:38px;border-radius:50%;font-size:17px;font-weight:900;cursor:pointer}
+  .modal h3{font-size:21px;margin-bottom:10px}
+  .lock-box{text-align:center;padding:16px 6px}
+  .lock-box .lico{font-size:52px;display:block;margin-bottom:10px}
+
+  #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,140%);background:#403A5C;color:#fff;padding:13px 22px;border-radius:999px;font-weight:800;font-size:14px;z-index:300;transition:transform .35s cubic-bezier(.2,1.2,.4,1);box-shadow:var(--shadow);max-width:92vw;text-align:center}
+  #toast.show{transform:translate(-50%,0)}
+
+  footer{text-align:center;padding:26px 16px 34px;color:var(--muted);font-weight:700;font-size:13px;border-top:2px dashed var(--line);background:rgba(255,255,255,.6)}
+  footer b{color:var(--pink)}
+  .credit-badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:8px 18px;box-shadow:var(--shadow-sm);margin-top:8px}
+
+  @media(max-width:520px){
+    .card{padding:16px;border-radius:20px}
+    .hero{padding:26px 14px}
+    .btn.big{padding:13px 18px;font-size:15px;width:100%}
+    .hero-actions{flex-direction:column}
+    .vocab-lab{grid-template-columns:1fr 1fr}
+    .map-node{width:44px;height:44px;font-size:15px;border-width:3px}
+    .map-node.boss{width:58px;height:58px;font-size:22px}
+    .map-node .node-label{font-size:8px;padding:1px 5px;margin-top:2px}
+    .adventure-map{min-height:300px}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-emoji">🐱</span>
+    <div>
+      <strong>Petualangan Huruf</strong>
+      <small>Bahasa Indonesia • Kelas 1 • Fase A</small>
+    </div>
+  </div>
+  <nav class="nav" id="mainNav">
+    <button class="nav-btn active" data-page="beranda">🏠 Beranda</button>
+    <button class="nav-btn" data-page="tujuan">🎯 Tujuan</button>
+    <button class="nav-btn" data-page="materi">📖 Materi</button>
+    <button class="nav-btn" data-page="lab">🔬 Lab Maya</button>
+    <button class="nav-btn" data-page="puzzle">🧩 Puzzle</button>
+    <button class="nav-btn" data-page="evaluasi">🗺️ Evaluasi</button>
+  </nav>
+  <button class="btn ghost small" id="btnGuru">👩‍🏫 Mode Guru</button>
+</header>
+
+<main>
+
+  <!-- BERANDA -->
+  <section id="page-beranda" class="page active">
+    <div class="hero">
+      <div class="hero-deco">🎈 ⭐ 🐱 🌈 ✏️</div>
+      <h1>Selamat Datang di <span>Petualangan Huruf!</span></h1>
+      <p>Halo, teman kecil! Ayo belajar <strong>membaca dan memahami huruf</strong> bersama Kiki si Kucing.
+         Kamu bisa membaca materi, mencoba lab maya, bermain puzzle, dan menjelajahi peta petualangan!
+         Semua bisa kamu buka dengan bebas — tanpa perlu login! 🎉</p>
+      <div class="hero-actions">
+        <button class="btn primary big" data-goto="materi">📖 Mulai Belajar</button>
+        <button class="btn amber big" data-goto="lab">🔬 Coba Lab Maya</button>
+        <button class="btn mint big" data-goto="puzzle">🧩 Main Puzzle</button>
+        <button class="btn sky big" data-goto="evaluasi">🗺️ Peta Petualangan</button>
+      </div>
+    </div>
+
+    <div class="menu-cards">
+      <div class="menu-card" data-goto="tujuan">
+        <span class="ico">🎯</span>
+        <h3>Tujuan Pembelajaran</h3>
+        <p>Apa saja yang akan kamu kuasai?</p>
+      </div>
+      <div class="menu-card" data-goto="materi">
+        <span class="ico">📖</span>
+        <h3>Materi Lengkap</h3>
+        <p>Kenali huruf A–Z dengan mudah</p>
+      </div>
+      <div class="menu-card" data-goto="lab">
+        <span class="ico">🔬</span>
+        <h3>Lab Maya</h3>
+        <p>Klik kartu & dengar suaranya!</p>
+      </div>
+      <div class="menu-card" data-goto="evaluasi">
+        <span class="ico">🗺️</span>
+        <h3>Peta Petualangan</h3>
+        <p>10 titik soal + tantangan akhir</p>
+      </div>
+    </div>
+
+    <div class="info-strip">
+      <span>🌈 Belajar sambil bermain</span>
+      <span>⭐ Kumpulkan bintang</span>
+      <span>🪙 Kumpulkan koin</span>
+      <span>🏅 Raih badge Master Huruf</span>
+    </div>
+  </section>
+
+  <!-- TUJUAN -->
+  <section id="page-tujuan" class="page">
+    <div class="card">
+      <div class="section-title"><span class="dot"></span>🎯 Tujuan Pembelajaran</div>
+      <p class="lead">Kompetensi yang akan kamu capai setelah belajar di modul ini.</p>
+
+      <div class="goal-box">
+        <h3>🌟 Capaian Utama</h3>
+        <p style="font-weight:700;margin:0">Peserta didik mampu <strong>membaca dan memahami huruf</strong> dengan tepat, mulai dari mengenali bentuk huruf, membedakan huruf vokal dan konsonan, merangkai huruf menjadi suku kata, hingga membaca kata dan kalimat sederhana.</p>
+      </div>
+
+      <h3 style="font-size:17px">✅ Indikator Keberhasilan</h3>
+      <div class="chips">
+        <span class="chip">🔤 Mengenal 26 huruf A–Z</span>
+        <span class="chip">🅰️ Membedakan huruf vokal &amp; konsonan</span>
+        <span class="chip">🔠 Membedakan huruf besar &amp; kecil</span>
+        <span class="chip">🧩 Merangkai huruf menjadi suku kata</span>
+        <span class="chip">📖 Membaca kata sederhana</span>
+        <span class="chip">✨ Membaca kalimat pendek</span>
+      </div>
+
+      <h3 style="font-size:17px;margin-top:24px">🤔 Pertanyaan Pemantik</h3>
+      <ol class="question-list">
+        <li>Mengapa kita perlu mengenal huruf sebelum bisa membaca?</li>
+        <li>Apa perbedaan huruf vokal dan huruf konsonan? Coba sebutkan contohnya!</li>
+        <li>Bagaimana caranya huruf-huruf bisa dirangkai menjadi sebuah kata?</li>
+      </ol>
+
+      <div class="hl sky" style="margin-top:18px">
+        💡 <strong>Petunjuk belajar:</strong> Bacalah materi terlebih dahulu, lalu coba Lab Maya untuk menguji pemahamanmu,
+        lanjutkan dengan Puzzle, dan akhiri dengan Peta Petualangan. Semangat! 🚀
+      </div>
+    </div>
+  </section>
+
+  <!-- MATERI -->
+  <section id="page-materi" class="page">
+    <div class="card">
+      <div class="section-title"><span class="dot"></span>📖 Materi Pembelajaran Mandiri</div>
+      <p class="lead">Bacalah dengan saksama. Klik huruf-huruf berwarna untuk mendengar/melihat contohnya!</p>
+      <div class="read-progress"><i id="readBar"></i></div>
+
+      <div class="materi-body" id="materiBody">
+        <h3>🔤 Bab I — Apa Itu Huruf?</h3>
+        <p><strong>Huruf</strong> adalah lambang atau tanda yang mewakili bunyi dalam bahasa. Bahasa Indonesia
+        menggunakan <strong>26 huruf</strong>, mulai dari <strong>A</strong> sampai <strong>Z</strong>.
+        Ketika kita membaca, tiga hal bekerja bersama: <em>mata</em> mengenali bentuk huruf, <em>otak</em>
+        menghubungkan bentuk itu dengan bunyi, dan <em>mulut</em> mengucapkannya.</p>
+        <p>Jadi, membaca bukan sekadar melihat tulisan. Membaca adalah kegiatan mengubah tulisan menjadi
+        <strong>bunyi</strong> dan <strong>makna</strong>. Inilah sebabnya memahami huruf menjadi fondasi
+        paling penting sebelum kita belajar membaca kata dan kalimat.</p>
+
+        <div class="hl">
+          📌 <strong>Poin penting:</strong> Huruf → Bunyi → Kata → Makna. Empat langkah ajaib dalam membaca!
+        </div>
+
+        <h3>🅰️ Bab II — Huruf Vokal dan Huruf Konsonan</h3>
+        <p>Huruf dalam bahasa Indonesia dibagi menjadi dua kelompok besar, yaitu <strong>huruf vokal</strong>
+        dan <strong>huruf konsonan</strong>.</p>
+
+        <h4>A. Huruf Vokal (Huruf Hidup)</h4>
+        <p>Huruf vokal ada <strong>5 buah</strong>, yaitu <strong>a, i, u, e, o</strong>. Disebut huruf hidup
+        karena saat mengucapkannya, udara keluar dengan lancar tanpa hambatan. Coba ucapkan "aaaa" —
+        mulutmu terbuka lebar, bukan?</p>
+        <div class="letter-grid">
+          <div class="letter-tile"><span class="big">Aa</span><span class="small">a</span></div>
+          <div class="letter-tile"><span class="big">Ii</span><span class="small">i</span></div>
+          <div class="letter-tile"><span class="big">Uu</span><span class="small">u</span></div>
+          <div class="letter-tile"><span class="big">Ee</span><span class="small">e</span></div>
+          <div class="letter-tile"><span class="big">Oo</span><span class="small">o</span></div>
+        </div>
+
+        <h4>B. Huruf Konsonan (Huruf Mati)</h4>
+        <p>Huruf konsonan ada <strong>21 buah</strong>, yaitu
+        <strong>b, c, d, f, g, h, j, k, l, m, n, p, q, r, s, t, v, w, x, y, z</strong>.
+        Saat mengucapkan huruf konsonan, ada hambatan pada mulut, lidah, atau gigi.
+        Coba ucapkan "b" — bibirmu menutup lalu terbuka, bukan?</p>
+        <div class="hl mint">
+          🧠 <strong>Contoh analisis kata "IBU":</strong><br>
+          I → huruf vokal &nbsp;|&nbsp; B → huruf konsonan &nbsp;|&nbsp; U → huruf vokal.<br>
+          Pola vokal–konsonan–vokal inilah yang membuat kata "IBU" mudah dibaca.
+        </div>
+
+        <h3>🔠 Bab III — Huruf Besar (Kapital) dan Huruf Kecil</h3>
+        <p>Setiap huruf memiliki dua bentuk: <strong>huruf besar (kapital)</strong> dan <strong>huruf kecil</strong>.
+        Keduanya adalah huruf yang sama, hanya berbeda bentuk dan penggunaannya.</p>
+        <div class="letter-grid">
+          <div class="letter-tile"><span class="big">A</span><span class="small">a</span></div>
+          <div class="letter-tile"><span class="big">B</span><span class="small">b</span></div>
+          <div class="letter-tile"><span class="big">C</span><span class="small">c</span></div>
+          <div class="letter-tile"><span class="big">D</span><span class="small">d</span></div>
+          <div class="letter-tile"><span class="big">E</span><span class="small">e</span></div>
+          <div class="letter-tile"><span class="big">F</span><span class="small">f</span></div>
+        </div>
+        <p><strong>Kapan kita memakai huruf kapital?</strong></p>
+        <ul>
+          <li>Pada <strong>awal kalimat</strong>. Contoh: <em>Ibu membeli susu.</em></li>
+          <li>Pada <strong>nama orang</strong>. Contoh: <em>Budi, Siti, Kiki.</em></li>
+          <li>Pada <strong>nama tempat</strong>. Contoh: <em>Bandung, Jakarta.</em></li>
+        </ul>
+        <div class="hl pink">
+          ⚠️ <strong>Hati-hati!</strong> Kata "ibu" di tengah kalimat ditulis dengan huruf kecil,
+          tetapi di awal kalimat harus menjadi "Ibu".
+        </div>
+
+        <h3>🧩 Bab IV — Merangkai Huruf Menjadi Suku Kata</h3>
+        <p>Setelah mengenal huruf, langkah berikutnya adalah <strong>merangkai huruf menjadi suku kata</strong>.
+        Suku kata adalah potongan bunyi dalam sebuah kata. Caranya: gabungkan satu huruf konsonan dengan
+        satu huruf vokal.</p>
+        <div class="vocab-grid">
+          <div class="vocab"><b>b + a = ba</b><span>Contoh: baju, batu</span></div>
+          <div class="vocab"><b>b + i = bi</b><span>Contoh: bibir, bibi</span></div>
+          <div class="vocab"><b>b + u = bu</b><span>Contoh: buku, bumi</span></div>
+          <div class="vocab"><b>m + a = ma</b><span>Contoh: mama, mata</span></div>
+          <div class="vocab"><b>s + u = su</b><span>Contoh: susu, sup</span></div>
+          <div class="vocab"><b>k + u = ku</b><span>Contoh: kucing, kuku</span></div>
+        </div>
+        <p>Setelah suku kata terbentuk, kita tinggal menggabungkannya menjadi kata utuh:</p>
+        <div class="hl sky">
+          🔗 <strong>b</strong> + <strong>u</strong> = <strong>bu</strong> &nbsp;→&nbsp;
+          <strong>bu</strong> + <strong>ku</strong> = <strong>buku</strong> 📚<br>
+          🔗 <strong>m</strong> + <strong>a</strong> = <strong>ma</strong> &nbsp;→&nbsp;
+          <strong>ma</strong> + <strong>ma</strong> = <strong>mama</strong> 👩
+        </div>
+
+        <h3>📖 Bab V — Membaca Kata dan Kalimat Sederhana</h3>
+        <p>Saat membaca, arahkan mata dari <strong>kiri ke kanan</strong>, lalu turun ke baris berikutnya.
+        Bacalah dengan suara jelas dan perlahan. Setelah lancar, barulah menambah kecepatan.</p>
+        <ul>
+          <li><strong>Tanda titik (.)</strong> dipakai untuk mengakhiri kalimat.</li>
+          <li><strong>Tanda tanya (?)</strong> dipakai untuk kalimat bertanya.</li>
+          <li>Bacalah dengan <strong>intonasi</strong> agar kalimat terdengar hidup.</li>
+        </ul>
+        <div class="hl">
+          📝 <strong>Latihan membaca:</strong><br>
+          "Ibu membeli buku." → I-bu mem-be-li bu-ku.<br>
+          "Kiki suka susu." → Ki-ki su-ka su-su.
+        </div>
+
+        <h3>🌟 Bab VI — Tips Sukses Belajar Huruf</h3>
+        <ol>
+          <li><strong>Latihan setiap hari</strong>, cukup 10 menit tetapi rutin.</li>
+          <li><strong>Baca dengan suara nyaring</strong> agar telinga juga ikut belajar.</li>
+          <li><strong>Gunakan kartu huruf</strong> warna-warni supaya mudah diingat.</li>
+          <li><strong>Bermain puzzle huruf</strong> untuk melatih kecepatan.</li>
+          <li><strong>Jangan takut salah</strong> — salah adalah bagian dari belajar! 💪</li>
+        </ol>
+
+        <h3>📌 Rangkuman Inti</h3>
+        <div class="summary-cards">
+          <div class="sum-card c1"><b>🔤 26 Huruf</b>Bahasa Indonesia memakai huruf A sampai Z.</div>
+          <div class="sum-card c2"><b>🅰️ 5 Vokal</b>a, i, u, e, o adalah huruf hidup.</div>
+          <div class="sum-card c3"><b>🔠 Huruf Kapital</b>Dipakai di awal kalimat dan nama.</div>
+          <div class="sum-card c4"><b>🧩 Suku Kata</b>Konsonan + vokal: ba, bi, bu, ma, su.</div>
+          <div class="sum-card c5"><b>📖 Membaca</b>Dari kiri ke kanan dengan intonasi.</div>
+        </div>
+
+        <h3>📚 Glosarium</h3>
+        <ul>
+          <li><strong>Huruf</strong> — lambang bunyi dalam bahasa tulis.</li>
+          <li><strong>Vokal</strong> — huruf hidup (a, i, u, e, o).</li>
+          <li><strong>Konsonan</strong> — huruf mati selain vokal.</li>
+          <li><strong>Suku kata</strong> — potongan bunyi pembentuk kata.</li>
+          <li><strong>Intonasi</strong> — naik turunnya nada saat membaca.</li>
+        </ul>
+
+        <div class="hl mint">
+          🎉 Selamat! Kamu telah menyelesaikan modul materi. Lanjutkan ke
+          <strong>Lab Maya</strong>, lalu <strong>Puzzle</strong>, dan akhiri dengan
+          <strong>Peta Petualangan</strong>. Semangat belajar! 🌟
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB MAYA -->
+  <section id="page-lab" class="page">
+    <div class="card">
+      <div class="section-title"><span class="dot"></span>🔬 Laboratorium Maya &amp; Simulasi Digital</div>
+      <p class="lead">Topik: <strong>Membaca dan Memahami Huruf</strong> — Ujilah bagaimana ketajaman penglihatan,
+      kestabilan fokus, dan durasi pengamatan memengaruhi kemampuan mengenali <strong>10 kosakata</strong>!
+      <br>👉 <strong>Klik kartu kosakata</strong> pada kanvas atau daftar untuk membuka <strong>Mode Baca</strong> bersuara otomatis.</p>
+
+      <div class="lab-grid">
+        <div>
+          <div class="lab-canvas-wrap">
+            <canvas id="labCanvas" height="420"></canvas>
+            <div class="canvas-hint">👆 Klik salah satu kartu untuk Mode Baca 🔊</div>
+          </div>
+          <div class="meters">
+            <div class="meter b1">
+              <div class="mtop"><span>🎯 Ketepatan Mengenali Huruf</span><b id="vAcc">0%</b></div>
+              <div class="bar"><i id="mAcc"></i></div>
+            </div>
+            <div class="meter b2">
+              <div class="mtop"><span>⚖️ Kestabilan Fokus Sistem</span><b id="vStab">0%</b></div>
+              <div class="bar"><i id="mStab"></i></div>
+            </div>
+            <div class="meter b3">
+              <div class="mtop"><span>🚀 Kelancaran Membaca</span><b id="vFlu">0%</b></div>
+              <div class="bar"><i id="mFlu"></i></div>
+            </div>
+          </div>
+          <div class="verdict" id="labVerdict">Geser slider untuk melihat perubahan sistem…</div>
+        </div>
+
+        <div>
+          <div class="control">
+            <label>💡 Intensitas Stimulus <span class="val" id="valIntensity">60 Poin</span></label>
+            <small>Semakin tinggi, semakin jelas bentuk huruf.</small>
+            <input type="range" id="slIntensity" min="10" max="100" step="5" value="60">
+          </div>
+          <div class="control">
+            <label>⚖️ Faktor Regulasi / Stabilitas <span class="val" id="valStability">50 %</span></label>
+            <small>Kemampuan sistem menjaga fokus.</small>
+            <input type="range" id="slStability" min="0" max="100" step="5" value="50">
+          </div>
+          <div class="control">
+            <label>⏱️ Durasi Respon / Pengamatan <span class="val" id="valDuration">20 Detik</span></label>
+            <small>Lama waktu pemantauan respon.</small>
+            <input type="range" id="slDuration" min="5" max="60" step="5" value="20">
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn primary small" id="btnLabReset">🔄 Reset</button>
+            <button class="btn violet small" id="btnLabRun">▶️ Jalankan</button>
+          </div>
+
+          <h4 style="margin-top:20px;font-size:15px">📚 Kosakata Lab (10 kata) — klik untuk dengar</h4>
+          <div class="vocab-lab" id="vocabLab"></div>
+
+          <h4 style="margin-top:20px;font-size:15px">📋 Titik Pengamatan</h4>
+          <ul class="obs-list">
+            <li><input type="checkbox"><span>Perubahan stimulus memengaruhi ketepatan mengenali 10 kosakata.</span></li>
+            <li><input type="checkbox"><span>Faktor regulasi optimal menghasilkan kestabilan berkelanjutan.</span></li>
+            <li><input type="checkbox"><span>Data pengamatan memvalidasi prinsip teoritis modul materi.</span></li>
+          </ul>
+
+          <div class="hl sky" style="margin-top:14px;font-size:13.5px">
+            🔬 <strong>Konsep saintifik:</strong> Prinsip Kausalitas Ilmiah, Kesetimbangan Sistem Dinamis,
+            dan Verifikasi Empiris.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUZZLE -->
+  <section id="page-puzzle" class="page">
+    <div class="card">
+      <div class="section-title"><span class="dot"></span>🧩 Tantangan Puzzle Drag &amp; Drop</div>
+      <p class="lead">Seret setiap kotak ke slot yang tepat untuk menyusun alur belajar <strong>membaca dan memahami huruf</strong> secara runtut!</p>
+
+      <div class="puzzle-slots" id="puzzleSlots"></div>
+
+      <h4 style="font-size:15px">🎴 Kepingan Konsep (seret ke atas ⬆️)</h4>
+      <div class="puzzle-tray" id="puzzleTray"></div>
+
+      <div class="puzzle-feedback" id="puzzleFeedback"></div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn ghost small" id="btnPuzzleReset">🔄 Acak Ulang</button>
+        <button class="btn amber small" id="btnPuzzleHint">💡 Petunjuk</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EVALUASI: PETA PETUALANGAN ================= -->
+  <section id="page-evaluasi" class="page">
+    <div class="card">
+      <div class="section-title"><span class="dot"></span>🗺️ Peta Petualangan Huruf</div>
+
+      <!-- SETUP -->
+      <div id="quizSetup">
+        <p class="lead">Sebelum memulai petualangan, isi data dirimu dulu ya! Data ini hanya untuk mencatat hasil belajarmu. ✨</p>
+        <div class="form-grid">
+          <div class="field">
+            <label>👦 Nama Penjelajah</label>
+            <input type="text" id="inpNama" placeholder="Contoh: Cantika" maxlength="30">
+          </div>
+          <div class="field">
+            <label>🏫 Kelas</label>
+            <input type="text" id="inpKelas" placeholder="Contoh: 1A" maxlength="12">
+          </div>
+          <div class="field">
+            <label>🔑 Kunci Petualangan</label>
+            <input type="text" id="inpKunci" placeholder="Ketik kunci dari gurumu">
+            <small>Kunci: <b>@1</b></small>
+          </div>
+          <div class="field">
+            <label>👥 Mode Bermain</label>
+            <select id="inpMode">
+              <option value="1">1 Penjelajah (Mandiri)</option>
+              <option value="2">2 Penjelajah (Duel Peta)</option>
+            </select>
+          </div>
+          <div class="field" id="fieldP2" style="display:none">
+            <label>🐰 Nama Penjelajah 2</label>
+            <input type="text" id="inpNama2" placeholder="Nama temanmu" maxlength="30">
+          </div>
+        </div>
+
+        <div class="hl" style="margin-top:16px;font-size:14px">
+          🗺️ <strong>Aturan Petualangan:</strong> Ada <strong>10 titik soal</strong> di peta.
+          Titik terbuka satu per satu. Jawaban benar = ⭐ + 🪙. Jawaban salah = kehilangan 1 nyawa ❤️ &amp; dapat petunjuk.
+          Setelah 10 titik selesai, muncul <strong>Tantangan Akhir 👑</strong>!
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+          <button class="btn primary big" id="btnStartQuiz">🚀 Mulai Petualangan</button>
+          <button class="btn ghost big" id="btnPembahasanLock">🔒 Lihat Pembahasan</button>
+        </div>
+      </div>
+
+      <!-- ADVENTURE MAP -->
+      <div id="adventureArea" style="display:none">
+        <div class="players-panel-map" id="playersPanelMap"></div>
+
+        <div class="map-wrapper">
+          <div class="map-header">
+            <h3>🗺️ Peta Petualangan Huruf</h3>
+            <p id="mapHint">Klik titik yang menyala ✨ untuk menjawab soal!</p>
+          </div>
+
+          <div class="adventure-map" id="adventureMap">
+            <svg class="map-path" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M 10,75 L 82,75 L 82,32 L 10,32"
+                    stroke="#A78BFA" stroke-width="0.9" fill="none"
+                    stroke-dasharray="2.5 2" stroke-linecap="round" stroke-linejoin="round"
+                    opacity="0.7"/>
+            </svg>
+          </div>
+
+          <div class="map-legend">
+            <span>🔒 Terkunci</span>
+            <span>✨ Bisa Diklik</span>
+            <span>✅ Benar</span>
+            <span>✗ Salah</span>
+            <span>👑 Tantangan Akhir</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;justify-content:center">
+          <button class="btn ghost small" id="btnAdvRestart">🔄 Petualangan Baru</button>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div id="quizResult" style="display:none"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>🌈 MPI Interaktif — Membaca dan Memahami Huruf • Bahasa Indonesia Kelas 1 (Fase A)</div>
+  <div class="credit-badge">👩‍💻 Dikembangkan oleh <b>Sofi</b></div>
+</footer>
+
+<!-- READING MODE -->
+<div class="reading-mode" id="readingMode">
+  <div class="reading-card" id="readingCard">
+    <button class="reading-close" id="btnReadingClose" aria-label="Tutup">✕</button>
+    <span class="reading-badge">🔊 MODE BACA — DENGARKAN</span>
+    <span class="reading-emoji" id="rdEmoji">📚</span>
+    <div class="reading-word" id="rdWord">BUKU</div>
+    <div class="reading-syllables" id="rdSyllables"></div>
+    <div class="reading-meaning">
+      <small>ARTI KATA</small>
+      <span id="rdMeaning">lembaran kertas terjilid</span>
+    </div>
+    <div class="reading-actions">
+      <button class="btn ghost" id="btnReadingPrev">← Sebelumnya</button>
+      <button class="btn mint" id="btnReadingPlay">🔊 Dengarkan Lagi</button>
+      <button class="btn sky" id="btnReadingNext">Selanjutnya →</button>
+    </div>
+    <div class="speak-status" id="rdStatus">Memutar suara…</div>
+  </div>
+</div>
+
+<!-- QUESTION OVERLAY -->
+<div class="q-overlay" id="questionOverlay">
+  <div class="q-overlay-card">
+    <div class="q-top-bar">
+      <div class="quiz-badges">
+        <span class="qbadge time">⏱️ <span id="uiTime">45</span>s</span>
+        <span class="qbadge lives" id="uiLives">❤️❤️❤️</span>
+        <span class="qbadge score">⭐ <span id="uiScore">0</span></span>
+        <span class="qbadge coins">🪙 <span id="uiCoins">0</span></span>
+      </div>
+      <span class="qbadge" id="uiQnum">1 / 10</span>
+    </div>
+    <div class="qcard" id="qcard"></div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* =========================================================
+   MPI PETUALANGAN HURUF — dikembangkan oleh Sofi
+   ========================================================= */
+(function(){
+"use strict";
+
+/* ---------- UTIL ---------- */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const esc = (s) => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+let toastTimer = null;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+/* ---------- MODAL ---------- */
+const modal = $('#modal'), modalBody = $('#modalBody');
+function openModal(html){ modalBody.innerHTML = html; modal.classList.add('show'); }
+function closeModal(){ modal.classList.remove('show'); modalBody.innerHTML=''; }
+$('#modalClose').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+
+/* ---------- NAVIGASI ---------- */
+function goTo(page){
+  $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-'+page));
+  $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(page === 'lab'){ startLab(); } else { stopLab(); }
+}
+$$('.nav-btn').forEach(b => b.addEventListener('click', () => goTo(b.dataset.page)));
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-goto]');
+  if(el){ goTo(el.dataset.goto); }
+});
+
+/* ---------- MATERI PROGRESS ---------- */
+window.addEventListener('scroll', () => {
+  const materi = $('#page-materi');
+  if(!materi.classList.contains('active')) return;
+  const rect = materi.getBoundingClientRect();
+  const total = rect.height - window.innerHeight;
+  const pct = total > 0 ? clamp((-rect.top / total) * 100, 0, 100) : 100;
+  $('#readBar').style.width = pct + '%';
+}, {passive:true});
+
+/* =========================================================
+   LAB MAYA
+   ========================================================= */
+const VOCAB = [
+  { word:'BUKU',  syllables:['BU','KU'],   emoji:'📚', meaning:'Lembaran kertas terjilid berisi tulisan.' },
+  { word:'IBU',   syllables:['I','BU'],    emoji:'👩', meaning:'Orang tua perempuan yang melahirkan kita.' },
+  { word:'AYAH',  syllables:['A','YAH'],   emoji:'👨', meaning:'Orang tua laki-laki dalam keluarga.' },
+  { word:'BOLA',  syllables:['BO','LA'],   emoji:'⚽', meaning:'Benda bulat yang dipakai untuk bermain.' },
+  { word:'KAKI',  syllables:['KA','KI'],   emoji:'🦶', meaning:'Anggota badan untuk berdiri dan berjalan.' },
+  { word:'MEJA',  syllables:['ME','JA'],   emoji:'🪑', meaning:'Perabot berkaki untuk menulis atau menaruh barang.' },
+  { word:'SUSU',  syllables:['SU','SU'],   emoji:'🥛', meaning:'Minuman putih bergizi dari sapi atau ibu.' },
+  { word:'TOPI',  syllables:['TO','PI'],   emoji:'🎩', meaning:'Penutup kepala supaya tidak kepanasan.' },
+  { word:'SAPI',  syllables:['SA','PI'],   emoji:'🐄', meaning:'Hewan besar penghasil susu dan daging.' },
+  { word:'BEBEK', syllables:['BE','BEK'],  emoji:'🦆', meaning:'Hewan yang hidup di air dan berbunyi kwek.' }
+];
+
+const lab = {
+  intensity: 60, stability: 50, duration: 20,
+  t: 0, raf: null, dpr: Math.min(window.devicePixelRatio || 1, 2),
+  lastRecognized: 0, hitboxes: []
+};
+const labCanvas = $('#labCanvas');
+const labCtx = labCanvas.getContext('2d');
+
+function fitCanvas(){
+  const w = labCanvas.parentElement.clientWidth - 20;
+  labCanvas.width = Math.max(300, w) * lab.dpr;
+  labCanvas.height = 420 * lab.dpr;
+  labCanvas.style.height = '420px';
+  labCtx.setTransform(lab.dpr, 0, 0, lab.dpr, 0, 0);
+}
+window.addEventListener('resize', fitCanvas);
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+}
+function computeOutputs(){
+  const I = lab.intensity, S = lab.stability, D = lab.duration;
+  const accuracy = clamp(0.65*I + 0.35*S, 0, 100);
+  const overload = Math.max(0, I - 70) / 180;
+  const stability = clamp(S * (1 - overload), 0, 100);
+  const durFactor = 0.55 + 0.45 * Math.min(1, D/30);
+  const fluency = clamp(accuracy * durFactor * (0.65 + 0.35*(stability/100)), 0, 100);
+  return {accuracy, stability, fluency};
+}
+function drawLab(){
+  const W = labCanvas.width / lab.dpr, H = labCanvas.height / lab.dpr;
+  const ctx = labCtx;
+  ctx.clearRect(0,0,W,H);
+  const g = ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#FFFDF8'); g.addColorStop(1,'#F3F0FF');
+  ctx.fillStyle = g; roundRect(ctx, 0, 0, W, H, 16); ctx.fill();
+
+  const blur = (100 - lab.intensity)/12, wob = (100 - lab.stability)/14;
+  const out = computeOutputs();
+
+  ctx.fillStyle = '#6B6488'; ctx.font = '800 12px "Segoe UI", sans-serif';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(`Stimulus: ${lab.intensity} • Regulasi: ${lab.stability}% • Durasi: ${lab.duration}s`, 16, 24);
+
+  const cols=5, rows=2, gap=8, padX=14, top=38;
+  const gridW = W - padX*2;
+  const cellW = (gridW - gap*(cols-1))/cols, cellH = 116;
+
+  lab.hitboxes = []; let recognized = 0;
+
+  VOCAB.forEach((v,i) => {
+    const r = Math.floor(i/cols), c = i%cols;
+    const x = padX + c*(cellW+gap), y = top + r*(cellH+gap);
+    lab.hitboxes.push({x,y,w:cellW,h:cellH,index:i});
+
+    ctx.fillStyle = '#FFFFFF'; roundRect(ctx,x,y,cellW,cellH,14); ctx.fill();
+    ctx.strokeStyle = '#EFE7F7'; ctx.lineWidth = 2; ctx.stroke();
+
+    const jitter = 0.85 + 0.15*Math.sin(lab.t*1.3 + i*1.7);
+    const clarity = clamp(out.accuracy * jitter, 0, 100);
+    const isOk = clarity >= 60;
+    if(isOk) recognized++;
+
+    ctx.save();
+    try { ctx.filter = `blur(${blur.toFixed(2)}px)`; } catch(e){}
+    ctx.globalAlpha = 0.55 + lab.intensity/220;
+    const fs = Math.max(11, Math.min(22, cellW*0.24));
+    ctx.font = `900 ${fs}px "Trebuchet MS", "Segoe UI", sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = isOk ? '#403A5C' : '#8B84A8';
+    const wy = y + cellH*0.40 + Math.sin(lab.t*1.6 + i*0.8)*wob;
+    ctx.fillText(v.word, x + cellW/2, wy);
+    ctx.restore();
+
+    const badgeW = Math.min(64, cellW-8), badgeH = 17;
+    const bx = x + (cellW-badgeW)/2, by = y + cellH - 26;
+    ctx.fillStyle = isOk ? '#D1FAE5' : '#FFE4E6';
+    roundRect(ctx,bx,by,badgeW,badgeH,9); ctx.fill();
+    ctx.font = '900 9.5px "Segoe UI", sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = isOk ? '#047857' : '#BE123C';
+    ctx.fillText(isOk ? '✓ terbaca' : '? kabur', x + cellW/2, by + badgeH/2 + 0.5);
+  });
+  lab.lastRecognized = recognized;
+
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.font = '900 13px "Segoe UI", sans-serif';
+  const sumY = top + rows*cellH + (rows-1)*gap + 22;
+  ctx.fillStyle = recognized === 10 ? '#047857' : (recognized >= 6 ? '#B45309' : '#BE123C');
+  ctx.fillText(`📖 ${recognized} dari 10 kosakata terbaca jelas`, 16, sumY);
+
+  const gx=16, gy=H-100, gw=W-32, gh=80;
+  ctx.save();
+  ctx.fillStyle = 'rgba(255,255,255,.78)';
+  roundRect(ctx,gx,gy,gw,gh,12); ctx.fill();
+  ctx.strokeStyle = '#E9E2F5'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.beginPath();
+  const pts = 60;
+  for(let i=0;i<=pts;i++){
+    const p = i/pts;
+    const val = out.fluency * (1 - Math.exp(-3.2*p)) * (1 + 0.03*Math.sin(lab.t*2 + p*8));
+    const px = gx + 10 + p*(gw-20);
+    const py = gy + gh - 10 - (clamp(val,0,100)/100)*(gh-24);
+    i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+  }
+  ctx.strokeStyle = '#34D399'; ctx.lineWidth = 3; ctx.lineJoin='round'; ctx.stroke();
+  ctx.fillStyle = '#9A93B5'; ctx.font = '700 11px "Segoe UI", sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('Kurva Kelancaran Membaca →', gx+10, gy+15);
+  ctx.restore();
+}
+function updateLabUI(){
+  const out = computeOutputs();
+  $('#mAcc').style.width = out.accuracy.toFixed(0)+'%';
+  $('#mStab').style.width = out.stability.toFixed(0)+'%';
+  $('#mFlu').style.width = out.fluency.toFixed(0)+'%';
+  $('#vAcc').textContent = out.accuracy.toFixed(0)+'%';
+  $('#vStab').textContent = out.stability.toFixed(0)+'%';
+  $('#vFlu').textContent = out.fluency.toFixed(0)+'%';
+
+  let msg = '';
+  if(out.fluency >= 80) msg = '🌟 <strong>Sistem sangat stabil!</strong> Kemampuan membaca 10 kosakata optimal.';
+  else if(out.fluency >= 55) msg = '⚖️ <strong>Sistem cukup seimbang.</strong> Coba naikkan variabel untuk peningkatan.';
+  else msg = '⚠️ <strong>Sistem belum stabil.</strong> Ketajaman huruf rendah atau fokus terganggu.';
+  if(lab.intensity >= 90 && lab.stability <= 25) msg += ' 🔎 <em>Stimulus berlebih tanpa regulasi menurunkan kestabilan.</em>';
+  $('#labVerdict').innerHTML = msg;
+
+  const okArr = VOCAB.map((v,i) => {
+    const jitter = 0.85 + 0.15*Math.sin(lab.t*1.3 + i*1.7);
+    return clamp(out.accuracy * jitter, 0, 100) >= 60;
+  });
+  $$('#vocabLab .vocab-item').forEach((el,i) => {
+    el.classList.toggle('hi', okArr[i]);
+    el.classList.toggle('lo', !okArr[i]);
+  });
+}
+function labLoop(){ lab.t += 0.045; drawLab(); updateLabUI(); lab.raf = requestAnimationFrame(labLoop); }
+function startLab(){ fitCanvas(); renderVocabList(); updateLabUI(); if(!lab.raf) labLoop(); }
+function stopLab(){ if(lab.raf){ cancelAnimationFrame(lab.raf); lab.raf = null; } }
+
+function renderVocabList(){
+  const wrap = $('#vocabLab');
+  if(wrap.dataset.done === '1') return;
+  wrap.innerHTML = VOCAB.map((v,i) => `
+    <button class="vocab-item" data-vocab="${i}" type="button" title="Klik untuk Mode Baca">
+      <span class="vw-ico">🔊</span>
+      <b>${esc(v.word)}</b>
+      <span>${esc(v.meaning)}</span>
+    </button>`).join('');
+  wrap.dataset.done = '1';
+  wrap.addEventListener('click', e => {
+    const btn = e.target.closest('.vocab-item');
+    if(!btn) return;
+    openReading(+btn.dataset.vocab);
+  });
+}
+
+let hoveringCard = false;
+labCanvas.addEventListener('click', e => {
+  const rect = labCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  const hit = lab.hitboxes.find(b => x>=b.x && x<=b.x+b.w && y>=b.y && y<=b.y+b.h);
+  if(hit) openReading(hit.index);
+});
+labCanvas.addEventListener('mousemove', e => {
+  const rect = labCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  const hit = lab.hitboxes.some(b => x>=b.x && x<=b.x+b.w && y>=b.y && y<=b.y+b.h);
+  if(hit !== hoveringCard){ hoveringCard = hit; labCanvas.style.cursor = hit ? 'pointer' : 'default'; }
+});
+
+$('#slIntensity').addEventListener('input', e => { lab.intensity = +e.target.value; $('#valIntensity').textContent = lab.intensity+' Poin'; updateLabUI(); });
+$('#slStability').addEventListener('input', e => { lab.stability = +e.target.value; $('#valStability').textContent = lab.stability+' %'; updateLabUI(); });
+$('#slDuration').addEventListener('input', e => { lab.duration = +e.target.value; $('#valDuration').textContent = lab.duration+' Detik'; updateLabUI(); });
+$('#btnLabReset').addEventListener('click', () => {
+  lab.intensity = 60; lab.stability = 50; lab.duration = 20;
+  $('#slIntensity').value = 60; $('#slStability').value = 50; $('#slDuration').value = 20;
+  $('#valIntensity').textContent = '60 Poin'; $('#valStability').textContent = '50 %'; $('#valDuration').textContent = '20 Detik';
+  updateLabUI(); toast('🔄 Variabel dikembalikan ke pengaturan awal');
+});
+$('#btnLabRun').addEventListener('click', () => { lab.t = 0; toast('▶️ Simulasi dijalankan!'); if(!lab.raf) labLoop(); });
+
+/* =========================================================
+   MODE BACA
+   ========================================================= */
+const reading = { active:false, index:0, autoTimer:null, supported:('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window) };
+const readingModeEl = $('#readingMode'), readingCardEl = $('#readingCard');
+let idVoice = null;
+function pickIndonesianVoice(){
+  if(!reading.supported) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if(!voices || !voices.length) return null;
+  idVoice = voices.find(v => (v.lang||'').toLowerCase()==='id-id') ||
+            voices.find(v => (v.lang||'').toLowerCase().startsWith('id')) ||
+            voices.find(v => /indones/i.test(v.name||'')) || null;
+  return idVoice;
+}
+if(reading.supported){ pickIndonesianVoice(); window.speechSynthesis.onvoiceschanged = pickIndonesianVoice; }
+
+function speakWord(text, opts){
+  if(!reading.supported){ $('#rdStatus').textContent = '⚠️ Browser tidak mendukung suara otomatis.'; $('#rdStatus').classList.remove('playing'); return; }
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'id-ID';
+  u.rate = (opts && opts.rate) ? opts.rate : 0.72;
+  u.pitch = 1.15; u.volume = 1;
+  if(!idVoice) pickIndonesianVoice();
+  if(idVoice) u.voice = idVoice;
+  readingCardEl.classList.add('speaking');
+  const st = $('#rdStatus'); st.classList.add('playing');
+  st.textContent = '🔊 Memutar suara… "' + text + '"';
+  u.onend = () => { readingCardEl.classList.remove('speaking'); st.classList.remove('playing'); st.textContent = '✅ Selesai. Tekan Dengarkan Lagi untuk mengulang.'; };
+  u.onerror = () => { readingCardEl.classList.remove('speaking'); st.classList.remove('playing'); st.textContent = '⚠️ Suara gagal diputar.'; };
+  window.speechSynthesis.speak(u);
+}
+function renderReadingCard(idx){
+  const v = VOCAB[idx]; if(!v) return;
+  reading.index = idx;
+  $('#rdEmoji').textContent = v.emoji;
+  $('#rdWord').textContent = v.word;
+  $('#rdMeaning').textContent = v.meaning;
+  $('#rdSyllables').innerHTML = v.syllables.map((s,i) =>
+    (i>0 ? '<span class="syl-dot">•</span>' : '') + `<span class="syl-chip">${esc(s)}</span>`).join('');
+  $('#rdStatus').textContent = 'Bersiap memutar suara…';
+  $('#rdStatus').classList.remove('playing');
+}
+function openReading(idx){
+  if(idx==null || idx<0 || idx>=VOCAB.length) return;
+  reading.active = true;
+  readingModeEl.classList.add('show');
+  renderReadingCard(idx);
+  stopLab();
+  clearTimeout(reading.autoTimer);
+  reading.autoTimer = setTimeout(() => speakWord(VOCAB[idx].word), 380);
+}
+function closeReading(){
+  reading.active = false;
+  readingModeEl.classList.remove('show');
+  readingCardEl.classList.remove('speaking');
+  try { window.speechSynthesis.cancel(); } catch(e){}
+  clearTimeout(reading.autoTimer);
+  if($('#page-lab').classList.contains('active')) startLab();
+}
+function nextReading(){ const ni = (reading.index+1)%VOCAB.length; renderReadingCard(ni); clearTimeout(reading.autoTimer); reading.autoTimer = setTimeout(()=>speakWord(VOCAB[ni].word),240); }
+function prevReading(){ const pi = (reading.index-1+VOCAB.length)%VOCAB.length; renderReadingCard(pi); clearTimeout(reading.autoTimer); reading.autoTimer = setTimeout(()=>speakWord(VOCAB[pi].word),240); }
+
+$('#btnReadingClose').addEventListener('click', closeReading);
+$('#btnReadingPlay').addEventListener('click', () => speakWord(VOCAB[reading.index].word));
+$('#btnReadingNext').addEventListener('click', nextReading);
+$('#btnReadingPrev').addEventListener('click', prevReading);
+readingModeEl.addEventListener('click', e => { if(e.target === readingModeEl) closeReading(); });
+document.addEventListener('keydown', e => {
+  if(!reading.active) return;
+  if(e.key === 'Escape') closeReading();
+  if(e.key === 'ArrowRight') nextReading();
+  if(e.key === 'ArrowLeft') prevReading();
+  if(e.key === ' '){ e.preventDefault(); speakWord(VOCAB[reading.index].word); }
+});
+
+/* =========================================================
+   PUZZLE
+   ========================================================= */
+const PUZZLE_ITEMS = [
+  { id:'p1', slot:1, label:'Mengenal bentuk huruf A–Z', hint:'Tahap dasar: fondasi & pengenalan konsep huruf.' },
+  { id:'p2', slot:2, label:'Membedakan huruf vokal dan konsonan', hint:'Identifikasi komponen & unsur kunci dari huruf.' },
+  { id:'p3', slot:3, label:'Merangkai huruf menjadi suku kata', hint:'Analisis mekanisme & hubungan sebab-akibat.' },
+  { id:'p4', slot:4, label:'Membaca kata dan kalimat sederhana', hint:'Pengujian konsep & pembuktian empiris.' },
+  { id:'p5', slot:5, label:'Memakai huruf untuk menulis cerita', hint:'Penerapan solusi & refleksi kontekstual.' }
+];
+const SLOT_HINTS = [
+  'Tahap 1 — Fondasi & Pengenalan Konsep',
+  'Tahap 2 — Identifikasi Komponen & Unsur Kunci',
+  'Tahap 3 — Analisis Mekanisme & Hubungan Sebab-Akibat',
+  'Tahap 4 — Pengujian Konsep & Pembuktian Empiris',
+  'Tahap 5 — Penerapan Solusi & Refleksi Kontekstual'
+];
+let puzzleState = { placed:0, attempts:0 };
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function buildPuzzle(){
+  puzzleState = { placed:0, attempts:0 };
+  const slotsEl = $('#puzzleSlots');
+  const trayEl  = $('#puzzleTray');
+  const fb      = $('#puzzleFeedback');
+  fb.className  = 'puzzle-feedback';
+  fb.textContent = '';
+
+  slotsEl.innerHTML = PUZZLE_ITEMS.map(it => `
+    <div class="puzzle-slot" data-slot="${it.slot}">
+      <span class="num">${it.slot}</span>
+      <span class="ph">${esc(SLOT_HINTS[it.slot-1])}</span>
+    </div>`).join('');
+
+  const shuffled = shuffle(PUZZLE_ITEMS);
+  trayEl.innerHTML = shuffled.map(it =>
+    `<div class="puzzle-chip" data-id="${it.id}" data-slot="${it.slot}">${esc(it.label)}</div>`
+  ).join('');
+}
+
+function showPuzzleFeedback(ok, msg){
+  const fb = $('#puzzleFeedback');
+  fb.className = 'puzzle-feedback ' + (ok ? 'ok' : 'no');
+  fb.innerHTML = msg;
+}
+
+function checkPuzzleDone(){
+  if(puzzleState.placed !== PUZZLE_ITEMS.length) return;
+  showPuzzleFeedback(true,
+    `🎉 <strong>Hebat!</strong> Kamu berhasil menyusun alur belajar membaca dengan tepat!<br>
+     Percobaan salah: <strong>${puzzleState.attempts}</strong> kali.`);
+  toast('🧩 Puzzle selesai! Kamu luar biasa! 🌟');
+}
+
+/* ---------- DRAG & DROP (pointer + sentuh) ---------- */
+let dragCtx = null;
+
+function positionGhost(x, y){
+  if(!dragCtx) return;
+  dragCtx.ghost.style.left = (x - dragCtx.dx) + 'px';
+  dragCtx.ghost.style.top  = (y - dragCtx.dy) + 'px';
+}
+function clearSlotOver(){
+  $$('.puzzle-slot').forEach(s => s.classList.remove('over'));
+}
+
+function onChipPointerDown(e){
+  const chip = e.target.closest('.puzzle-chip');
+  if(!chip || chip.classList.contains('placed')) return;
+  if(e.pointerType === 'mouse' && e.button !== 0) return;
+  e.preventDefault();
+
+  const rect = chip.getBoundingClientRect();
+  const ghost = chip.cloneNode(true);
+  ghost.classList.add('ghost');
+  ghost.style.width  = rect.width + 'px';
+  ghost.style.height = rect.height + 'px';
+  document.body.appendChild(ghost);
+
+  dragCtx = { chip, ghost, dx: e.clientX - rect.left, dy: e.clientY - rect.top };
+  chip.classList.add('dragging');
+  positionGhost(e.clientX, e.clientY);
+
+  document.addEventListener('pointermove', onChipPointerMove);
+  document.addEventListener('pointerup', onChipPointerUp);
+  document.addEventListener('pointercancel', onChipPointerUp);
+}
+
+function onChipPointerMove(e){
+  if(!dragCtx) return;
+  e.preventDefault();
+  positionGhost(e.clientX, e.clientY);
+  clearSlotOver();
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const slot = el && el.closest('.puzzle-slot');
+  if(slot && !slot.classList.contains('filled')) slot.classList.add('over');
+}
+
+function onChipPointerUp(e){
+  if(!dragCtx) return;
+  document.removeEventListener('pointermove', onChipPointerMove);
+  document.removeEventListener('pointerup', onChipPointerUp);
+  document.removeEventListener('pointercancel', onChipPointerUp);
+
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const slot = el && el.closest('.puzzle-slot');
+  clearSlotOver();
+
+  const { chip, ghost } = dragCtx;
+  ghost.remove();
+  chip.classList.remove('dragging');
+  dragCtx = null;
+
+  if(slot && !slot.classList.contains('filled')){
+    placeChip(chip, slot);
+  }
+}
+
+function placeChip(chip, slot){
+  const slotNum = +slot.dataset.slot;
+  const chipNum = +chip.dataset.slot;
+
+  if(slotNum === chipNum){
+    slot.classList.add('filled');
+    const ph = slot.querySelector('.ph');
+    if(ph) ph.remove();
+    chip.classList.add('placed');
+    slot.appendChild(chip);
+    puzzleState.placed++;
+    toast('✅ Tepat!');
+    checkPuzzleDone();
+  } else {
+    slot.classList.add('wrong');
+    setTimeout(() => slot.classList.remove('wrong'), 460);
+    puzzleState.attempts++;
+    showPuzzleFeedback(false,
+      `❌ <strong>Belum tepat.</strong> Coba pikirkan lagi urutan tahap belajarnya ya!`);
+  }
+}
+
+document.addEventListener('pointerdown', onChipPointerDown);
+
+$('#btnPuzzleReset').addEventListener('click', () => {
+  buildPuzzle();
+  toast('🔄 Puzzle diacak ulang!');
+});
+
+$('#btnPuzzleHint').addEventListener('click', () => {
+  const emptySlot = $$('.puzzle-slot').find(s => !s.classList.contains('filled'));
+  if(!emptySlot){ toast('✨ Semua slot sudah terisi!'); return; }
+  const need = +emptySlot.dataset.slot;
+  const chip = $$('.puzzle-chip').find(c => +c.dataset.slot === need && !c.classList.contains('placed'));
+  if(chip){
+    chip.style.transition = 'box-shadow .2s';
+    chip.style.boxShadow = '0 0 0 6px #FDE68A';
+    setTimeout(() => { chip.style.boxShadow = ''; }, 1400);
+    toast('💡 Kepingan yang menyala cocok untuk slot nomor ' + need + '!');
+  }
+});
+
+/* =========================================================
+   EVALUASI — PETA PETUALANGAN HURUF
+   ========================================================= */
+const QUESTIONS = [
+  { ico:'🔤', q:'Huruf pertama dalam abjad adalah…',
+    opts:['A','B','C','D'], ans:0,
+    hint:'Abjad dimulai dari huruf paling awal, yaitu "A".' },
+  { ico:'🅰️', q:'Manakah yang termasuk huruf vokal?',
+    opts:['B','K','A','T'], ans:2,
+    hint:'Huruf vokal ada 5: a, i, u, e, o.' },
+  { ico:'🔠', q:'Huruf yang hilang pada urutan ini adalah… A, B, …, D',
+    opts:['E','C','F','G'], ans:1,
+    hint:'Setelah B adalah C, lalu D.' },
+  { ico:'📖', q:'Kata "IBU" diawali dengan huruf…',
+    opts:['I','B','U','O'], ans:0,
+    hint:'Bacalah dari kiri ke kanan. Huruf pertama adalah I.' },
+  { ico:'🔡', q:'Manakah yang termasuk huruf konsonan?',
+    opts:['A','I','U','M'], ans:3,
+    hint:'Konsonan adalah huruf mati, contohnya m, b, k, t.' },
+  { ico:'🔤', q:'Huruf besar (kapital) dari "k" adalah…',
+    opts:['K','R','X','H'], ans:0,
+    hint:'Bentuk hurufnya sama, hanya ukurannya lebih besar.' },
+  { ico:'🧩', q:'b + u menghasilkan suku kata…',
+    opts:['ba','bu','bi','bo'], ans:1,
+    hint:'Gabungkan bunyi "b" dengan "u" menjadi "bu".' },
+  { ico:'📚', q:'Kata "SUSU" terdiri dari berapa suku kata?',
+    opts:['1','2','3','4'], ans:1,
+    hint:'Su-su → ada dua potongan bunyi.' },
+  { ico:'✏️', q:'Penulisan nama orang yang benar adalah…',
+    opts:['budi','Budi','buDi','BUDi'], ans:1,
+    hint:'Nama orang diawali dengan huruf kapital.' },
+  { ico:'🌟', q:'Awal kalimat harus ditulis dengan huruf…',
+    opts:['kecil','kapital','miring','tebal'], ans:1,
+    hint:'Setiap awal kalimat selalu memakai huruf kapital.' }
+];
+
+const BOSS_Q = {
+  ico:'👑',
+  q:'Bacalah kalimat ini: "Ayah membeli topi baru." Apa yang dibeli Ayah?',
+  opts:['buku','bola','topi','susu'],
+  ans:2,
+  hint:'Baca dengan teliti. Kata setelah "membeli" adalah jawabannya: topi.',
+  stars:3, coins:30
+};
+
+/* posisi titik pada peta (persen) */
+const NODE_POS = [
+  {x:10,y:75},{x:28,y:75},{x:46,y:75},{x:64,y:75},{x:82,y:75},
+  {x:82,y:53},
+  {x:82,y:32},{x:64,y:32},{x:46,y:32},{x:28,y:32}
+];
+const BOSS_POS = {x:10,y:32};
+const AVATARS = ['🐱','🐰'];
+
+const ADV = {
+  active:false, mode:1, players:[], cur:0,
+  nodes:[], qIndex:0, timeLeft:0, timerId:null,
+  locked:false, review:[], meta:{}
+};
+
+/* ---------- SETUP FORM ---------- */
+$('#inpMode').addEventListener('change', e => {
+  $('#fieldP2').style.display = e.target.value === '2' ? 'block' : 'none';
+});
+
+function newPlayer(name, idx){
+  return {
+    name: name, avatar: AVATARS[idx % AVATARS.length],
+    stars:0, coins:0, lives:3, correct:0, wrong:0
+  };
+}
+
+$('#btnStartQuiz').addEventListener('click', () => {
+  const nama  = $('#inpNama').value.trim();
+  const kelas = $('#inpKelas').value.trim();
+  const kunci = $('#inpKunci').value.trim();
+  const mode  = +$('#inpMode').value;
+  const nama2 = $('#inpNama2').value.trim();
+
+  if(!nama){ toast('⚠️ Isi nama penjelajah dulu ya!'); return; }
+  if(!kelas){ toast('⚠️ Isi kelas dulu ya!'); return; }
+  if(kunci !== '@1'){ toast('🔑 Kunci petualangan salah. Tanya gurumu ya!'); return; }
+  if(mode === 2 && !nama2){ toast('⚠️ Isi nama Penjelajah 2 dulu ya!'); return; }
+
+  startAdventure({ nama, kelas, mode, nama2 });
+});
+
+function startAdventure(meta){
+  ADV.meta = meta;
+  ADV.mode = meta.mode;
+  ADV.players = [ newPlayer(meta.nama, 0) ];
+  if(meta.mode === 2) ADV.players.push(newPlayer(meta.nama2, 1));
+  ADV.cur = 0;
+  ADV.qIndex = 0;
+  ADV.locked = false;
+  ADV.review = [];
+  ADV.active = true;
+
+  ADV.nodes = Array.from({ length: 11 }, (_, i) => ({
+    status: i === 0 ? 'current' : 'locked',
+    q: i === 10 ? BOSS_Q : QUESTIONS[i]
+  }));
+
+  $('#quizSetup').style.display = 'none';
+  $('#quizResult').style.display = 'none';
+  $('#quizResult').innerHTML = '';
+  $('#adventureArea').style.display = 'block';
+
+  buildMap();
+  updateMap();
+  renderPlayersPanel();
+  $('#mapHint').textContent = ADV.mode === 2
+    ? 'Bermain bergantian! Klik titik yang menyala ✨'
+    : 'Klik titik yang menyala ✨ untuk menjawab soal!';
+
+  toast('🚀 Petualangan dimulai! Semangat, ' + meta.nama + '!');
+}
+
+/* ---------- PETA ---------- */
+function buildMap(){
+  const map = $('#adventureMap');
+  $$('.map-node', map).forEach(n => n.remove());
+
+  NODE_POS.forEach((pos, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'map-node locked';
+    btn.dataset.idx = i;
+    btn.style.left = pos.x + '%';
+    btn.style.top  = pos.y + '%';
+    btn.innerHTML = `<span class="node-ico">${i+1}</span>
+                     <span class="node-label">Titik ${i+1}</span>`;
+    btn.addEventListener('click', () => onNodeClick(i));
+    map.appendChild(btn);
+  });
+
+  const boss = document.createElement('button');
+  boss.type = 'button';
+  boss.className = 'map-node boss locked';
+  boss.dataset.idx = 10;
+  boss.style.left = BOSS_POS.x + '%';
+  boss.style.top  = BOSS_POS.y + '%';
+  boss.innerHTML = `<span class="node-ico">👑</span>
+                    <span class="node-label">Tantangan Akhir</span>`;
+  boss.addEventListener('click', () => onNodeClick(10));
+  map.appendChild(boss);
+}
+
+function updateMap(){
+  $$('.map-node').forEach(el => {
+    const i = +el.dataset.idx;
+    const n = ADV.nodes[i];
+    el.classList.remove('locked','current','completed','failed','done');
+    if(n.status === 'locked')        el.classList.add('locked');
+    else if(n.status === 'current')  el.classList.add('current');
+    else if(n.status === 'completed')el.classList.add('completed');
+    else if(n.status === 'failed')   el.classList.add('failed');
+    el.disabled = n.status !== 'current';
+    if(i === 10 && n.status === 'completed') el.classList.add('done');
+  });
+}
+
+function renderPlayersPanel(){
+  const wrap = $('#playersPanelMap');
+  wrap.className = 'players-panel-map' + (ADV.mode === 2 ? ' duel' : '');
+
+  wrap.innerHTML = ADV.players.map((p, i) => {
+    const active = ADV.mode === 2 ? (i === ADV.cur) : (i === 0);
+    return `
+      <div class="player-card ${active ? 'active' : 'waiting'}">
+        <div class="pc-head">
+          <span class="pc-avatar">${p.avatar}</span>
+          <div>
+            <strong>${esc(p.name)}</strong>
+            <small>Penjelajah ${i+1}</small>
+          </div>
+        </div>
+        <div class="pc-stats">
+          <span>⭐ ${p.stars}</span>
+          <span>🪙 ${p.coins}</span>
+          <span>${'❤️'.repeat(p.lives)}${'🖤'.repeat(Math.max(0, 3 - p.lives))}</span>
+        </div>
+        ${ADV.mode === 2
+          ? `<span class="pc-status">${active ? '▶️ Sedang bermain' : '⏸️ Menunggu giliran'}</span>`
+          : `<span class="pc-status">📚 Kelas ${esc(ADV.meta.kelas || '-')}</span>`}
+      </div>`;
+  }).join('');
+}
+
+function onNodeClick(i){
+  if(!ADV.active) return;
+  if(ADV.nodes[i].status !== 'current') return;
+  openQuestion(i);
+}
+
+/* ---------- SOAL ---------- */
+function openQuestion(i){
+  ADV.qIndex = i;
+  ADV.locked = false;
+  ADV.timeLeft = i === 10 ? 60 : 45;
+  renderQuestion();
+  $('#questionOverlay').classList.add('show');
+  startTimer();
+}
+
+function renderQuestion(){
+  const idx = ADV.qIndex;
+  const q = ADV.nodes[idx].q;
+  const p = ADV.players[ADV.cur];
+  const isBoss = idx === 10;
+  const letters = ['A','B','C','D'];
+
+  $('#uiTime').textContent  = ADV.timeLeft;
+  $('#uiLives').textContent = '❤️'.repeat(p.lives) + '🖤'.repeat(Math.max(0, 3 - p.lives));
+  $('#uiScore').textContent = p.stars;
+  $('#uiCoins').textContent = p.coins;
+  $('#uiQnum').textContent  = isBoss ? '👑 BOSS' : `${idx + 1} / 10`;
+
+  const levelText = isBoss ? 'Sangat Menantang'
+    : (idx < 4 ? 'Level Mudah' : idx < 7 ? 'Level Sedang' : 'Level Sulit');
+
+  $('#qcard').innerHTML = `
+    <div class="qmeta">
+      <span class="tag">${isBoss ? '👑 Tantangan Akhir' : 'Titik ' + (idx + 1)}</span>
+      <span class="tag lv">${levelText}</span>
+      <span class="tag">${esc(p.avatar)} ${esc(p.name)}</span>
+    </div>
+    <div class="qtext">
+      <span class="qico">${q.ico}</span>
+      <span>${esc(q.q)}</span>
+    </div>
+    <div class="options" id="qOptions">
+      ${q.opts.map((o, i) => `
+        <button class="opt" type="button" data-i="${i}">
+          <span class="letter">${letters[i]}</span>
+          <span>${esc(o)}</span>
+        </button>`).join('')}
+    </div>
+    <div class="feedback" id="qFeedback"></div>
+  `;
+
+  $$('#qOptions .opt').forEach(btn => {
+    btn.addEventListener('click', () => handleAnswer(+btn.dataset.i));
+  });
+}
+
+function startTimer(){
+  clearInterval(ADV.timerId);
+  $('#uiTime').textContent = ADV.timeLeft;
+  ADV.timerId = setInterval(() => {
+    ADV.timeLeft--;
+    $('#uiTime').textContent = ADV.timeLeft;
+    if(ADV.timeLeft <= 0){
+      clearInterval(ADV.timerId);
+      handleAnswer(-1);
+    }
+  }, 1000);
+}
+
+function handleAnswer(choice){
+  if(ADV.locked) return;
+  ADV.locked = true;
+  clearInterval(ADV.timerId);
+
+  const idx = ADV.qIndex;
+  const q = ADV.nodes[idx].q;
+  const p = ADV.players[ADV.cur];
+  const opts = $$('#qOptions .opt');
+  opts.forEach(o => o.disabled = true);
+
+  const isCorrect = choice === q.ans;
+  if(choice >= 0) opts[choice].classList.add(isCorrect ? 'correct' : 'wrong');
+  if(!isCorrect) opts[q.ans].classList.add('correct');
+
+  if(isCorrect){
+    p.stars  += q.stars || 1;
+    p.coins  += q.coins || 10;
+    p.correct++;
+    ADV.nodes[idx].status = 'completed';
+  } else {
+    p.lives = Math.max(0, p.lives - 1);
+    p.wrong++;
+    ADV.nodes[idx].status = 'failed';
+  }
+
+  ADV.review.push({
+    idx: idx,
+    q: q.q,
+    opts: q.opts,
+    ans: q.ans,
+    choice: choice,
+    correct: isCorrect,
+    hint: q.hint,
+    player: p.name,
+    avatar: p.avatar,
+    isBoss: idx === 10
+  });
+
+  updateMap();
+  renderPlayersPanel();
+  showFeedback(isCorrect, q);
+}
+
+function showFeedback(ok, q){
+  const fb = $('#qFeedback');
+  fb.className = 'feedback ' + (ok ? 'ok' : 'no');
+  fb.innerHTML = `
+    <div>${ok
+      ? '🎉 <strong>Benar sekali!</strong> Kamu mendapat ⭐ dan 🪙!'
+      : '💡 <strong>Belum tepat.</strong> ' + esc(q.hint)}</div>
+    <div style="margin-top:12px">
+      <button class="btn ${ok ? 'mint' : 'amber'} small" id="btnNextQ">Lanjut →</button>
+    </div>
+  `;
+  $('#btnNextQ').addEventListener('click', nextQuestion);
+}
+
+function nextQuestion(){
+  const wasBoss = ADV.qIndex === 10;
+  $('#questionOverlay').classList.remove('show');
+
+  if(wasBoss){ showResult(); return; }
+
+  ADV.qIndex++;
+  ADV.nodes[ADV.qIndex].status = 'current';
+  if(ADV.qIndex === 10) toast('👑 Tantangan Akhir terbuka!');
+
+  if(ADV.mode === 2) ADV.cur = 1 - ADV.cur;
+
+  updateMap();
+  renderPlayersPanel();
+}
+
+/* ---------- HASIL ---------- */
+function showResult(){
+  ADV.active = false;
+  $('#adventureArea').style.display = 'none';
+  const box = $('#quizResult');
+  box.style.display = 'block';
+
+  const maxStars = 13; // 10 titik × 1 + boss 3
+
+  const cards = ADV.players.map(p => {
+    const pct = Math.round((p.stars / maxStars) * 100);
+    let medal = '🥉', title = 'Ayo Semangat!';
+    if(pct >= 90){ medal = '🏆'; title = 'Master Huruf!'; }
+    else if(pct >= 70){ medal = '🥇'; title = 'Hebat Sekali!'; }
+    else if(pct >= 50){ medal = '🥈'; title = 'Bagus!'; }
+
+    return `
+      <div class="result-hero" style="margin-bottom:14px">
+        <span class="medal">${medal}</span>
+        <h2>${esc(p.avatar)} ${esc(p.name)} — ${title}</h2>
+        <p style="font-weight:700;color:#5B5478;margin:0">
+          Kamu berhasil menyelesaikan Peta Petualangan Huruf!
+        </p>
+        <div class="result-stats">
+          <div class="rstat"><small>Bintang</small>⭐ ${p.stars}</div>
+          <div class="rstat"><small>Koin</small>🪙 ${p.coins}</div>
+          <div class="rstat"><small>Benar</small>✅ ${p.correct}</div>
+          <div class="rstat"><small>Salah</small>✗ ${p.wrong}</div>
+          <div class="rstat"><small>Nilai</small>${pct}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  let duelNote = '';
+  if(ADV.mode === 2){
+    const [a, b] = ADV.players;
+    let winner = 'Seri! 🤝';
+    if(a.stars > b.stars) winner = `🏆 Pemenang: ${esc(a.avatar)} ${esc(a.name)}!`;
+    else if(b.stars > a.stars) winner = `🏆 Pemenang: ${esc(b.avatar)} ${esc(b.name)}!`;
+    duelNote = `<div class="hl amber" style="text-align:center;font-size:16px">${winner}</div>`;
+  }
+
+  const reviewHtml = ADV.review.map((r, i) => `
+    <div class="review-item">
+      <div class="rq">${r.isBoss ? '👑 ' : ''}${i + 1}. ${esc(r.q)}
+        <span style="font-size:12px;color:#7C7A96">— ${esc(r.avatar)} ${esc(r.player)}</span></div>
+      <div class="ra">✅ Jawaban benar: ${esc(r.opts[r.ans])}</div>
+      ${r.correct
+        ? '<div class="rx">Jawabanmu benar! 🎉</div>'
+        : `<div class="rx">Jawabanmu: ${r.choice >= 0 ? esc(r.opts[r.choice]) : 'tidak dijawab (waktu habis)'}</div>
+           <div class="rh">💡 ${esc(r.hint)}</div>`}
+    </div>`).join('');
+
+  box.innerHTML = `
+    ${cards}
+    ${duelNote}
+    <div class="card" style="margin-top:16px">
+      <div class="section-title"><span class="dot"></span>📋 Pembahasan Jawaban</div>
+      <p class="lead">Pelajari kembali soal yang sudah kamu kerjakan ya!</p>
+      ${reviewHtml}
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+      <button class="btn primary big" id="btnPlayAgain">🔄 Petualangan Baru</button>
+      <button class="btn sky big" id="btnBackMateri">📖 Baca Materi Lagi</button>
+    </div>
+  `;
+
+  $('#btnPlayAgain').addEventListener('click', restartAdventure);
+  $('#btnBackMateri').addEventListener('click', () => goTo('materi'));
+
+  toast('🎉 Petualangan selesai! Lihat hasilmu di bawah ya!');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartAdventure(){
+  clearInterval(ADV.timerId);
+  ADV.active = false;
+  $('#quizResult').style.display = 'none';
+  $('#quizResult').innerHTML = '';
+  $('#adventureArea').style.display = 'none';
+  $('#quizSetup').style.display = 'block';
+  $('#inpNama').value = '';
+  $('#inpKelas').value = '';
+  $('#inpKunci').value = '';
+  $('#inpNama2').value = '';
+  $('#inpMode').value = '1';
+  $('#fieldP2').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+$('#btnAdvRestart').addEventListener('click', restartAdventure);
+
+/* ---------- PEMBAHASAN TERKUNCI ---------- */
+$('#btnPembahasanLock').addEventListener('click', () => {
+  openModal(`
+    <h3>🔒 Pembahasan Terkunci</h3>
+    <p style="font-weight:700">Halaman pembahasan hanya dapat dibuka oleh guru pendamping.</p>
+    <div class="lock-box">
+      <span class="lico">🔑</span>
+      <p style="font-weight:700;margin-bottom:10px">Masukkan kunci guru:</p>
+      <input type="password" id="inpLockKey" placeholder="Kunci guru"
+        style="width:100%;max-width:280px;padding:12px 16px;border-radius:16px;border:2px solid var(--line);
+               font-size:15px;font-weight:700;text-align:center;font-family:inherit;outline:none">
+      <div style="margin-top:16px">
+        <button class="btn primary" id="btnUnlock">🔓 Buka</button>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:12px">
+        Kunci demo: <b>@2</b>
+      </p>
+    </div>
+  `);
+
+  $('#btnUnlock').addEventListener('click', () => {
+    const v = $('#inpLockKey').value.trim();
+    if(v !== '@2'){ toast('🔒 Kunci guru salah!'); return; }
+    closeModal();
+    showTeacherReview();
+  });
+});
+
+function showTeacherReview(){
+  if(!ADV.review.length){
+    openModal(`
+      <h3>📋 Pembahasan Guru</h3>
+      <p style="font-weight:700">Belum ada jawaban siswa yang tercatat pada sesi ini.</p>
+      <p style="color:var(--muted);font-weight:600;font-size:14px">
+        Minta siswa menyelesaikan Peta Petualangan terlebih dahulu.</p>
+    `);
+    return;
+  }
+
+  const rows = ADV.review.map((r, i) => `
+    <div class="review-item">
+      <div class="rq">${i + 1}. ${esc(r.q)}</div>
+      <div class="ra">Kunci: ${esc(r.opts[r.ans])}</div>
+      <div class="rx">
+        ${esc(r.avatar)} <b>${esc(r.player)}</b> —
+        ${r.correct ? '✅ Benar' : '✗ Salah' + (r.choice >= 0 ? ' (' + esc(r.opts[r.choice]) + ')' : ' (waktu habis)')}
+      </div>
+      <div class="rh">💡 ${esc(r.hint)}</div>
+    </div>`).join('');
+
+  const summary = ADV.players.map(p => {
+    const pct = Math.round((p.stars / 13) * 100);
+    return `<div class="chip">${esc(p.avatar)} ${esc(p.name)}: ⭐${p.stars} • 🪙${p.coins} • Nilai ${pct}</div>`;
+  }).join('');
+
+  openModal(`
+    <h3>📋 Pembahasan Lengkap (Mode Guru)</h3>
+    <div class="chips" style="margin-bottom:14px">${summary}</div>
+    ${rows}
+  `);
+}
+
+/* ---------- MODE GURU ---------- */
+$('#btnGuru').addEventListener('click', () => {
+  openModal(`
+    <h3>👩‍🏫 Mode Guru — Panduan Singkat</h3>
+    <p style="font-weight:700">Media Pembelajaran Interaktif (MPI) "Petualangan Huruf"</p>
+    <ul style="font-weight:600;font-size:14.5px;line-height:1.8">
+      <li><b>Materi</b> — 6 bab: pengertian huruf, vokal &amp; konsonan, huruf kapital, suku kata,
+          membaca kalimat, dan tips belajar.</li>
+      <li><b>Lab Maya</b> — simulasi 3 variabel (stimulus, regulasi, durasi) terhadap ketepatan
+          mengenali 10 kosakata. Klik kartu untuk Mode Baca bersuara.</li>
+      <li><b>Puzzle</b> — menyusun 5 tahap belajar membaca secara runtut (drag &amp; drop).</li>
+      <li><b>Evaluasi</b> — Peta Petualangan: 10 titik soal + Tantangan Akhir 👑,
+          lengkap dengan nyawa ❤️, bintang ⭐, dan koin 🪙. Tersedia mode duel 2 pemain.</li>
+    </ul>
+    <div class="hl sky" style="font-size:13.5px">
+      🔑 <b>Kunci membuka evaluasi:</b> <b>@1</b> &nbsp;•&nbsp;
+      🔒 <b>Kunci pembahasan:</b> <b>@2</b>
+    </div>
+    <div class="hl mint" style="font-size:13.5px">
+      🎯 <b>Saran penggunaan:</b> 1) Bacakan materi bersama-sama, 2) demonstrasikan Lab Maya,
+      3) kerjakan Puzzle berkelompok, 4) akhiri dengan Peta Petualangan sebagai asesmen formatif.
+    </div>
+  `);
+});
+
+/* ---------- INIT ---------- */
+function init(){
+  buildPuzzle();
+  fitCanvas();
+  renderVocabList();
+}
+init();
+
+})();
+</script>
+</body>
+</html>

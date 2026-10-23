@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI — Bangunan Umum di Indonesia | Media Pembelajaran Interaktif Inklusif</title>
+<style>
+  :root{
+    --bg:#f6f2e9; --panel:#ffffff; --text:#231f1a; --muted:#6f6558;
+    --accent:#b3541e; --accent-dark:#7a3b1d; --accent2:#1d6f6a;
+    --border:#e4dbc9; --ok:#1f7a44; --bad:#b3261e;
+    --shadow:0 4px 16px rgba(60,40,20,.10); --radius:16px;
+  }
+  body.hc{
+    --bg:#000; --panel:#0a0a0a; --text:#fff; --muted:#ffe680;
+    --accent:#ffd400; --accent-dark:#ffd400; --accent2:#00e5ff;
+    --border:#fff; --ok:#00ff88; --bad:#ff4d4d; --shadow:none;
+  }
+  *{box-sizing:border-box;}
+  html{font-size:16px; scroll-behavior:smooth;}
+  body{
+    margin:0; font-family:"Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.65;
+    transition:background .3s, color .3s;
+  }
+  h1,h2,h3,h4{line-height:1.25; margin:0 0 .5rem;}
+  p{margin:0 0 .6rem;}
+  button{font-family:inherit; cursor:pointer;}
+  input,select{font-family:inherit;}
+
+  .site-header{
+    background:linear-gradient(135deg,#b3541e,#7a3b1d);
+    color:#fff; padding:1.1rem 1.2rem;
+  }
+  body.hc .site-header{background:#000; border-bottom:4px solid var(--accent); color:var(--accent);}
+  .brand{display:flex; align-items:center; gap:.9rem; max-width:68rem; margin:0 auto;}
+  .logo{font-size:2rem; line-height:1; background:rgba(255,255,255,.18); border-radius:14px; padding:.4rem .6rem;}
+  body.hc .logo{background:#111; border:2px solid var(--accent);}
+  .brand h1{font-size:1.45rem; margin:0;}
+  .brand p{margin:0; font-size:.85rem; opacity:.9;}
+
+  .akses-bar{background:var(--panel); border-bottom:3px solid var(--accent2); padding:.7rem 1rem; box-shadow:var(--shadow);}
+  body.hc .akses-bar{border-bottom-width:4px;}
+  .akses-inner{max-width:68rem; margin:0 auto;}
+  .akses-head{display:flex; justify-content:space-between; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.5rem;}
+  .akses-head strong{font-size:.95rem; color:var(--accent2);}
+  body.hc .akses-head strong{color:var(--accent);}
+  .mini-btn{background:transparent; border:2px solid var(--border); color:var(--text); border-radius:999px; padding:.2rem .8rem; font-size:.8rem; font-weight:600;}
+  .mini-btn:hover{background:var(--accent); color:#fff; border-color:var(--accent);}
+  body.hc .mini-btn:hover{color:#000;}
+  .akses-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:.6rem 1.2rem;}
+  .ctrl{display:flex; flex-direction:column; gap:.2rem; font-size:.82rem;}
+  .ctrl-label{font-weight:700; color:var(--muted);}
+  body.hc .ctrl-label{color:var(--text);}
+  .ctrl-row{display:flex; align-items:center; gap:.6rem;}
+  .ctrl input[type=range]{flex:1; accent-color:var(--accent); height:1.4rem; cursor:pointer;}
+  .ctrl-val{min-width:3.6rem; text-align:center; font-weight:700; font-size:.8rem; background:var(--bg); border:2px solid var(--border); border-radius:8px; padding:.05rem .35rem;}
+  body.hc .ctrl-val{background:#111;}
+  .switch{display:flex; align-items:center; gap:.5rem; font-weight:700; cursor:pointer;}
+  .switch input{width:1.3rem; height:1.3rem; accent-color:var(--accent); cursor:pointer;}
+
+  .tabs{display:flex; gap:.4rem; flex-wrap:wrap; padding:.6rem 1rem; background:var(--panel); border-bottom:2px solid var(--border); position:sticky; top:0; z-index:60;}
+  body.hc .tabs{border-bottom-width:4px;}
+  .tabs-inner{max-width:68rem; margin:0 auto; display:flex; gap:.4rem; flex-wrap:wrap; width:100%;}
+  .tab{border:2px solid var(--border); background:var(--panel); color:var(--text); border-radius:999px; padding:.42rem 1rem; font-size:.9rem; font-weight:700; transition:.2s;}
+  .tab:hover{border-color:var(--accent); color:var(--accent);}
+  .tab.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+  body.hc .tab.active{color:#000;}
+
+  main{max-width:68rem; margin:0 auto; padding:1.1rem 1rem 3rem;}
+  .panel-section{display:none; animation:fade .35s ease;}
+  .panel-section.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  .card{background:var(--panel); border:2px solid var(--border); border-radius:var(--radius); padding:1rem 1.1rem; box-shadow:var(--shadow);}
+  body.hc .card{border-width:3px;}
+  .section-title{font-size:1.25rem; color:var(--accent-dark); border-left:6px solid var(--accent); padding-left:.6rem; margin-bottom:.9rem;}
+  body.hc .section-title{color:var(--accent);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(17rem,1fr)); gap:1rem;}
+
+  .hero{background:linear-gradient(135deg, rgba(179,84,30,.12), rgba(29,111,106,.12)); border:2px solid var(--border); border-radius:var(--radius); padding:1.3rem; margin-bottom:1rem;}
+  body.hc .hero{background:#0a0a0a; border-width:3px;}
+  .hero h2{color:var(--accent-dark); font-size:1.5rem;}
+  body.hc .hero h2{color:var(--accent);}
+  .hero-svg{width:100%; max-width:36rem; height:auto; display:block; margin:0 auto .8rem; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.15);}
+  .pill-row{display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.7rem;}
+  .pill{background:var(--panel); border:2px solid var(--border); border-radius:999px; padding:.25rem .8rem; font-size:.8rem; font-weight:700;}
+
+  /* MATERI */
+  .materi-card{display:flex; flex-direction:column; gap:.35rem; padding:0; overflow:hidden; cursor:pointer; transition:transform .2s, box-shadow .2s;}
+  .materi-card:hover{transform:translateY(-4px); box-shadow:0 10px 24px rgba(60,40,20,.18);}
+  .materi-card:focus-visible{outline:4px solid var(--accent2); outline-offset:3px;}
+  .materi-card::after{
+    content:'🔍 Klik untuk perbesar';
+    position:absolute; bottom:.5rem; right:.5rem;
+    background:rgba(0,0,0,.65); color:#fff;
+    font-size:.68rem; font-weight:700;
+    padding:.15rem .5rem; border-radius:999px;
+    opacity:0; transition:opacity .2s;
+    pointer-events:none;
+  }
+  .materi-card{position:relative;}
+  .materi-card:hover::after{opacity:1;}
+  .materi-illust{background:#eef6fb; border-bottom:2px solid var(--border); line-height:0;}
+  body.hc .materi-illust{background:#111; border-bottom-color:#fff;}
+  .materi-svg{display:block; width:100%; height:auto;}
+  .materi-body{padding:.7rem .9rem .9rem;}
+  .kategori{display:inline-block; font-size:.72rem; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
+    background:var(--accent2); color:#fff; border-radius:999px; padding:.15rem .65rem; margin-bottom:.35rem;}
+  body.hc .kategori{color:#000;}
+  .materi-body h3{font-size:1.08rem; color:var(--accent-dark); margin:.1rem 0 .3rem;}
+  body.hc .materi-body h3{color:var(--accent);}
+  .materi-body p{font-size:.87rem; color:var(--muted); margin:0 0 .4rem;}
+  body.hc .materi-body p{color:var(--text);}
+  .fakta{font-size:.8rem; border-left:4px solid var(--accent); padding-left:.5rem; font-style:italic; color:var(--muted); margin-top:.4rem;}
+  body.hc .fakta{color:var(--text);}
+
+  /* MODAL ZOOM */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(20,14,10,.75);
+    display:flex; align-items:center; justify-content:center;
+    padding:1rem; z-index:1000;
+    opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s;
+    backdrop-filter:blur(4px);
+  }
+  .modal-overlay.open{opacity:1; visibility:visible;}
+  .modal-card{
+    background:var(--panel); border:3px solid var(--accent);
+    border-radius:var(--radius); max-width:52rem; width:100%;
+    max-height:92vh; overflow:auto; position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,.55);
+    transform:scale(.92); transition:transform .3s ease;
+  }
+  .modal-overlay.open .modal-card{transform:scale(1);}
+  .modal-close{
+    position:absolute; top:.7rem; right:.7rem; z-index:2;
+    width:2.4rem; height:2.4rem; border-radius:50%;
+    background:var(--accent); color:#fff; border:none;
+    font-size:1.2rem; font-weight:900; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.3);
+  }
+  body.hc .modal-close{color:#000;}
+  .modal-close:hover{filter:brightness(1.15);}
+  .modal-illust{
+    background:linear-gradient(180deg,#eaf3f7,#dbe9ef);
+    border-bottom:3px solid var(--accent);
+    padding:1rem; line-height:0; text-align:center;
+  }
+  body.hc .modal-illust{background:#111;}
+  .modal-illust svg{
+    width:100%; max-width:44rem; height:auto;
+    border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.15);
+  }
+  .modal-body{padding:1.1rem 1.4rem 1.4rem;}
+  .modal-body h3{font-size:1.5rem; color:var(--accent-dark); margin-bottom:.4rem;}
+  body.hc .modal-body h3{color:var(--accent);}
+  .modal-body p{font-size:.98rem; line-height:1.7; color:var(--text);}
+  .modal-body .fakta{font-size:.92rem; margin-top:.6rem;}
+  .modal-hint{
+    display:flex; align-items:center; gap:.4rem;
+    font-size:.78rem; color:var(--muted); margin-top:.8rem;
+    padding-top:.6rem; border-top:1px dashed var(--border);
+  }
+  body.hc .modal-hint{color:var(--text);}
+
+  /* LAB */
+  .lab-layout{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr); gap:1rem;}
+  @media(max-width:860px){ .lab-layout{grid-template-columns:1fr;} }
+  .stage-wrap{display:flex; flex-direction:column; align-items:center; gap:.7rem;}
+  .stage{
+    position:relative; display:inline-block; line-height:0;
+    background:#eaf3f7; border:2px solid var(--border); border-radius:var(--radius);
+    padding:.5rem; overflow:visible; width:100%;
+  }
+  body.hc .stage{background:#000; border-width:3px;}
+  .stage-svg{width:100%; max-width:28rem; height:auto; display:block; border-radius:10px; margin:0 auto;}
+  .label-layer{position:absolute; inset:0; pointer-events:none;}
+  .part{transition:opacity .35s ease, filter .35s ease;}
+  .stage-svg.dim .part:not(.active){opacity:.22;}
+  .stage-svg .part.active{filter:drop-shadow(0 0 8px var(--accent));}
+  .stage-svg .part.active > *{stroke:var(--accent); stroke-width:3.4; stroke-linejoin:round;}
+  body.hc .stage-svg .part.active > *{stroke:#fff;}
+
+  .part-label{
+    position:absolute; transform:translate(-50%,-50%);
+    background:var(--accent); color:#fff; border-radius:12px; padding:.3rem .7rem;
+    font-size:.8rem; font-weight:700; line-height:1.3; max-width:14rem; text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.25); animation:pop .3s ease;
+  }
+  body.hc .part-label{color:#000; border:2px solid #fff;}
+  .part-label .lbl-desc{display:block; font-weight:500; font-size:.72rem; margin-top:.2rem; opacity:.95;}
+  .part-label.lvl2::after, .part-label.lvl3::after{
+    content:''; position:absolute; left:50%; bottom:-9px; transform:translateX(-50%);
+    border:9px solid transparent; border-top-color:var(--accent); border-bottom:0;
+  }
+  @keyframes pop{from{opacity:0; transform:translate(-50%,-50%) scale(.7);} to{opacity:1; transform:translate(-50%,-50%) scale(1);}}
+
+  .narasi-box{width:100%; background:var(--panel); border:2px solid var(--border); border-radius:12px; padding:.7rem .9rem; font-size:.88rem; min-height:4.2rem;}
+  body.hc .narasi-box{border-width:3px;}
+  .narasi-box .n-title{font-weight:800; color:var(--accent-dark); display:block; margin-bottom:.15rem;}
+  body.hc .narasi-box .n-title{color:var(--accent);}
+
+  .lab-controls{display:flex; flex-direction:column; gap:.9rem;}
+  .bangunan-pick{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(6.5rem, 1fr));
+    gap:.4rem;
+  }
+  .bangunan-pick button{
+    border:2px solid var(--border); background:var(--panel); color:var(--text);
+    border-radius:12px; padding:.5rem .4rem; font-weight:700; font-size:.78rem;
+    display:flex; flex-direction:column; align-items:center; gap:.15rem;
+    transition:.18s; line-height:1.2;
+  }
+  .bangunan-pick button .bp-emoji{font-size:1.3rem; line-height:1;}
+  .bangunan-pick button:hover{border-color:var(--accent2);}
+  .bangunan-pick button.active{background:var(--accent2); border-color:var(--accent2); color:#fff;}
+  body.hc .bangunan-pick button.active{color:#000;}
+
+  .btn{border:2px solid transparent; border-radius:12px; padding:.55rem 1rem; font-weight:800; font-size:.9rem; transition:.2s;}
+  .btn-primary{background:var(--accent); color:#fff;}
+  .btn-primary:hover{filter:brightness(1.1);}
+  body.hc .btn-primary{color:#000;}
+  .btn-ghost{background:transparent; border-color:var(--border); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+  .btn:disabled{opacity:.45; cursor:not-allowed;}
+
+  .progress-bar{height:.6rem; border-radius:999px; background:var(--bg); border:2px solid var(--border); overflow:hidden; width:100%;}
+  body.hc .progress-bar{background:#111;}
+  .progress-fill{height:100%; width:0%; background:var(--accent); transition:width .4s ease;}
+
+  .science{background:var(--panel); border:2px solid var(--accent2); border-radius:var(--radius); padding:.9rem 1rem;}
+  body.hc .science{border-width:3px;}
+  .science h3{font-size:1rem; color:var(--accent2); margin-bottom:.5rem;}
+  body.hc .science h3{color:var(--accent);}
+  .sci-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.45rem;}
+  .sci-list li{font-size:.8rem; padding:.5rem .65rem; border-radius:10px; border:2px dashed var(--border); color:var(--muted); transition:.25s;}
+  body.hc .sci-list li{color:var(--text);}
+  .sci-list li.on{border-style:solid; border-color:var(--accent); color:var(--text); background:rgba(179,84,30,.08);}
+  body.hc .sci-list li.on{background:#111;}
+  .sci-list li b{display:block; margin-bottom:.1rem;}
+
+  /* PUZZLE */
+  .puzzle-wrap{display:flex; flex-direction:column; gap:1rem;}
+  .chip-pool{display:flex; flex-wrap:wrap; gap:.6rem; min-height:4rem; background:var(--panel); border:2px dashed var(--border); border-radius:var(--radius); padding:.8rem; align-items:flex-start;}
+  body.hc .chip-pool{border-width:3px;}
+  .chip{
+    display:inline-flex; align-items:center; gap:.45rem;
+    background:var(--accent); color:#fff; border-radius:12px;
+    padding:.5rem .9rem; font-weight:800; font-size:.88rem;
+    cursor:grab; user-select:none; touch-action:none;
+    border:2px solid transparent; transition:transform .15s, box-shadow .15s;
+    box-shadow:0 3px 8px rgba(0,0,0,.18);
+  }
+  body.hc .chip{color:#000; border-color:#fff;}
+  .chip:hover{transform:translateY(-2px);}
+  .chip.selected{outline:4px solid var(--accent2); outline-offset:2px;}
+  .chip.dragging{opacity:.35;}
+  .chip.locked{cursor:default; background:var(--ok); box-shadow:none;}
+  .chip-emoji{font-size:1.15rem; line-height:1;}
+  .chip.ghost{position:fixed; z-index:9999; pointer-events:none; opacity:.9; transform:rotate(-3deg) scale(1.04); box-shadow:0 10px 22px rgba(0,0,0,.3);}
+
+  .slot-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:.8rem;}
+  .slot{background:var(--panel); border:2px solid var(--border); border-radius:var(--radius); padding:.7rem; display:flex; flex-direction:column; gap:.5rem;}
+  body.hc .slot{border-width:3px;}
+  .slot-fungsi{font-weight:800; font-size:.9rem; color:var(--accent-dark);}
+  body.hc .slot-fungsi{color:var(--accent);}
+  .slot-fungsi small{display:block; font-weight:500; font-size:.76rem; color:var(--muted); margin-top:.1rem;}
+  body.hc .slot-fungsi small{color:var(--text);}
+  .dropzone{min-height:3.1rem; border:2px dashed var(--border); border-radius:12px; display:flex; align-items:center; justify-content:center; padding:.35rem; transition:.2s; text-align:center;}
+  .dropzone .ph{font-size:.78rem; color:var(--muted); font-style:italic;}
+  body.hc .dropzone .ph{color:var(--text);}
+  .dropzone.filled{border-style:solid; border-color:var(--ok); background:rgba(31,122,68,.08);}
+  body.hc .dropzone.filled{background:#111;}
+  .dropzone.wrong{border-color:var(--bad); animation:shake .4s;}
+  @keyframes shake{0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);}}
+  .puzzle-msg{font-weight:800; text-align:center; font-size:1rem; padding:.6rem; border-radius:12px; display:none;}
+  .puzzle-msg.show{display:block; background:rgba(31,122,68,.12); color:var(--ok); border:2px solid var(--ok);}
+
+  /* EVALUASI */
+  .soal{background:var(--panel); border:2px solid var(--border); border-radius:var(--radius); padding:.9rem 1rem; margin-bottom:.9rem;}
+  body.hc .soal{border-width:3px;}
+  .soal-q{font-weight:700; margin-bottom:.5rem; display:flex; gap:.5rem; align-items:flex-start;}
+  .soal-emoji{font-size:1.3rem; line-height:1; flex:0 0 auto;}
+  .opsi{display:flex; flex-direction:column; gap:.35rem;}
+  .opsi label{display:flex; align-items:flex-start; gap:.55rem; cursor:pointer; padding:.4rem .6rem; border-radius:10px; border:2px solid transparent; font-size:.9rem; transition:.15s;}
+  .opsi label:hover{background:rgba(179,84,30,.07);}
+  body.hc .opsi label:hover{background:#151515;}
+  .opsi input{width:1.15rem; height:1.15rem; margin-top:.15rem; accent-color:var(--accent); cursor:pointer; flex:0 0 auto;}
+  .fb{font-size:.84rem; margin-top:.45rem; padding:.4rem .6rem; border-radius:8px; display:none; font-weight:600;}
+  .fb.show{display:block;}
+  .fb.benar{background:rgba(31,122,68,.13); color:var(--ok); border-left:5px solid var(--ok);}
+  .fb.salah{background:rgba(179,38,30,.13); color:var(--bad); border-left:5px solid var(--bad);}
+  body.hc .fb.benar{color:var(--ok);} body.hc .fb.salah{color:var(--bad);}
+  .opsi label.benar{border-color:var(--ok); background:rgba(31,122,68,.10);}
+  .opsi label.salah{border-color:var(--bad); background:rgba(179,38,30,.10);}
+
+  .skor-box{text-align:center; background:var(--panel); border:3px solid var(--accent); border-radius:var(--radius); padding:1rem; margin-bottom:1rem; display:none;}
+  .skor-box.show{display:block;}
+  .skor-angka{font-size:2.4rem; font-weight:900; color:var(--accent); line-height:1;}
+
+  footer{text-align:center; font-size:.78rem; color:var(--muted); padding:1.2rem; border-top:2px solid var(--border);}
+  body.hc footer{color:var(--text);}
+
+  :focus-visible{outline:4px solid var(--accent2); outline-offset:2px; border-radius:6px;}
+</style>
+</head>
+<body>
+
+<!-- ===================== SHARED SVG DEFS ===================== -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5BA7D6"/>
+      <stop offset="55%" stop-color="#A5D4EE"/>
+      <stop offset="100%" stop-color="#E2F1FA"/>
+    </linearGradient>
+    <radialGradient id="sun-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFDE7"/>
+      <stop offset="55%" stop-color="#FFE082"/>
+      <stop offset="100%" stop-color="#FFB300" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wall-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FBF3E2"/>
+      <stop offset="100%" stop-color="#E3CFAE"/>
+    </linearGradient>
+    <linearGradient id="wall-side" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#BCA487"/>
+      <stop offset="100%" stop-color="#8A7054"/>
+    </linearGradient>
+    <linearGradient id="wall-white" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E1E1E1"/>
+    </linearGradient>
+    <linearGradient id="roof-red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E85C4A"/>
+      <stop offset="100%" stop-color="#95271A"/>
+    </linearGradient>
+    <linearGradient id="roof-brown" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A87043"/>
+      <stop offset="100%" stop-color="#5A3818"/>
+    </linearGradient>
+    <linearGradient id="roof-green" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3FBE6E"/>
+      <stop offset="100%" stop-color="#0F5132"/>
+    </linearGradient>
+    <linearGradient id="roof-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4FA3D8"/>
+      <stop offset="100%" stop-color="#1E5185"/>
+    </linearGradient>
+    <linearGradient id="glass-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#CDEDFA"/>
+      <stop offset="45%" stop-color="#8FCEE8"/>
+      <stop offset="100%" stop-color="#3E82A8"/>
+    </linearGradient>
+    <linearGradient id="grass-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9DD187"/>
+      <stop offset="100%" stop-color="#4E8A3B"/>
+    </linearGradient>
+    <linearGradient id="path-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#CDC3B2"/>
+      <stop offset="100%" stop-color="#948872"/>
+    </linearGradient>
+    <linearGradient id="wood-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#95602E"/>
+      <stop offset="50%" stop-color="#6E4220"/>
+      <stop offset="100%" stop-color="#452714"/>
+    </linearGradient>
+    <linearGradient id="trunk-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6B4220"/>
+      <stop offset="100%" stop-color="#3A2512"/>
+    </linearGradient>
+    <radialGradient id="leaf-grad" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#8FDB64"/>
+      <stop offset="100%" stop-color="#266B24"/>
+    </radialGradient>
+    <radialGradient id="leaf-light" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#C4EEA4"/>
+      <stop offset="100%" stop-color="#4CAF50"/>
+    </radialGradient>
+    <linearGradient id="red-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F4493A"/>
+      <stop offset="100%" stop-color="#A61414"/>
+    </linearGradient>
+    <linearGradient id="green-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4CC164"/>
+      <stop offset="100%" stop-color="#1B5E20"/>
+    </linearGradient>
+    <linearGradient id="blue-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4FA3D8"/>
+      <stop offset="100%" stop-color="#1E5185"/>
+    </linearGradient>
+    <linearGradient id="orange-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5A623"/>
+      <stop offset="100%" stop-color="#C26A00"/>
+    </linearGradient>
+    <linearGradient id="metal-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E0E0E0"/>
+      <stop offset="50%" stop-color="#A8A8A8"/>
+      <stop offset="100%" stop-color="#606060"/>
+    </linearGradient>
+    <linearGradient id="road-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6F6F6F"/>
+      <stop offset="100%" stop-color="#3E3E3E"/>
+    </linearGradient>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.4"/>
+      <feOffset dx="1.4" dy="2"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.32"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="drop-shadow-lt" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.5"/>
+      <feOffset dx="3" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.28"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<!-- ===================== HEADER ===================== -->
+<header class="site-header">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">🏙️</div>
+    <div>
+      <h1>Bangunan Umum di Indonesia</h1>
+      <p>Media Pembelajaran Interaktif • Prinsip Pendidikan Khusus &amp; Desain Universal</p>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== PANEL AKSESIBILITAS ===================== -->
+<section class="akses-bar" aria-label="Panel Aksesibilitas">
+  <div class="akses-inner">
+    <div class="akses-head">
+      <strong>♿ Panel Aksesibilitas — Prinsip Pendidikan Khusus</strong>
+      <button class="mini-btn" id="resetAkses" type="button">↺ Atur Ulang</button>
+    </div>
+    <div class="akses-grid" id="aksesGrid">
+      <label class="ctrl">
+        <span class="ctrl-label">⏱️ Tempo Kecepatan Panduan</span>
+        <span class="ctrl-row">
+          <input type="range" data-var="tempo" min="0.5" max="2" step="0.25" value="1">
+          <span class="ctrl-val" data-out="tempo">1×</span>
+        </span>
+      </label>
+      <label class="ctrl">
+        <span class="ctrl-label">🔍 Ukuran Objek &amp; Teks</span>
+        <span class="ctrl-row">
+          <input type="range" data-var="ukuran" min="0.9" max="1.6" step="0.05" value="1">
+          <span class="ctrl-val" data-out="ukuran">100%</span>
+        </span>
+      </label>
+      <label class="ctrl">
+        <span class="ctrl-label">🌗 Kontras Tampilan</span>
+        <span class="ctrl-row">
+          <label class="switch"><input type="checkbox" data-var="kontras"><span data-out="kontras">Normal</span></label>
+        </span>
+      </label>
+      <label class="ctrl">
+        <span class="ctrl-label">💡 Tingkat Bantuan Petunjuk Visual</span>
+        <span class="ctrl-row">
+          <input type="range" data-var="bantuan" min="0" max="3" step="1" value="1">
+          <span class="ctrl-val" data-out="bantuan">Ringan</span>
+        </span>
+      </label>
+      <label class="ctrl">
+        <span class="ctrl-label">🔊 Narasi Suara (Multisensori)</span>
+        <span class="ctrl-row">
+          <label class="switch"><input type="checkbox" data-var="narasi"><span data-out="narasi">Nonaktif</span></label>
+        </span>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TAB ===================== -->
+<nav class="tabs" aria-label="Navigasi utama">
+  <div class="tabs-inner">
+    <button class="tab active" data-target="beranda" type="button">🏠 Beranda</button>
+    <button class="tab" data-target="materi" type="button">📚 Materi</button>
+    <button class="tab" data-target="lab" type="button">🔬 Lab Maya</button>
+    <button class="tab" data-target="puzzle" type="button">🧩 Puzzle</button>
+    <button class="tab" data-target="evaluasi" type="button">📝 Evaluasi</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===================== BERANDA ===================== -->
+  <section class="panel-section active" id="beranda">
+    <div class="hero">
+      <svg viewBox="0 0 560 200" class="hero-svg" role="img" aria-label="Panorama bangunan umum">
+        <rect width="560" height="200" fill="url(#sky-grad)"/>
+        <circle cx="60" cy="55" r="34" fill="url(#sun-grad)"/>
+        <circle cx="60" cy="55" r="16" fill="#FFEE8A" opacity=".9"/>
+        <g fill="#fff" opacity=".85">
+          <ellipse cx="180" cy="42" rx="34" ry="10"/>
+          <ellipse cx="205" cy="35" rx="22" ry="9"/>
+          <ellipse cx="430" cy="50" rx="30" ry="9"/>
+          <ellipse cx="455" cy="44" rx="20" ry="8"/>
+        </g>
+        <path d="M0,140 Q90,105 180,132 T360,124 T560,138 L560,200 L0,200 Z" fill="#8FC08E" opacity=".55"/>
+        <path d="M0,155 Q120,128 240,150 T480,148 T560,160 L560,200 L0,200 Z" fill="#6FA46E" opacity=".7"/>
+        <rect y="165" width="560" height="35" fill="url(#grass-grad)"/>
+        <rect y="182" width="560" height="12" fill="url(#road-grad)"/>
+        <g stroke="#FFEB3B" stroke-width="1.5" stroke-dasharray="10 8"><line x1="0" y1="188" x2="560" y2="188"/></g>
+
+        <g filter="url(#drop-shadow-lt)">
+          <rect x="20" y="105" width="72" height="60" fill="url(#wall-grad)"/>
+          <rect x="20" y="105" width="6" height="60" fill="url(#wall-side)"/>
+          <rect x="16" y="100" width="80" height="6" fill="#B8AC9A"/>
+          <rect x="50" y="80" width="12" height="20" fill="url(#red-grad)"/>
+          <rect x="46" y="84" width="20" height="12" fill="url(#red-grad)"/>
+          <rect x="28" y="115" width="10" height="9" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+          <rect x="70" y="115" width="10" height="9" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+          <rect x="52" y="140" width="10" height="25" fill="url(#wood-grad)"/>
+        </g>
+
+        <g filter="url(#drop-shadow-lt)">
+          <rect x="130" y="112" width="90" height="53" fill="url(#wall-grad)"/>
+          <rect x="130" y="112" width="7" height="53" fill="url(#wall-side)"/>
+          <polygon points="124,112 175,80 226,112" fill="url(#roof-red)"/>
+          <rect x="173" y="86" width="4" height="26" fill="#6A1A10"/>
+          <rect x="142" y="122" width="12" height="10" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+          <rect x="178" y="122" width="12" height="10" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+          <rect x="168" y="140" width="16" height="25" fill="url(#wood-grad)"/>
+          <rect x="105" y="95" width="2" height="70" fill="#888"/>
+          <rect x="107" y="99" width="22" height="6" fill="url(#red-grad)"/>
+          <rect x="107" y="105" width="22" height="6" fill="#fff" stroke="#ccc" stroke-width=".4"/>
+        </g>
+
+        <g filter="url(#drop-shadow-lt)">
+          <rect x="240" y="140" width="80" height="25" fill="url(#wall-grad)"/>
+          <polygon points="234,140 280,116 326,140" fill="url(#orange-grad)"/>
+          <rect x="248" y="146" width="10" height="8" fill="#D32F2F"/>
+          <rect x="260" y="146" width="10" height="8" fill="#388E3C"/>
+          <rect x="272" y="146" width="10" height="8" fill="#FBC02D"/>
+          <rect x="284" y="146" width="10" height="8" fill="#1976D2"/>
+        </g>
+
+        <g filter="url(#drop-shadow-lt)">
+          <rect x="345" y="108" width="105" height="57" fill="url(#wall-grad)"/>
+          <rect x="340" y="100" width="115" height="9" fill="#A89F92"/>
+          <rect x="360" y="120" width="15" height="12" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+          <rect x="410" y="120" width="15" height="12" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+          <rect x="388" y="145" width="20" height="20" fill="url(#wood-grad)"/>
+          <rect x="345" y="80" width="105" height="22" rx="4" fill="url(#blue-grad)" stroke="#0B2942" stroke-width="1"/>
+          <rect x="345" y="80" width="105" height="5" fill="#E8E8E8"/>
+        </g>
+
+        <g filter="url(#drop-shadow-lt)">
+          <rect x="460" y="125" width="42" height="40" fill="url(#wall-white)"/>
+          <rect x="456" y="119" width="50" height="7" fill="#2E7D32"/>
+          <rect x="476" y="148" width="10" height="17" fill="url(#wood-grad)"/>
+          <rect x="510" y="145" width="16" height="20" rx="3" fill="url(#orange-grad)" stroke="#7B3F00" stroke-width="1"/>
+        </g>
+
+        <g filter="url(#soft-shadow)">
+          <rect x="112" y="150" width="3" height="20" fill="url(#trunk-grad)"/>
+          <ellipse cx="113" cy="146" rx="12" ry="11" fill="url(#leaf-grad)"/>
+          <rect x="330" y="152" width="3" height="18" fill="url(#trunk-grad)"/>
+          <ellipse cx="331" cy="148" rx="11" ry="10" fill="url(#leaf-grad)"/>
+        </g>
+      </svg>
+
+      <h2>Selamat Datang di Jelajah Bangunan Umum Nusantara!</h2>
+      <p>
+        Media Pembelajaran Interaktif ini mengajakmu mengenal <b>8 bangunan umum</b> di Indonesia —
+        mulai dari rumah sakit, sekolah, pasar, stasiun, hingga balai desa. Kamu akan belajar melalui
+        <b>materi bergambar</b>, <b>laboratorium maya</b>, <b>permainan puzzle</b>, dan <b>evaluasi</b>.
+      </p>
+      <p>
+        💡 <b>Tips:</b> Klik kartu materi untuk melihat gambarnya lebih besar (zoom). Masuk ke
+        <b>Lab Maya</b> untuk melihat <b>semua 8 bangunan</b> dengan tur berpanduan interaktif!
+      </p>
+      <div class="pill-row">
+        <span class="pill">🏥 Rumah Sakit</span>
+        <span class="pill">🏫 Sekolah</span>
+        <span class="pill">🏪 Pasar</span>
+        <span class="pill">🚉 Stasiun</span>
+        <span class="pill">📮 Kantor Pos</span>
+        <span class="pill">📚 Perpustakaan</span>
+        <span class="pill">🏥 Puskesmas</span>
+        <span class="pill">🏛️ Balai Desa</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>🏙️ Apa yang akan kamu pelajari?</h3>
+        <p>1. Nama dan fungsi bangunan umum di sekitar kita.</p>
+        <p>2. Ciri khas bentuk, warna, dan bagian bangunan.</p>
+        <p>3. Manfaat bangunan umum bagi kehidupan masyarakat.</p>
+      </div>
+      <div class="card">
+        <h3>🎮 Cara Menggunakan</h3>
+        <p>1. Buka <b>Materi</b> → klik kartu untuk <b>zoom gambar</b>.</p>
+        <p>2. Masuk <b>Lab Maya</b> → pilih salah satu dari 8 bangunan.</p>
+        <p>3. Main <b>Puzzle</b> drag &amp; drop, lalu kerjakan <b>Evaluasi</b>.</p>
+      </div>
+      <div class="card">
+        <h3>♿ Pengaturan Khusus</h3>
+        <p>Gunakan <b>Panel Aksesibilitas</b> di atas untuk menyesuaikan tempo panduan,
+        ukuran objek, kontras warna, tingkat bantuan visual, dan narasi suara.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MATERI ===================== -->
+  <section class="panel-section" id="materi">
+    <h2 class="section-title">📚 Materi: Bangunan Umum di Indonesia</h2>
+    <p style="margin-bottom:1rem;">
+      Klik salah satu kartu di bawah untuk melihat gambarnya <b>lebih besar (zoom)</b> beserta penjelasan lengkap.
+    </p>
+
+    <div class="grid" id="materiGrid">
+
+      <!-- RUMAH SAKIT -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Rumah Sakit">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Rumah Sakit">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="40" cy="32" r="18" fill="url(#sun-grad)"/>
+            <g fill="#fff" opacity=".85"><ellipse cx="180" cy="30" rx="24" ry="7"/><ellipse cx="200" cy="26" rx="15" ry="6"/></g>
+            <rect y="125" width="240" height="25" fill="url(#grass-grad)"/>
+            <rect y="140" width="240" height="10" fill="url(#path-grad)"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="65" y="55" width="115" height="70" fill="url(#wall-grad)"/>
+              <rect x="65" y="55" width="8" height="70" fill="url(#wall-side)"/>
+              <rect x="60" y="50" width="125" height="7" fill="#B0A594"/>
+              <rect x="110" y="20" width="14" height="26" fill="url(#red-grad)"/>
+              <rect x="102" y="26" width="30" height="14" fill="url(#red-grad)"/>
+              <rect x="78" y="66" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="100" y="66" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="122" y="66" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="144" y="66" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="78" y="86" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="144" y="86" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="105" y="95" width="26" height="30" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width=".8"/>
+              <circle cx="127" cy="110" r="1.3" fill="#FFD700"/>
+              <rect x="155" y="95" width="42" height="13" rx="2" fill="#D32F2F"/>
+              <text x="176" y="105" font-size="9" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">IGD</text>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="8" y="105" width="50" height="20" rx="3" fill="#fff" stroke="#666" stroke-width=".8"/>
+              <rect x="12" y="110" width="12" height="9" fill="url(#glass-grad)"/>
+              <rect x="32" y="109" width="12" height="4" fill="#D32F2F"/>
+              <rect x="36" y="106" width="4" height="3" fill="#D32F2F"/>
+              <circle cx="20" cy="127" r="3.5" fill="#222"/>
+              <circle cx="46" cy="127" r="3.5" fill="#222"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="195" y="110" width="3.5" height="20" fill="url(#trunk-grad)"/>
+              <ellipse cx="197" cy="104" rx="15" ry="13" fill="url(#leaf-grad)"/>
+              <ellipse cx="194" cy="100" rx="10" ry="9" fill="url(#leaf-light)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">🏥 Kesehatan</span>
+          <h3>Rumah Sakit</h3>
+          <p>Tempat merawat orang sakit. Ada dokter, perawat, ruang periksa, dan ruang inap. Ditandai dengan <b>palang merah</b> dan <b>IGD</b>.</p>
+          <p class="fakta">Fakta: IGD = Instalasi Gawat Darurat, untuk pertolongan cepat.</p>
+        </div>
+      </article>
+
+      <!-- SEKOLAH -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Sekolah">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Sekolah">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="30" cy="28" r="16" fill="url(#sun-grad)"/>
+            <g fill="#fff" opacity=".9"><ellipse cx="175" cy="30" rx="26" ry="8"/><ellipse cx="195" cy="25" rx="16" ry="6"/></g>
+            <rect y="125" width="240" height="25" fill="url(#grass-grad)"/>
+            <rect y="142" width="240" height="8" fill="url(#path-grad)"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="60" y="62" width="130" height="63" fill="url(#wall-grad)"/>
+              <rect x="60" y="62" width="8" height="63" fill="url(#wall-side)"/>
+              <polygon points="52,62 125,26 198,62" fill="url(#roof-red)"/>
+              <polygon points="52,62 125,26 125,62" fill="#B33A28" opacity=".55"/>
+              <rect x="122" y="34" width="6" height="28" fill="#6A1A10"/>
+              <circle cx="125" cy="45" r="7" fill="#fff" stroke="#5d4037" stroke-width="1.4"/>
+              <line x1="125" y1="45" x2="125" y2="40" stroke="#5d4037" stroke-width="1.2"/>
+              <line x1="125" y1="45" x2="129" y2="46" stroke="#5d4037" stroke-width="1.2"/>
+              <rect x="72" y="74" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="94" y="74" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="140" y="74" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="162" y="74" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="72" y="96" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="162" y="96" width="16" height="14" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="113" y="98" width="26" height="27" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width=".8"/>
+              <rect x="115" y="100" width="10" height="20" fill="#5A3318"/>
+              <rect x="127" y="100" width="10" height="20" fill="#5A3318"/>
+              <circle cx="134" cy="113" r="1.2" fill="#FFD700"/>
+            </g>
+            <rect x="42" y="60" width="2.5" height="85" fill="#888"/>
+            <rect x="44.5" y="64" width="26" height="7" fill="url(#red-grad)"/>
+            <rect x="44.5" y="71" width="26" height="7" fill="#fff" stroke="#ccc" stroke-width=".4"/>
+            <g filter="url(#soft-shadow)">
+              <rect x="208" y="106" width="3.5" height="22" fill="url(#trunk-grad)"/>
+              <ellipse cx="210" cy="100" rx="14" ry="12" fill="url(#leaf-grad)"/>
+              <ellipse cx="207" cy="96" rx="9" ry="8" fill="url(#leaf-light)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">🏫 Pendidikan</span>
+          <h3>Sekolah</h3>
+          <p>Tempat siswa belajar, bermain, dan menuntut ilmu. Ada ruang kelas, perpustakaan, dan halaman untuk upacara bendera.</p>
+          <p class="fakta">Fakta: Setiap Senin diadakan upacara bendera Merah Putih.</p>
+        </div>
+      </article>
+
+      <!-- PASAR -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Pasar">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Pasar">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="200" cy="28" r="16" fill="url(#sun-grad)"/>
+            <rect y="125" width="240" height="25" fill="url(#path-grad)"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="20" y="80" width="62" height="45" fill="url(#wall-white)"/>
+              <polygon points="14,80 51,58 88,80" fill="url(#roof-red)"/>
+              <polygon points="14,80 51,58 51,80" fill="#A02319" opacity=".5"/>
+              <rect x="26" y="90" width="12" height="10" fill="#E53935"/>
+              <rect x="42" y="90" width="12" height="10" fill="#43A047"/>
+              <rect x="58" y="90" width="12" height="10" fill="#FDD835"/>
+              <rect x="26" y="104" width="12" height="10" fill="#FB8C00"/>
+              <rect x="42" y="104" width="12" height="10" fill="#8E24AA"/>
+              <rect x="58" y="104" width="12" height="10" fill="#1E88E5"/>
+            </g>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="90" y="80" width="62" height="45" fill="url(#wall-white)"/>
+              <polygon points="84,80 121,58 158,80" fill="#1E88E5"/>
+              <polygon points="84,80 121,58 121,80" fill="#125EA8" opacity=".55"/>
+              <rect x="96" y="90" width="12" height="10" fill="#FDD835"/>
+              <rect x="112" y="90" width="12" height="10" fill="#E53935"/>
+              <rect x="128" y="90" width="12" height="10" fill="#43A047"/>
+              <rect x="96" y="104" width="12" height="10" fill="#1E88E5"/>
+              <rect x="112" y="104" width="12" height="10" fill="#FB8C00"/>
+            </g>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="160" y="80" width="62" height="45" fill="url(#wall-white)"/>
+              <polygon points="154,80 191,58 228,80" fill="url(#roof-green)"/>
+              <polygon points="154,80 191,58 191,80" fill="#1B5E20" opacity=".55"/>
+              <rect x="166" y="90" width="12" height="10" fill="#FB8C00"/>
+              <rect x="182" y="90" width="12" height="10" fill="#E53935"/>
+              <rect x="198" y="90" width="12" height="10" fill="#43A047"/>
+              <rect x="166" y="104" width="12" height="10" fill="#FDD835"/>
+              <rect x="182" y="104" width="12" height="10" fill="#1E88E5"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <circle cx="52" cy="132" r="4.5" fill="#F2C79A"/>
+              <rect x="48" y="135" width="8" height="11" fill="#1E88E5" rx="2"/>
+              <circle cx="120" cy="132" r="4.5" fill="#F2C79A"/>
+              <rect x="116" y="135" width="8" height="11" fill="#D32F2F" rx="2"/>
+              <circle cx="190" cy="132" r="4.5" fill="#F2C79A"/>
+              <rect x="186" y="135" width="8" height="11" fill="#43A047" rx="2"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">🏪 Perdagangan</span>
+          <h3>Pasar</h3>
+          <p>Tempat orang berjualan dan membeli kebutuhan sehari-hari. Ada sayur, buah, ikan, dan sembako.</p>
+          <p class="fakta">Fakta: Pasar tradisional biasanya paling ramai pada pagi hari.</p>
+        </div>
+      </article>
+
+      <!-- STASIUN -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Stasiun">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Stasiun Kereta">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="200" cy="28" r="16" fill="url(#sun-grad)"/>
+            <g fill="#fff" opacity=".85"><ellipse cx="60" cy="30" rx="24" ry="7"/><ellipse cx="78" cy="26" rx="14" ry="6"/></g>
+            <rect y="125" width="240" height="25" fill="url(#path-grad)"/>
+            <line x1="0" y1="138" x2="240" y2="138" stroke="#333" stroke-width="1.5"/>
+            <line x1="0" y1="144" x2="240" y2="144" stroke="#333" stroke-width="1.5"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="5" y="82" width="130" height="42" rx="5" fill="url(#blue-grad)" stroke="#0B2942" stroke-width="1.2"/>
+              <rect x="5" y="82" width="130" height="7" fill="#E8E8E8"/>
+              <rect x="14" y="95" width="18" height="16" fill="url(#glass-grad)" stroke="#0B2942" stroke-width=".8"/>
+              <rect x="38" y="95" width="18" height="16" fill="url(#glass-grad)" stroke="#0B2942" stroke-width=".8"/>
+              <rect x="62" y="95" width="18" height="16" fill="url(#glass-grad)" stroke="#0B2942" stroke-width=".8"/>
+              <rect x="86" y="95" width="18" height="16" fill="url(#glass-grad)" stroke="#0B2942" stroke-width=".8"/>
+              <rect x="110" y="95" width="18" height="16" fill="url(#glass-grad)" stroke="#0B2942" stroke-width=".8"/>
+              <circle cx="22" cy="129" r="4" fill="#222"/>
+              <circle cx="118" cy="129" r="4" fill="#222"/>
+            </g>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="148" y="62" width="88" height="63" fill="url(#wall-grad)"/>
+              <rect x="148" y="62" width="6" height="63" fill="url(#wall-side)"/>
+              <rect x="144" y="55" width="96" height="9" fill="#A89F92"/>
+              <rect x="162" y="42" width="60" height="14" rx="1" fill="#B71C1C"/>
+              <text x="192" y="52" font-size="9" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">STASIUN</text>
+              <rect x="158" y="72" width="14" height="12" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="178" y="72" width="14" height="12" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="198" y="72" width="14" height="12" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="218" y="72" width="14" height="12" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width=".8"/>
+              <rect x="182" y="95" width="22" height="30" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width=".8"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">🚉 Transportasi</span>
+          <h3>Stasiun Kereta</h3>
+          <p>Tempat orang naik dan turun dari kereta api. Ada peron, loket tiket, dan jadwal keberangkatan.</p>
+          <p class="fakta">Fakta: Stasiun besar seperti Gambir dan Pasar Senen ada di Jakarta.</p>
+        </div>
+      </article>
+
+      <!-- KANTOR POS -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Kantor Pos">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Kantor Pos">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="30" cy="28" r="16" fill="url(#sun-grad)"/>
+            <rect y="125" width="240" height="25" fill="url(#grass-grad)"/>
+            <rect y="142" width="240" height="8" fill="url(#path-grad)"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="55" y="62" width="130" height="63" fill="url(#wall-white)"/>
+              <rect x="55" y="62" width="7" height="63" fill="#B8B8B8"/>
+              <rect x="50" y="54" width="140" height="10" fill="#2E7D32"/>
+              <rect x="50" y="54" width="140" height="3" fill="#4CAF50"/>
+              <text x="120" y="63" font-size="9" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">KANTOR POS</text>
+              <rect x="70" y="74" width="18" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="94" y="74" width="18" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="128" y="74" width="18" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="152" y="74" width="18" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="106" y="98" width="26" height="27" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width=".8"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="195" y="98" width="24" height="30" rx="3" fill="url(#orange-grad)" stroke="#7B3F00" stroke-width="1"/>
+              <rect x="200" y="104" width="14" height="4" fill="#4A2C17"/>
+              <circle cx="207" cy="115" r="1.8" fill="#fff"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="30" y="108" width="24" height="16" fill="#fff" stroke="#5d4037" stroke-width=".9"/>
+              <polygon points="30,108 42,118 54,108" fill="none" stroke="#5d4037" stroke-width=".9"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="18" y="108" width="3.5" height="22" fill="url(#trunk-grad)"/>
+              <ellipse cx="20" cy="102" rx="13" ry="11" fill="url(#leaf-grad)"/>
+              <ellipse cx="17" cy="98" rx="8" ry="7" fill="url(#leaf-light)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">📮 Komunikasi</span>
+          <h3>Kantor Pos</h3>
+          <p>Tempat mengirim <b>surat, paket, dan barang</b>. Juga menjual perangko dan melayani pembayaran tagihan.</p>
+          <p class="fakta">Fakta: Di depan kantor pos biasanya ada kotak pos berwarna oranye.</p>
+        </div>
+      </article>
+
+      <!-- PERPUSTAKAAN -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Perpustakaan">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Perpustakaan">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="30" cy="28" r="16" fill="url(#sun-grad)"/>
+            <rect y="125" width="240" height="25" fill="url(#grass-grad)"/>
+            <rect y="142" width="240" height="8" fill="url(#path-grad)"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="55" y="62" width="130" height="63" fill="url(#wall-grad)"/>
+              <rect x="55" y="62" width="7" height="63" fill="url(#wall-side)"/>
+              <polygon points="48,62 120,26 192,62" fill="url(#roof-brown)"/>
+              <polygon points="48,62 120,26 120,62" fill="#7A4E28" opacity=".55"/>
+              <rect x="76" y="70" width="88" height="14" rx="2" fill="#1d6f6a"/>
+              <text x="120" y="80" font-size="8" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">PERPUSTAKAAN</text>
+              <rect x="70" y="90" width="34" height="22" fill="#fff" stroke="#5d4037" stroke-width="1"/>
+              <rect x="74" y="108" width="5" height="4" fill="#D32F2F"/>
+              <rect x="80" y="106" width="5" height="6" fill="#1E88E5"/>
+              <rect x="86" y="104" width="5" height="8" fill="#43A047"/>
+              <rect x="92" y="107" width="5" height="5" fill="#FDD835"/>
+              <rect x="113" y="98" width="26" height="27" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width=".8"/>
+              <circle cx="134" cy="113" r="1.2" fill="#FFD700"/>
+              <rect x="150" y="90" width="26" height="22" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <circle cx="176" cy="124" r="4.5" fill="#F2C79A"/>
+              <rect x="172" y="127" width="8" height="10" rx="2" fill="#8E24AA"/>
+              <rect x="166" y="130" width="14" height="9" fill="#fff" stroke="#5d4037" stroke-width=".7"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="18" y="108" width="3.5" height="22" fill="url(#trunk-grad)"/>
+              <ellipse cx="20" cy="102" rx="13" ry="11" fill="url(#leaf-grad)"/>
+              <ellipse cx="17" cy="98" rx="8" ry="7" fill="url(#leaf-light)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">📚 Literasi</span>
+          <h3>Perpustakaan</h3>
+          <p>Tempat membaca dan meminjam <b>buku</b>. Pengunjung harus tenang agar bisa fokus membaca.</p>
+          <p class="fakta">Fakta: Perpustakaan Nasional RI di Jakarta memiliki koleksi jutaan buku.</p>
+        </div>
+      </article>
+
+      <!-- PUSKESMAS -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Puskesmas">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Puskesmas">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="200" cy="30" r="16" fill="url(#sun-grad)"/>
+            <rect y="125" width="240" height="25" fill="url(#grass-grad)"/>
+            <rect y="142" width="240" height="8" fill="url(#path-grad)"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="65" y="62" width="115" height="63" fill="url(#wall-grad)"/>
+              <rect x="65" y="62" width="7" height="63" fill="url(#wall-side)"/>
+              <rect x="60" y="55" width="125" height="9" fill="#2E7D32"/>
+              <rect x="60" y="55" width="125" height="3" fill="#4CAF50"/>
+              <text x="122" y="63" font-size="8" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">PUSKESMAS</text>
+              <rect x="111" y="22" width="14" height="26" fill="url(#green-grad)"/>
+              <rect x="104" y="28" width="28" height="14" fill="url(#green-grad)"/>
+              <rect x="78" y="74" width="16" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="152" y="74" width="16" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="78" y="96" width="16" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="152" y="96" width="16" height="14" fill="url(#glass-grad)" stroke="#5d4037" stroke-width=".8"/>
+              <rect x="110" y="98" width="26" height="27" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width=".8"/>
+              <circle cx="131" cy="113" r="1.2" fill="#FFD700"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <circle cx="196" cy="105" r="6" fill="none" stroke="#333" stroke-width="2"/>
+              <path d="M 196,111 Q 196,124 210,124 Q 220,124 220,114" fill="none" stroke="#333" stroke-width="2"/>
+              <circle cx="220" cy="111" r="3" fill="#333"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="18" y="108" width="3.5" height="22" fill="url(#trunk-grad)"/>
+              <ellipse cx="20" cy="102" rx="13" ry="11" fill="url(#leaf-grad)"/>
+              <ellipse cx="17" cy="98" rx="8" ry="7" fill="url(#leaf-light)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">🏥 Kesehatan</span>
+          <h3>Puskesmas</h3>
+          <p><b>Pusat Kesehatan Masyarakat</b> — tempat berobat ringan, imunisasi, dan penyuluhan. Ada di setiap kecamatan.</p>
+          <p class="fakta">Fakta: Puskesmas = Pusat Kesehatan Masyarakat.</p>
+        </div>
+      </article>
+
+      <!-- BALAI DESA -->
+      <article class="card materi-card" tabindex="0" role="button" aria-label="Perbesar materi Balai Desa">
+        <div class="materi-illust">
+          <svg viewBox="0 0 240 150" class="materi-svg" role="img" aria-label="Ilustrasi Balai Desa">
+            <rect width="240" height="150" fill="url(#sky-grad)"/>
+            <circle cx="30" cy="28" r="16" fill="url(#sun-grad)"/>
+            <rect y="125" width="240" height="25" fill="url(#grass-grad)"/>
+            <rect y="142" width="240" height="8" fill="url(#path-grad)"/>
+            <g filter="url(#drop-shadow-lt)">
+              <rect x="65" y="70" width="115" height="55" fill="url(#wall-grad)"/>
+              <rect x="65" y="70" width="7" height="55" fill="url(#wall-side)"/>
+              <polygon points="55,70 122,38 190,70" fill="url(#roof-brown)"/>
+              <polygon points="55,70 122,38 122,70" fill="#7A4E28" opacity=".55"/>
+              <polygon points="80,70 122,52 165,70" fill="#4A2C17"/>
+              <rect x="82" y="78" width="82" height="12" rx="2" fill="#1d6f6a"/>
+              <text x="123" y="87" font-size="7.5" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">BALAI DESA</text>
+              <rect x="110" y="98" width="26" height="27" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width=".8"/>
+              <circle cx="131" cy="113" r="1.2" fill="#FFD700"/>
+            </g>
+            <rect x="44" y="65" width="2.5" height="80" fill="#888"/>
+            <rect x="46.5" y="69" width="26" height="7" fill="url(#red-grad)"/>
+            <rect x="46.5" y="76" width="26" height="7" fill="#fff" stroke="#ccc" stroke-width=".4"/>
+            <g filter="url(#soft-shadow)">
+              <circle cx="190" cy="130" r="4.5" fill="#F2C79A"/>
+              <rect x="186" y="133" width="8" height="10" rx="2" fill="#D32F2F"/>
+              <circle cx="205" cy="130" r="4.5" fill="#F2C79A"/>
+              <rect x="201" y="133" width="8" height="10" rx="2" fill="#1E88E5"/>
+              <circle cx="220" cy="130" r="4.5" fill="#F2C79A"/>
+              <rect x="216" y="133" width="8" height="10" rx="2" fill="#43A047"/>
+            </g>
+            <g filter="url(#soft-shadow)">
+              <rect x="18" y="108" width="3.5" height="22" fill="url(#trunk-grad)"/>
+              <ellipse cx="20" cy="102" rx="13" ry="11" fill="url(#leaf-grad)"/>
+              <ellipse cx="17" cy="98" rx="8" ry="7" fill="url(#leaf-light)"/>
+            </g>
+          </svg>
+        </div>
+        <div class="materi-body">
+          <span class="kategori">🏛️ Pemerintahan</span>
+          <h3>Balai Desa</h3>
+          <p>Tempat musyawarah dan kegiatan warga desa. Dipimpin oleh <b>kepala desa</b>.</p>
+          <p class="fakta">Fakta: Balai desa sering dipakai untuk posyandu dan kegiatan sosial.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===================== LAB MAYA ===================== -->
+  <section class="panel-section" id="lab">
+    <h2 class="section-title">🔬 Lab Maya: Tur Berpanduan 8 Bangunan Umum</h2>
+    <p style="margin-bottom:1rem;">
+      Pilih salah satu dari <b>8 bangunan</b>, lalu jalankan tur berpanduan. Ubah variabel aksesibilitas
+      di panel kanan untuk menyesuaikan tampilan sesuai kebutuhanmu.
+    </p>
+
+    <div class="lab-layout">
+      <div class="lab-controls">
+        <div class="card stage-wrap">
+          <div class="bangunan-pick" id="bangunanPick" role="group" aria-label="Pilih bangunan">
+            <button type="button" class="active" data-bangunan="sekolah"><span class="bp-emoji">🏫</span>Sekolah</button>
+            <button type="button" data-bangunan="rs"><span class="bp-emoji">🏥</span>R. Sakit</button>
+            <button type="button" data-bangunan="pasar"><span class="bp-emoji">🏪</span>Pasar</button>
+            <button type="button" data-bangunan="stasiun"><span class="bp-emoji">🚉</span>Stasiun</button>
+            <button type="button" data-bangunan="kantorpos"><span class="bp-emoji">📮</span>K. Pos</button>
+            <button type="button" data-bangunan="perpustakaan"><span class="bp-emoji">📚</span>Perpus.</button>
+            <button type="button" data-bangunan="puskesmas"><span class="bp-emoji">🏥</span>Puskesmas</button>
+            <button type="button" data-bangunan="balaidesa"><span class="bp-emoji">🏛️</span>Balai Desa</button>
+          </div>
+
+          <div class="stage" id="stage">
+            <!-- ============ SEKOLAH ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-sekolah" role="img" aria-label="Ilustrasi Sekolah">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="330" cy="55" r="32" fill="url(#sun-grad)"/>
+              <circle cx="330" cy="55" r="16" fill="#FFF59D" opacity=".85"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="80" cy="55" rx="34" ry="10"/><ellipse cx="105" cy="48" rx="22" ry="9"/>
+                <ellipse cx="240" cy="38" rx="26" ry="8"/><ellipse cx="258" cy="33" rx="16" ry="6"/>
+              </g>
+              <path d="M0,240 Q100,215 200,235 T400,232 L400,300 L0,300 Z" fill="#8FC08E" opacity=".5"/>
+              <g id="sekolah-halaman" class="part">
+                <rect y="235" width="400" height="65" fill="url(#grass-grad)"/>
+                <rect y="272" width="400" height="28" fill="url(#path-grad)"/>
+                <line x1="0" y1="272" x2="400" y2="272" stroke="#7a6e5c" stroke-width="1"/>
+                <ellipse cx="40" cy="278" rx="18" ry="7" fill="#3E7A2E"/>
+                <ellipse cx="360" cy="282" rx="22" ry="8" fill="#3E7A2E"/>
+              </g>
+              <ellipse cx="205" cy="262" rx="135" ry="6" fill="#000" opacity=".18"/>
+              <g id="sekolah-bendera" class="part">
+                <rect x="65" y="90" width="4" height="172" fill="url(#metal-grad)"/>
+                <ellipse cx="67" cy="90" rx="4" ry="2.5" fill="#B0B0B0"/>
+                <path d="M69,95 Q90,100 108,96 Q120,94 122,98 L122,120 Q110,116 100,118 Q82,122 69,117 Z" fill="url(#red-grad)"/>
+                <path d="M69,117 Q82,122 100,118 Q110,116 122,120 L122,142 Q110,138 100,140 Q82,144 69,139 Z" fill="#fff" stroke="#ddd" stroke-width=".6"/>
+              </g>
+              <g id="sekolah-badan" class="part">
+                <rect x="110" y="125" width="200" height="112" fill="url(#wall-grad)" stroke="#8a7561" stroke-width=".8"/>
+                <rect x="110" y="125" width="12" height="112" fill="url(#wall-side)"/>
+                <rect x="104" y="120" width="212" height="8" fill="#A89F92"/>
+                <rect x="104" y="232" width="212" height="6" fill="#8a7561"/>
+              </g>
+              <g id="sekolah-jendela" class="part">
+                <rect x="135" y="140" width="28" height="24" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.6"/>
+                <rect x="178" y="140" width="28" height="24" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.6"/>
+                <rect x="221" y="140" width="28" height="24" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.6"/>
+                <rect x="264" y="140" width="28" height="24" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.6"/>
+                <rect x="135" y="176" width="28" height="24" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.6"/>
+                <rect x="264" y="176" width="28" height="24" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.6"/>
+                <rect x="137" y="142" width="10" height="20" fill="#fff" opacity=".45"/>
+                <rect x="180" y="142" width="10" height="20" fill="#fff" opacity=".45"/>
+                <rect x="223" y="142" width="10" height="20" fill="#fff" opacity=".45"/>
+                <rect x="266" y="142" width="10" height="20" fill="#fff" opacity=".45"/>
+              </g>
+              <g id="sekolah-pintu" class="part">
+                <rect x="182" y="190" width="58" height="47" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width="1.6"/>
+                <rect x="184" y="192" width="24" height="43" fill="#5A3318" stroke="#2c1a0c" stroke-width=".8"/>
+                <rect x="214" y="192" width="24" height="43" fill="#5A3318" stroke="#2c1a0c" stroke-width=".8"/>
+                <circle cx="230" cy="216" r="2.2" fill="#FFD700"/>
+                <rect x="176" y="235" width="70" height="3" fill="#B0A594"/>
+              </g>
+              <g id="sekolah-atap" class="part">
+                <polygon points="98,125 210,52 322,125" fill="url(#roof-red)" stroke="#7a2018" stroke-width="1.6"/>
+                <polygon points="98,125 210,52 210,125" fill="#A02319" opacity=".5"/>
+                <rect x="207" y="58" width="6" height="45" fill="#5A1A10"/>
+                <rect x="180" y="72" width="60" height="11" fill="#FBC02D" stroke="#7a2018" stroke-width="1.2"/>
+              </g>
+              <g class="part">
+                <circle cx="210" cy="100" r="8" fill="#fff" stroke="#5d4037" stroke-width="1.8"/>
+                <line x1="210" y1="100" x2="210" y2="94.5" stroke="#333" stroke-width="1.3"/>
+                <line x1="210" y1="100" x2="214.5" y2="101.5" stroke="#333" stroke-width="1.3"/>
+              </g>
+              <g class="part">
+                <rect x="55" y="215" width="7" height="42" fill="url(#trunk-grad)"/>
+                <ellipse cx="58" cy="205" rx="26" ry="24" fill="url(#leaf-grad)"/>
+                <ellipse cx="52" cy="196" rx="16" ry="14" fill="url(#leaf-light)"/>
+              </g>
+              <g class="part">
+                <rect x="345" y="225" width="5" height="32" fill="url(#trunk-grad)"/>
+                <ellipse cx="347" cy="216" rx="18" ry="17" fill="url(#leaf-grad)"/>
+                <ellipse cx="343" cy="211" rx="11" ry="9" fill="url(#leaf-light)"/>
+              </g>
+            </svg>
+
+            <!-- ============ RUMAH SAKIT ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-rs" role="img" aria-label="Ilustrasi Rumah Sakit" style="display:none">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="60" cy="55" r="30" fill="url(#sun-grad)"/>
+              <circle cx="60" cy="55" r="15" fill="#FFF59D" opacity=".85"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="280" cy="42" rx="30" ry="9"/><ellipse cx="305" cy="36" rx="18" ry="7"/>
+              </g>
+              <path d="M0,238 Q100,215 200,232 T400,230 L400,300 L0,300 Z" fill="#8FC08E" opacity=".5"/>
+              <rect y="235" width="400" height="65" fill="#B6D6B4"/>
+              <rect y="272" width="400" height="28" fill="url(#path-grad)"/>
+              <g id="rs-taman" class="part">
+                <rect x="345" y="230" width="6" height="38" fill="url(#trunk-grad)"/>
+                <ellipse cx="348" cy="220" rx="26" ry="24" fill="url(#leaf-grad)"/>
+                <ellipse cx="342" cy="211" rx="16" ry="14" fill="url(#leaf-light)"/>
+                <rect x="378" y="242" width="4" height="26" fill="url(#trunk-grad)"/>
+                <ellipse cx="380" cy="236" rx="14" ry="13" fill="url(#leaf-grad)"/>
+              </g>
+              <g class="part">
+                <rect x="0" y="248" width="120" height="50" fill="#6E6E6E" opacity=".55"/>
+                <line x1="30" y1="248" x2="30" y2="298" stroke="#fff" stroke-width="2" opacity=".8"/>
+                <line x1="60" y1="248" x2="60" y2="298" stroke="#fff" stroke-width="2" opacity=".8"/>
+                <line x1="90" y1="248" x2="90" y2="298" stroke="#fff" stroke-width="2" opacity=".8"/>
+                <rect x="8" y="268" width="34" height="14" rx="3" fill="#D32F2F"/>
+                <rect x="14" y="262" width="20" height="8" rx="2" fill="#D32F2F"/>
+                <rect x="16" y="263" width="7" height="6" fill="url(#glass-grad)"/>
+                <rect x="26" y="263" width="7" height="6" fill="url(#glass-grad)"/>
+                <circle cx="16" cy="284" r="3.5" fill="#222"/>
+                <circle cx="36" cy="284" r="3.5" fill="#222"/>
+              </g>
+              <ellipse cx="220" cy="262" rx="130" ry="6" fill="#000" opacity=".18"/>
+              <g id="rs-gedung" class="part">
+                <rect x="135" y="95" width="180" height="150" fill="url(#wall-grad)" stroke="#8a7561" stroke-width=".8"/>
+                <rect x="135" y="95" width="10" height="150" fill="url(#wall-side)"/>
+                <rect x="130" y="88" width="190" height="10" fill="#A89F92"/>
+                <rect x="130" y="240" width="190" height="6" fill="#8a7561"/>
+                <rect x="205" y="95" width="40" height="150" fill="#EFE5D3"/>
+              </g>
+              <g class="part">
+                <rect x="150" y="115" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="188" y="115" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="226" y="115" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="264" y="115" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="150" y="148" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="264" y="148" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="150" y="181" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="264" y="181" width="26" height="22" fill="url(#glass-grad)" stroke="#6a5a48" stroke-width="1.4"/>
+                <rect x="152" y="117" width="9" height="18" fill="#fff" opacity=".42"/>
+                <rect x="190" y="117" width="9" height="18" fill="#fff" opacity=".42"/>
+                <rect x="228" y="117" width="9" height="18" fill="#fff" opacity=".42"/>
+                <rect x="266" y="117" width="9" height="18" fill="#fff" opacity=".42"/>
+              </g>
+              <g id="rs-igd" class="part">
+                <rect x="168" y="210" width="114" height="34" rx="3" fill="#D32F2F" stroke="#8B0000" stroke-width="1.6"/>
+                <text x="225" y="234" font-size="20" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">IGD</text>
+              </g>
+              <g id="rs-palang" class="part">
+                <rect x="212" y="20" width="20" height="52" fill="url(#red-grad)" stroke="#8B0000" stroke-width="1.2"/>
+                <rect x="194" y="36" width="56" height="20" fill="url(#red-grad)" stroke="#8B0000" stroke-width="1.2"/>
+              </g>
+              <g id="rs-ambulans" class="part">
+                <rect x="8" y="196" width="115" height="48" rx="6" fill="#F8F8F8" stroke="#666" stroke-width="1.4"/>
+                <rect x="8" y="196" width="115" height="6" fill="#E0E0E0"/>
+                <rect x="18" y="208" width="28" height="24" fill="url(#glass-grad)" stroke="#333" stroke-width="1"/>
+                <rect x="55" y="212" width="38" height="8" fill="#D32F2F"/>
+                <rect x="66" y="205" width="14" height="8" fill="#D32F2F"/>
+                <circle cx="32" cy="248" r="7" fill="#222"/>
+                <circle cx="98" cy="248" r="7" fill="#222"/>
+                <circle cx="32" cy="248" r="3" fill="#888"/>
+                <circle cx="98" cy="248" r="3" fill="#888"/>
+              </g>
+            </svg>
+
+            <!-- ============ PASAR ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-pasar" role="img" aria-label="Ilustrasi Pasar" style="display:none">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="340" cy="50" r="28" fill="url(#sun-grad)"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="80" cy="50" rx="30" ry="9"/><ellipse cx="105" cy="44" rx="18" ry="7"/>
+              </g>
+              <rect y="240" width="400" height="60" fill="url(#path-grad)"/>
+              <ellipse cx="200" cy="262" rx="180" ry="6" fill="#000" opacity=".15"/>
+              <g id="pasar-tenda1" class="part">
+                <rect x="30" y="130" width="110" height="110" fill="url(#wall-white)" stroke="#8a7561" stroke-width=".8"/>
+                <polygon points="20,130 85,90 150,130" fill="url(#roof-red)" stroke="#7a2018" stroke-width="1.2"/>
+                <polygon points="20,130 85,90 85,130" fill="#A02319" opacity=".5"/>
+              </g>
+              <g id="pasar-barang1" class="part">
+                <rect x="42" y="200" width="86" height="8" fill="#8a5a33" rx="2"/>
+                <rect x="46" y="208" width="4" height="30" fill="#6E4220"/>
+                <rect x="122" y="208" width="4" height="30" fill="#6E4220"/>
+                <circle cx="58" cy="192" r="9" fill="#4CAF50"/>
+                <circle cx="76" cy="192" r="9" fill="#E53935"/>
+                <circle cx="94" cy="192" r="9" fill="#FBC02D"/>
+                <circle cx="112" cy="192" r="9" fill="#8E24AA"/>
+              </g>
+              <g id="pasar-tenda2" class="part">
+                <rect x="160" y="130" width="110" height="110" fill="url(#wall-white)" stroke="#8a7561" stroke-width=".8"/>
+                <polygon points="150,130 215,90 280,130" fill="url(#roof-blue)" stroke="#125EA8" stroke-width="1.2"/>
+                <polygon points="150,130 215,90 215,130" fill="#125EA8" opacity=".5"/>
+              </g>
+              <g id="pasar-barang2" class="part">
+                <rect x="172" y="200" width="86" height="8" fill="#8a5a33" rx="2"/>
+                <rect x="176" y="208" width="4" height="30" fill="#6E4220"/>
+                <rect x="252" y="208" width="4" height="30" fill="#6E4220"/>
+                <circle cx="188" cy="192" r="9" fill="#FDD835"/>
+                <circle cx="206" cy="192" r="9" fill="#E53935"/>
+                <circle cx="224" cy="192" r="9" fill="#43A047"/>
+                <circle cx="242" cy="192" r="9" fill="#FB8C00"/>
+              </g>
+              <g id="pasar-orang" class="part">
+                <circle cx="300" cy="220" r="11" fill="#F2C79A"/>
+                <rect x="290" y="232" width="20" height="28" rx="3" fill="#D32F2F"/>
+                <circle cx="340" cy="220" r="11" fill="#F2C79A"/>
+                <rect x="330" y="232" width="20" height="28" rx="3" fill="#1E88E5"/>
+                <circle cx="370" cy="222" r="9" fill="#F2C79A"/>
+                <rect x="362" y="232" width="16" height="24" rx="3" fill="#43A047"/>
+              </g>
+              <g id="pasar-tanah" class="part">
+                <rect x="15" y="240" width="270" height="60" fill="#B0A594" opacity=".55"/>
+                <line x1="20" y1="265" x2="280" y2="265" stroke="#8a7561" stroke-width="1" stroke-dasharray="8 5"/>
+              </g>
+            </svg>
+
+            <!-- ============ STASIUN ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-stasiun" role="img" aria-label="Ilustrasi Stasiun" style="display:none">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="60" cy="55" r="28" fill="url(#sun-grad)"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="280" cy="42" rx="30" ry="9"/><ellipse cx="305" cy="36" rx="18" ry="7"/>
+              </g>
+              <rect y="220" width="400" height="80" fill="url(#path-grad)"/>
+              <!-- Rel -->
+              <g id="stasiun-rel" class="part">
+                <line x1="0" y1="268" x2="400" y2="268" stroke="#333" stroke-width="2.5"/>
+                <line x1="0" y1="282" x2="400" y2="282" stroke="#333" stroke-width="2.5"/>
+                <g stroke="#5d4037" stroke-width="2">
+                  <line x1="20" y1="262" x2="20" y2="288"/>
+                  <line x1="80" y1="262" x2="80" y2="288"/>
+                  <line x1="140" y1="262" x2="140" y2="288"/>
+                  <line x1="200" y1="262" x2="200" y2="288"/>
+                  <line x1="260" y1="262" x2="260" y2="288"/>
+                  <line x1="320" y1="262" x2="320" y2="288"/>
+                  <line x1="380" y1="262" x2="380" y2="288"/>
+                </g>
+              </g>
+              <!-- Kereta -->
+              <g id="stasiun-kereta" class="part">
+                <rect x="5" y="180" width="230" height="72" rx="6" fill="url(#blue-grad)" stroke="#0B2942" stroke-width="1.5"/>
+                <rect x="5" y="180" width="230" height="10" fill="#E8E8E8"/>
+                <rect x="5" y="192" width="230" height="4" fill="#1E5185"/>
+                <rect x="20" y="205" width="30" height="26" fill="url(#glass-grad)" stroke="#0B2942" stroke-width="1"/>
+                <rect x="58" y="205" width="30" height="26" fill="url(#glass-grad)" stroke="#0B2942" stroke-width="1"/>
+                <rect x="96" y="205" width="30" height="26" fill="url(#glass-grad)" stroke="#0B2942" stroke-width="1"/>
+                <rect x="134" y="205" width="30" height="26" fill="url(#glass-grad)" stroke="#0B2942" stroke-width="1"/>
+                <rect x="172" y="205" width="30" height="26" fill="url(#glass-grad)" stroke="#0B2942" stroke-width="1"/>
+                <rect x="22" y="207" width="10" height="22" fill="#fff" opacity=".4"/>
+                <rect x="60" y="207" width="10" height="22" fill="#fff" opacity=".4"/>
+                <rect x="98" y="207" width="10" height="22" fill="#fff" opacity=".4"/>
+                <rect x="136" y="207" width="10" height="22" fill="#fff" opacity=".4"/>
+                <circle cx="35" cy="255" r="7" fill="#222"/>
+                <circle cx="205" cy="255" r="7" fill="#222"/>
+                <circle cx="35" cy="255" r="3" fill="#888"/>
+                <circle cx="205" cy="255" r="3" fill="#888"/>
+                <text x="120" y="230" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">KERETA API</text>
+              </g>
+              <!-- Gedung stasiun -->
+              <g id="stasiun-gedung" class="part">
+                <rect x="255" y="115" width="140" height="125" fill="url(#wall-grad)" stroke="#8a7561" stroke-width=".8"/>
+                <rect x="255" y="115" width="10" height="125" fill="url(#wall-side)"/>
+                <rect x="250" y="108" width="150" height="12" fill="#A89F92"/>
+                <rect x="250" y="108" width="150" height="3" fill="#D8D0C4"/>
+              </g>
+              <!-- Atap -->
+              <g id="stasiun-atap" class="part">
+                <rect x="270" y="80" width="110" height="28" fill="#B71C1C" stroke="#7A0D0D" stroke-width="1.2"/>
+                <text x="325" y="100" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">STASIUN</text>
+              </g>
+              <!-- Jendela -->
+              <g id="stasiun-jendela" class="part">
+                <rect x="272" y="130" width="24" height="22" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.2"/>
+                <rect x="304" y="130" width="24" height="22" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.2"/>
+                <rect x="336" y="130" width="24" height="22" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.2"/>
+                <rect x="368" y="130" width="24" height="22" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.2"/>
+                <rect x="274" y="132" width="8" height="18" fill="#fff" opacity=".42"/>
+                <rect x="306" y="132" width="8" height="18" fill="#fff" opacity=".42"/>
+                <rect x="338" y="132" width="8" height="18" fill="#fff" opacity=".42"/>
+                <rect x="370" y="132" width="8" height="18" fill="#fff" opacity=".42"/>
+              </g>
+              <!-- Peron -->
+              <g id="stasiun-peron" class="part">
+                <rect x="250" y="240" width="150" height="8" fill="#7f8c8d"/>
+                <rect x="250" y="248" width="150" height="6" fill="#95a5a6"/>
+                <line x1="250" y1="240" x2="250" y2="254" stroke="#5d4037" stroke-width="2"/>
+              </g>
+              <!-- Pintu -->
+              <g id="stasiun-pintu" class="part">
+                <rect x="305" y="185" width="40" height="55" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width="1.4"/>
+                <rect x="308" y="188" width="16" height="49" fill="#5A3318"/>
+                <rect x="326" y="188" width="16" height="49" fill="#5A3318"/>
+                <circle cx="340" cy="215" r="1.8" fill="#FFD700"/>
+              </g>
+            </svg>
+
+            <!-- ============ KANTOR POS ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-kantorpos" role="img" aria-label="Ilustrasi Kantor Pos" style="display:none">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="340" cy="50" r="28" fill="url(#sun-grad)"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="100" cy="50" rx="30" ry="9"/><ellipse cx="125" cy="44" rx="18" ry="7"/>
+              </g>
+              <rect y="230" width="400" height="70" fill="url(#grass-grad)"/>
+              <rect y="272" width="400" height="28" fill="url(#path-grad)"/>
+              <ellipse cx="200" cy="252" rx="145" ry="6" fill="#000" opacity=".18"/>
+              <!-- Gedung -->
+              <g id="kantorpos-gedung" class="part">
+                <rect x="110" y="125" width="200" height="115" fill="url(#wall-white)" stroke="#8a7561" stroke-width=".8"/>
+                <rect x="110" y="125" width="12" height="115" fill="#B8B8B8"/>
+                <rect x="104" y="118" width="212" height="10" fill="#2E7D32"/>
+                <rect x="104" y="118" width="212" height="3" fill="#4CAF50"/>
+                <text x="210" y="127" font-size="14" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">KANTOR POS</text>
+              </g>
+              <!-- Jendela -->
+              <g id="kantorpos-jendela" class="part">
+                <rect x="130" y="145" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="170" y="145" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="222" y="145" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="262" y="145" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="132" y="147" width="10" height="22" fill="#fff" opacity=".42"/>
+                <rect x="172" y="147" width="10" height="22" fill="#fff" opacity=".42"/>
+                <rect x="224" y="147" width="10" height="22" fill="#fff" opacity=".42"/>
+                <rect x="264" y="147" width="10" height="22" fill="#fff" opacity=".42"/>
+              </g>
+              <!-- Pintu -->
+              <g id="kantorpos-pintu" class="part">
+                <rect x="182" y="190" width="56" height="50" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width="1.4"/>
+                <rect x="184" y="192" width="26" height="46" fill="#5A3318"/>
+                <rect x="212" y="192" width="26" height="46" fill="#5A3318"/>
+                <circle cx="228" cy="217" r="2" fill="#FFD700"/>
+              </g>
+              <!-- Kotak pos -->
+              <g id="kantorpos-kotakpos" class="part">
+                <rect x="330" y="185" width="40" height="55" rx="5" fill="url(#orange-grad)" stroke="#7B3F00" stroke-width="1.6"/>
+                <rect x="340" y="195" width="20" height="6" fill="#4A2C17"/>
+                <circle cx="350" cy="215" r="3" fill="#fff"/>
+                <rect x="345" y="228" width="10" height="5" fill="#4A2C17"/>
+              </g>
+              <!-- Surat -->
+              <g id="kantorpos-surat" class="part">
+                <rect x="50" y="200" width="46" height="30" fill="#fff" stroke="#5d4037" stroke-width="1.4"/>
+                <polygon points="50,200 73,217 96,200" fill="none" stroke="#5d4037" stroke-width="1.4"/>
+                <circle cx="73" cy="222" r="3" fill="#E53935"/>
+              </g>
+              <!-- Pohon -->
+              <g id="kantorpos-pohon" class="part">
+                <rect x="55" y="200" width="7" height="50" fill="url(#trunk-grad)"/>
+                <ellipse cx="58" cy="188" rx="32" ry="28" fill="url(#leaf-grad)"/>
+                <ellipse cx="50" cy="176" rx="20" ry="17" fill="url(#leaf-light)"/>
+              </g>
+            </svg>
+
+            <!-- ============ PERPUSTAKAAN ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-perpustakaan" role="img" aria-label="Ilustrasi Perpustakaan" style="display:none">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="60" cy="50" r="28" fill="url(#sun-grad)"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="290" cy="40" rx="30" ry="9"/><ellipse cx="315" cy="34" rx="18" ry="7"/>
+              </g>
+              <rect y="235" width="400" height="65" fill="url(#grass-grad)"/>
+              <rect y="272" width="400" height="28" fill="url(#path-grad)"/>
+              <ellipse cx="200" cy="260" rx="150" ry="6" fill="#000" opacity=".18"/>
+              <!-- Gedung -->
+              <g id="perpustakaan-gedung" class="part">
+                <rect x="100" y="115" width="200" height="120" fill="url(#wall-grad)" stroke="#8a7561" stroke-width=".8"/>
+                <rect x="100" y="115" width="12" height="120" fill="url(#wall-side)"/>
+                <rect x="94" y="108" width="212" height="10" fill="#A89F92"/>
+                <rect x="94" y="108" width="212" height="3" fill="#D8D0C4"/>
+              </g>
+              <!-- Atap -->
+              <g id="perpustakaan-atap" class="part">
+                <polygon points="90,115 200,55 310,115" fill="url(#roof-brown)" stroke="#4A2C17" stroke-width="1.6"/>
+                <polygon points="90,115 200,55 200,115" fill="#7A4E28" opacity=".55"/>
+              </g>
+              <!-- Jendela dengan buku -->
+              <g id="perpustakaan-jendela" class="part">
+                <rect x="120" y="130" width="50" height="36" fill="#fff" stroke="#5d4037" stroke-width="1.6"/>
+                <rect x="126" y="152" width="7" height="10" fill="#D32F2F"/>
+                <rect x="136" y="148" width="7" height="14" fill="#1E88E5"/>
+                <rect x="146" y="145" width="7" height="17" fill="#43A047"/>
+                <rect x="156" y="150" width="7" height="12" fill="#FDD835"/>
+                <rect x="230" y="130" width="50" height="36" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.6"/>
+                <rect x="234" y="132" width="14" height="32" fill="#fff" opacity=".42"/>
+              </g>
+              <!-- Pintu -->
+              <g id="perpustakaan-pintu" class="part">
+                <rect x="178" y="180" width="48" height="55" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width="1.4"/>
+                <rect x="181" y="183" width="20" height="50" fill="#5A3318"/>
+                <rect x="203" y="183" width="20" height="50" fill="#5A3318"/>
+                <circle cx="220" cy="210" r="2" fill="#FFD700"/>
+              </g>
+              <!-- Nama -->
+              <g id="perpustakaan-nama" class="part">
+                <rect x="140" y="122" width="120" height="18" rx="2" fill="#1d6f6a"/>
+                <text x="200" y="136" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">PERPUSTAKAAN</text>
+              </g>
+              <!-- Orang membaca -->
+              <g id="perpustakaan-orang" class="part">
+                <circle cx="330" cy="230" r="12" fill="#F2C79A"/>
+                <rect x="318" y="243" width="24" height="32" rx="4" fill="#8E24AA"/>
+                <rect x="305" y="248" width="24" height="15" fill="#fff" stroke="#5d4037" stroke-width="1"/>
+                <line x1="317" y1="248" x2="317" y2="263" stroke="#5d4037" stroke-width=".8"/>
+              </g>
+              <!-- Pohon -->
+              <g id="perpustakaan-pohon" class="part">
+                <rect x="45" y="205" width="7" height="50" fill="url(#trunk-grad)"/>
+                <ellipse cx="48" cy="192" rx="30" ry="28" fill="url(#leaf-grad)"/>
+                <ellipse cx="40" cy="180" rx="18" ry="15" fill="url(#leaf-light)"/>
+              </g>
+            </svg>
+
+            <!-- ============ PUSKESMAS ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-puskesmas" role="img" aria-label="Ilustrasi Puskesmas" style="display:none">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="330" cy="55" r="28" fill="url(#sun-grad)"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="90" cy="48" rx="30" ry="9"/><ellipse cx="115" cy="42" rx="18" ry="7"/>
+              </g>
+              <rect y="235" width="400" height="65" fill="url(#grass-grad)"/>
+              <rect y="272" width="400" height="28" fill="url(#path-grad)"/>
+              <ellipse cx="200" cy="258" rx="140" ry="6" fill="#000" opacity=".18"/>
+              <!-- Gedung -->
+              <g id="puskesmas-gedung" class="part">
+                <rect x="110" y="125" width="190" height="110" fill="url(#wall-grad)" stroke="#8a7561" stroke-width=".8"/>
+                <rect x="110" y="125" width="12" height="110" fill="url(#wall-side)"/>
+                <rect x="104" y="118" width="202" height="10" fill="#2E7D32"/>
+                <rect x="104" y="118" width="202" height="3" fill="#4CAF50"/>
+                <text x="210" y="128" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">PUSKESMAS</text>
+              </g>
+              <!-- Palang hijau -->
+              <g id="puskesmas-palang" class="part">
+                <rect x="200" y="25" width="18" height="45" fill="url(#green-grad)" stroke="#1B5E20" stroke-width="1.4"/>
+                <rect x="186" y="38" width="46" height="18" fill="url(#green-grad)" stroke="#1B5E20" stroke-width="1.4"/>
+              </g>
+              <!-- Jendela -->
+              <g id="puskesmas-jendela" class="part">
+                <rect x="130" y="145" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="256" y="145" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="130" y="183" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="256" y="183" width="28" height="26" fill="url(#glass-grad)" stroke="#5d4037" stroke-width="1.4"/>
+                <rect x="132" y="147" width="10" height="22" fill="#fff" opacity=".42"/>
+                <rect x="258" y="147" width="10" height="22" fill="#fff" opacity=".42"/>
+                <rect x="132" y="185" width="10" height="22" fill="#fff" opacity=".42"/>
+                <rect x="258" y="185" width="10" height="22" fill="#fff" opacity=".42"/>
+              </g>
+              <!-- Pintu -->
+              <g id="puskesmas-pintu" class="part">
+                <rect x="182" y="185" width="48" height="50" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width="1.4"/>
+                <rect x="185" y="188" width="20" height="45" fill="#5A3318"/>
+                <rect x="207" y="188" width="20" height="45" fill="#5A3318"/>
+                <circle cx="224" cy="213" r="2" fill="#FFD700"/>
+              </g>
+              <!-- Stetoskop -->
+              <g id="puskesmas-stetoskop" class="part">
+                <circle cx="350" cy="200" r="14" fill="none" stroke="#333" stroke-width="3"/>
+                <path d="M 350,214 Q 350,240 375,240 Q 388,240 388,222" fill="none" stroke="#333" stroke-width="3"/>
+                <circle cx="388" cy="216" r="6" fill="#333"/>
+              </g>
+              <!-- Pohon -->
+              <g id="puskesmas-pohon" class="part">
+                <rect x="45" y="205" width="7" height="50" fill="url(#trunk-grad)"/>
+                <ellipse cx="48" cy="192" rx="30" ry="28" fill="url(#leaf-grad)"/>
+                <ellipse cx="40" cy="180" rx="18" ry="15" fill="url(#leaf-light)"/>
+              </g>
+            </svg>
+
+            <!-- ============ BALAI DESA ============ -->
+            <svg viewBox="0 0 400 300" class="stage-svg" id="svg-balaidesa" role="img" aria-label="Ilustrasi Balai Desa" style="display:none">
+              <rect width="400" height="300" fill="url(#sky-grad)"/>
+              <circle cx="60" cy="50" r="28" fill="url(#sun-grad)"/>
+              <g fill="#fff" opacity=".9">
+                <ellipse cx="290" cy="40" rx="30" ry="9"/><ellipse cx="315" cy="34" rx="18" ry="7"/>
+              </g>
+              <rect y="235" width="400" height="65" fill="url(#grass-grad)"/>
+              <rect y="272" width="400" height="28" fill="url(#path-grad)"/>
+              <ellipse cx="200" cy="260" rx="145" ry="6" fill="#000" opacity=".18"/>
+              <!-- Gedung -->
+              <g id="balaidesa-gedung" class="part">
+                <rect x="110" y="135" width="180" height="100" fill="url(#wall-grad)" stroke="#8a7561" stroke-width=".8"/>
+                <rect x="110" y="135" width="12" height="100" fill="url(#wall-side)"/>
+                <rect x="104" y="128" width="192" height="10" fill="#A89F92"/>
+                <rect x="104" y="232" width="192" height="5" fill="#8a7561"/>
+              </g>
+              <!-- Atap joglo (dua tingkat) -->
+              <g id="balaidesa-atap" class="part">
+                <polygon points="90,135 200,65 310,135" fill="url(#roof-brown)" stroke="#4A2C17" stroke-width="1.8"/>
+                <polygon points="90,135 200,65 200,135" fill="#7A4E28" opacity=".55"/>
+                <polygon points="135,135 200,105 265,135" fill="#4A2C17"/>
+                <polygon points="135,135 200,105 200,135" fill="#3A1E0E"/>
+              </g>
+              <!-- Nama -->
+              <g id="balaidesa-nama" class="part">
+                <rect x="140" y="150" width="120" height="20" rx="2" fill="#1d6f6a"/>
+                <text x="200" y="164" font-size="12" fill="#fff" text-anchor="middle" font-weight="bold" font-family="sans-serif">BALAI DESA</text>
+              </g>
+              <!-- Pintu -->
+              <g id="balaidesa-pintu" class="part">
+                <rect x="182" y="185" width="48" height="50" fill="url(#wood-grad)" stroke="#2c1a0c" stroke-width="1.4"/>
+                <rect x="185" y="188" width="20" height="45" fill="#5A3318"/>
+                <rect x="207" y="188" width="20" height="45" fill="#5A3318"/>
+                <circle cx="224" cy="213" r="2" fill="#FFD700"/>
+              </g>
+              <!-- Bendera -->
+              <g id="balaidesa-bendera" class="part">
+                <rect x="60" y="85" width="4" height="175" fill="url(#metal-grad)"/>
+                <path d="M64,90 Q84,94 102,90 Q112,88 114,92 L114,112 Q104,108 94,110 Q78,114 64,109 Z" fill="url(#red-grad)"/>
+                <path d="M64,109 Q78,114 94,110 Q104,108 114,112 L114,132 Q104,128 94,130 Q78,134 64,129 Z" fill="#fff" stroke="#ddd" stroke-width=".6"/>
+              </g>
+              <!-- Orang berkumpul -->
+              <g id="balaidesa-orang" class="part">
+                <circle cx="310" cy="225" r="11" fill="#F2C79A"/>
+                <rect x="300" y="237" width="20" height="28" rx="3" fill="#D32F2F"/>
+                <circle cx="345" cy="225" r="11" fill="#F2C79A"/>
+                <rect x="335" y="237" width="20" height="28" rx="3" fill="#1E88E5"/>
+                <circle cx="378" cy="227" r="10" fill="#F2C79A"/>
+                <rect x="369" y="238" width="18" height="26" rx="3" fill="#43A047"/>
+              </g>
+              <!-- Pohon -->
+              <g id="balaidesa-pohon" class="part">
+                <rect x="45" y="205" width="7" height="50" fill="url(#trunk-grad)"/>
+                <ellipse cx="48" cy="192" rx="30" ry="28" fill="url(#leaf-grad)"/>
+                <ellipse cx="40" cy="180" rx="18" ry="15" fill="url(#leaf-light)"/>
+              </g>
+            </svg>
+
+            <div class="label-layer" id="labelLayer" aria-hidden="true"></div>
+          </div>
+
+          <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+          <div style="display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center;">
+            <button class="btn btn-primary" id="btnMulai" type="button">▶️ Mulai Tur</button>
+            <button class="btn btn-ghost" id="btnLanjut" type="button" disabled>⏭️ Langkah Berikutnya</button>
+            <button class="btn btn-ghost" id="btnStop" type="button" disabled>⏹️ Hentikan</button>
+          </div>
+        </div>
+
+        <div class="narasi-box" id="narasiBox" aria-live="polite">
+          Pilih salah satu dari <b>8 bangunan</b>, lalu tekan <b>Mulai Tur</b> untuk memulai panduan langkah demi langkah.
+        </div>
+      </div>
+
+      <div class="lab-controls">
+        <div class="card">
+          <h3 style="font-size:1rem;">🎛️ Variabel Interaktif Lab</h3>
+          <p style="font-size:.82rem; color:var(--muted);">Ubah nilai di bawah ini — sama dengan Panel Aksesibilitas di atas.</p>
+          <div class="akses-grid" style="grid-template-columns:1fr;">
+            <label class="ctrl">
+              <span class="ctrl-label">⏱️ Tempo Kecepatan Panduan</span>
+              <span class="ctrl-row">
+                <input type="range" data-var="tempo" min="0.5" max="2" step="0.25" value="1">
+                <span class="ctrl-val" data-out="tempo">1×</span>
+              </span>
+            </label>
+            <label class="ctrl">
+              <span class="ctrl-label">🔍 Ukuran Objek &amp; Kontras Tampilan</span>
+              <span class="ctrl-row">
+                <input type="range" data-var="ukuran" min="0.9" max="1.6" step="0.05" value="1">
+                <span class="ctrl-val" data-out="ukuran">100%</span>
+              </span>
+            </label>
+            <label class="ctrl">
+              <span class="ctrl-label">🌗 Mode Kontras Tinggi</span>
+              <span class="ctrl-row">
+                <label class="switch"><input type="checkbox" data-var="kontras"><span data-out="kontras">Normal</span></label>
+              </span>
+            </label>
+            <label class="ctrl">
+              <span class="ctrl-label">💡 Tingkat Bantuan Petunjuk Visual</span>
+              <span class="ctrl-row">
+                <input type="range" data-var="bantuan" min="0" max="3" step="1" value="1">
+                <span class="ctrl-val" data-out="bantuan">Ringan</span>
+              </span>
+            </label>
+            <label class="ctrl">
+              <span class="ctrl-label">🔊 Narasi Suara</span>
+              <span class="ctrl-row">
+                <label class="switch"><input type="checkbox" data-var="narasi"><span data-out="narasi">Nonaktif</span></label>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="science">
+          <h3>🧪 Dasar Ilmiah — Prinsip Pendidikan Khusus</h3>
+          <ul class="sci-list" id="sciList">
+            <li data-sci="tempo"><b>Tempo Kecepatan Panduan</b>Prinsip <i>Individualized Pace</i> — setiap anak berkebutuhan khusus memiliki kecepatan memproses informasi yang berbeda.</li>
+            <li data-sci="ukuran"><b>Ukuran Objek</b>Prinsip <i>Universal Design for Learning (UDL)</i> — memperbesar objek membantu peserta didik dengan hambatan penglihatan.</li>
+            <li data-sci="kontras"><b>Kontras Tampilan</b>Prinsip <i>Aksesibilitas Visual (WCAG 2.1)</i> — rasio kontras tinggi membantu low vision dan buta warna.</li>
+            <li data-sci="bantuan"><b>Tingkat Bantuan Petunjuk Visual</b>Prinsip <i>Scaffolding</i> (Vygotsky) dan <i>Beban Kognitif</i> (Sweller) — bantuan bertahap lalu dikurangi.</li>
+            <li data-sci="narasi"><b>Narasi Suara (Multisensori)</b>Prinsip <i>Dual Coding</i> (Mayer) — informasi disajikan melalui gambar dan suara sekaligus.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PUZZLE ===================== -->
+  <section class="panel-section" id="puzzle">
+    <h2 class="section-title">🧩 Puzzle: Pasangkan Bangunan dengan Fungsinya</h2>
+    <p style="margin-bottom:1rem;">
+      <b>Cara bermain:</b> tarik (drag) kartu nama bangunan ke kotak fungsi yang tepat. Bisa juga dengan <b>klik kartu</b> lalu <b>klik kotak tujuan</b>.
+    </p>
+    <div class="puzzle-wrap">
+      <div class="chip-pool" id="chipPool" aria-label="Kumpulan kartu nama bangunan"></div>
+      <div class="slot-grid" id="slotGrid"></div>
+      <div class="puzzle-msg" id="puzzleMsg" role="status">🎉 Hebat! Semua bangunan berhasil dipasangkan dengan tepat!</div>
+      <div style="text-align:center;">
+        <button class="btn btn-ghost" id="btnResetPuzzle" type="button">↺ Ulangi Puzzle</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EVALUASI ===================== -->
+  <section class="panel-section" id="evaluasi">
+    <h2 class="section-title">📝 Evaluasi Akhir</h2>
+    <p style="margin-bottom:1rem;">Pilihlah satu jawaban yang paling tepat. Setelah selesai, tekan <b>Periksa Jawaban</b>.</p>
+    <div class="skor-box" id="skorBox" role="status">
+      <div class="skor-angka" id="skorAngka">0</div>
+      <div id="skorTeks">dari 8 soal</div>
+      <div id="skorPesan" style="margin-top:.4rem; font-weight:700;"></div>
+    </div>
+    <div id="soalWrap"></div>
+    <div style="display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; margin-top:1rem;">
+      <button class="btn btn-primary" id="btnPeriksa" type="button">✅ Periksa Jawaban</button>
+      <button class="btn btn-ghost" id="btnUlangEvaluasi" type="button">↺ Kerjakan Ulang</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Media Pembelajaran Interaktif — <b>Bangunan Umum di Indonesia</b> · Prinsip Pendidikan Khusus, UDL, dan WCAG 2.1.
+</footer>
+
+<!-- ===================== MODAL ZOOM ===================== -->
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Tutup">✕</button>
+    <div class="modal-illust" id="modalIllust"></div>
+    <div class="modal-body">
+      <span class="kategori" id="modalKategori"></span>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <p class="fakta" id="modalFakta"></p>
+      <div class="modal-hint">💡 Tekan <b>Esc</b> atau klik di luar kartu untuk menutup.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   STATE
+   ========================================================= */
+const state = {
+  tempo: 1, ukuran: 1, kontras: false, bantuan: 1, narasi: false, bangunan: 'sekolah'
+};
+const LABEL_BANTUAN = ['Tanpa Bantuan', 'Ringan', 'Sedang', 'Penuh'];
+
+/* =========================================================
+   DATA TUR LAB — 8 BANGUNAN
+   ========================================================= */
+const TOUR = {
+  sekolah: {
+    nama: 'Sekolah',
+    steps: [
+      { id:'sekolah-bendera', nama:'Bendera Merah Putih', lx:16, ly:44,
+        desc:'Bendera Merah Putih dikibarkan di halaman sekolah. Setiap hari Senin diadakan upacara bendera untuk melatih kedisiplinan dan cinta tanah air.' },
+      { id:'sekolah-atap', nama:'Atap Sekolah', lx:52, ly:28,
+        desc:'Atap sekolah berbentuk segitiga dan melindungi ruang kelas dari panas dan hujan. Atap yang baik membuat suasana belajar nyaman.' },
+      { id:'sekolah-jendela', nama:'Jendela Kelas', lx:52, ly:55,
+        desc:'Jendela kelas berfungsi sebagai tempat masuknya cahaya dan udara segar. Ruang kelas yang terang membuat belajar lebih semangat.' },
+      { id:'sekolah-pintu', nama:'Pintu Masuk', lx:52, ly:72,
+        desc:'Pintu masuk ke dalam gedung sekolah. Siswa masuk ke kelas melalui pintu ini dengan tertib dan rapi.' },
+      { id:'sekolah-halaman', nama:'Halaman Sekolah', lx:52, ly:92,
+        desc:'Halaman sekolah adalah tempat bermain, berolahraga, dan upacara. Halaman hijau membuat suasana sejuk dan menyenangkan.' }
+    ]
+  },
+  rs: {
+    nama: 'Rumah Sakit',
+    steps: [
+      { id:'rs-palang', nama:'Palang Merah', lx:55, ly:15,
+        desc:'Palang merah adalah lambang pertolongan medis. Simbol ini menandakan bahwa bangunan tersebut adalah tempat pelayanan kesehatan.' },
+      { id:'rs-gedung', nama:'Gedung Utama', lx:55, ly:50,
+        desc:'Gedung utama rumah sakit berisi ruang periksa, ruang inap, ruang operasi, dan apotek. Ada dokter dan perawat yang siap membantu.' },
+      { id:'rs-igd', nama:'IGD (Gawat Darurat)', lx:55, ly:76,
+        desc:'IGD adalah Instalasi Gawat Darurat. Tempat ini melayani pasien yang butuh pertolongan cepat, misalnya kecelakaan atau sakit berat.' },
+      { id:'rs-ambulans', nama:'Ambulans', lx:16, ly:78,
+        desc:'Ambulans adalah kendaraan khusus untuk mengangkut orang sakit. Ambulans membawa pasien ke rumah sakit dengan cepat dan aman.' },
+      { id:'rs-taman', nama:'Taman Rumah Sakit', lx:88, ly:78,
+        desc:'Taman rumah sakit menyediakan udara segar dan tempat istirahat. Lingkungan hijau membantu pasien cepat sembuh.' }
+    ]
+  },
+  pasar: {
+    nama: 'Pasar',
+    steps: [
+      { id:'pasar-tenda1', nama:'Tenda Penjual', lx:16, ly:48,
+        desc:'Tenda berwarna-warni menjadi ciri khas pasar tradisional. Tenda melindungi pedagang dan pembeli dari panas dan hujan.' },
+      { id:'pasar-barang1', nama:'Barang Dagangan', lx:16, ly:68,
+        desc:'Di atas meja tersusun aneka barang dagangan: sayur, buah, dan bahan pokok. Pembeli dapat memilih langsung barang yang diinginkan.' },
+      { id:'pasar-tenda2', nama:'Tenda Kedua', lx:54, ly:48,
+        desc:'Pasar tradisional memiliki banyak tenda berjajar. Setiap tenda menjual barang yang berbeda-beda.' },
+      { id:'pasar-orang', nama:'Pembeli & Pedagang', lx:84, ly:80,
+        desc:'Orang-orang berinteraksi di pasar: pedagang menawarkan barang, pembeli menawar harga. Di sinilah terjadi jual beli.' },
+      { id:'pasar-tanah', nama:'Lantai Pasar', lx:36, ly:88,
+        desc:'Lantai pasar dibuat rata dan bersih agar pengunjung nyaman berjalan. Bagian ini juga menjadi jalur lalu-lalang orang.' }
+    ]
+  },
+  stasiun: {
+    nama: 'Stasiun Kereta',
+    steps: [
+      { id:'stasiun-atap', nama:'Papan Nama Stasiun', lx:82, ly:35,
+        desc:'Papan nama besar bertuliskan "STASIUN" memudahkan penumpang mengenali bangunan ini. Warnanya mencolok agar mudah terlihat.' },
+      { id:'stasiun-gedung', nama:'Gedung Stasiun', lx:82, ly:55,
+        desc:'Gedung stasiun berisi loket tiket, ruang tunggu, dan informasi jadwal. Petugas membantu penumpang yang akan berangkat.' },
+      { id:'stasiun-jendela', nama:'Jendela Stasiun', lx:82, ly:48,
+        desc:'Jendela besar membuat ruang tunggu terang dan nyaman. Dari dalam, penumpang dapat melihat kereta yang datang.' },
+      { id:'stasiun-peron', nama:'Peron', lx:82, ly:82,
+        desc:'Peron adalah tempat penumpang menunggu kereta. Berada di sisi rel agar penumpang mudah naik dan turun.' },
+      { id:'stasiun-kereta', nama:'Kereta Api', lx:28, ly:72,
+        desc:'Kereta api adalah kendaraan massal yang mengangkut banyak penumpang. Berjalan di atas rel dengan jadwal yang teratur.' },
+      { id:'stasiun-rel', nama:'Rel Kereta', lx:28, ly:92,
+        desc:'Rel adalah jalur khusus kereta api. Terbuat dari baja kuat yang ditanam di atas bantalan kayu atau beton.' }
+    ]
+  },
+  kantorpos: {
+    nama: 'Kantor Pos',
+    steps: [
+      { id:'kantorpos-gedung', nama:'Gedung Kantor Pos', lx:52, ly:45,
+        desc:'Gedung kantor pos melayani pengiriman surat, paket, dan pembayaran tagihan. Ditandai papan hijau bertuliskan "KANTOR POS".' },
+      { id:'kantorpos-jendela', nama:'Jendela Layanan', lx:52, ly:55,
+        desc:'Di balik jendela ini petugas melayani pelanggan: menjual perangko, menerima paket, dan mengurus pengiriman.' },
+      { id:'kantorpos-pintu', nama:'Pintu Masuk', lx:52, ly:72,
+        desc:'Pintu masuk utama untuk pelanggan yang datang berkirim surat atau mengambil paket.' },
+      { id:'kantorpos-kotakpos', nama:'Kotak Pos', lx:88, ly:78,
+        desc:'Kotak pos berwarna oranye digunakan untuk menitipkan surat yang akan dikirim. Petugas pos akan mengambilnya secara rutin.' },
+      { id:'kantorpos-surat', nama:'Surat', lx:18, ly:72,
+        desc:'Surat adalah pesan tertulis yang dikirim melalui kantor pos. Meski zaman modern, surat masih digunakan untuk dokumen resmi.' },
+      { id:'kantorpos-pohon', nama:'Pohon Peneduh', lx:13, ly:62,
+        desc:'Pohon di halaman kantor pos memberikan keteduhan dan udara segar bagi pengunjung yang menunggu.' }
+    ]
+  },
+  perpustakaan: {
+    nama: 'Perpustakaan',
+    steps: [
+      { id:'perpustakaan-atap', nama:'Atap Perpustakaan', lx:50, ly:30,
+        desc:'Atap pelana yang tinggi membuat ruang perpustakaan terasa lapang dan sejuk. Sirkulasi udara menjadi lebih baik.' },
+      { id:'perpustakaan-nama', nama:'Papan Nama', lx:50, ly:47,
+        desc:'Papan nama "PERPUSTAKAAN" menunjukkan identitas bangunan. Pengunjung dapat mengenali bangunan ini dari kejauhan.' },
+      { id:'perpustakaan-jendela', nama:'Jendela Buku', lx:36, ly:52,
+        desc:'Jendela besar dan jendela pajangan berisi buku-buku. Cahaya alami masuk membuat ruang baca nyaman.' },
+      { id:'perpustakaan-pintu', nama:'Pintu Masuk', lx:50, ly:74,
+        desc:'Pintu masuk menuju ruang baca dan rak buku. Pengunjung harus tenang di dalam perpustakaan.' },
+      { id:'perpustakaan-orang', nama:'Pembaca', lx:82, ly:82,
+        desc:'Orang yang sedang membaca buku di area baca. Perpustakaan menyediakan tempat nyaman untuk fokus membaca.' },
+      { id:'perpustakaan-pohon', nama:'Pohon Peneduh', lx:13, ly:74,
+        desc:'Pohon di halaman membuat suasana perpustakaan sejuk dan menyenangkan bagi pengunjung.' }
+    ]
+  },
+  puskesmas: {
+    nama: 'Puskesmas',
+    steps: [
+      { id:'puskesmas-palang', nama:'Palang Hijau', lx:50, ly:15,
+        desc:'Palang hijau adalah lambang kesehatan puskesmas. Warna hijau melambangkan kesehatan dan lingkungan yang bersih.' },
+      { id:'puskesmas-gedung', nama:'Gedung Puskesmas', lx:52, ly:48,
+        desc:'Gedung puskesmas melayani berobat ringan, imunisasi, dan penyuluhan kesehatan. Ada di setiap kecamatan.' },
+      { id:'puskesmas-jendela', nama:'Jendela Ruang Periksa', lx:52, ly:58,
+        desc:'Jendela pada ruang periksa memberi cahaya alami dan udara segar. Pasien merasa lebih nyaman saat diperiksa.' },
+      { id:'puskesmas-pintu', nama:'Pintu Masuk', lx:52, ly:74,
+        desc:'Pintu masuk tempat pasien mendaftar dan menunggu giliran diperiksa oleh petugas kesehatan.' },
+      { id:'puskesmas-stetoskop', nama:'Stetoskop', lx:92, ly:74,
+        desc:'Stetoskop adalah alat untuk mendengar detak jantung dan pernapasan pasien. Ini alat khas tenaga kesehatan.' },
+      { id:'puskesmas-pohon', nama:'Pohon Peneduh', lx:13, ly:74,
+        desc:'Pohon di halaman puskesmas memberikan keteduhan bagi pasien dan keluarganya yang menunggu.' }
+    ]
+  },
+  balaidesa: {
+    nama: 'Balai Desa',
+    steps: [
+      { id:'balaidesa-bendera', nama:'Bendera Merah Putih', lx:15, ly:38,
+        desc:'Bendera Merah Putih dikibarkan di halaman balai desa. Menandakan bangunan ini milik pemerintah desa.' },
+      { id:'balaidesa-atap', nama:'Atap Joglo', lx:52, ly:32,
+        desc:'Atap joglo bersusun dua adalah ciri arsitektur Jawa. Atap berbentuk limas melambangkan hubungan manusia dengan Tuhan.' },
+      { id:'balaidesa-nama', nama:'Papan Nama', lx:52, ly:52,
+        desc:'Papan nama "BALAI DESA" menunjukkan identitas bangunan sebagai pusat pemerintahan desa.' },
+      { id:'balaidesa-pintu', nama:'Pintu Masuk', lx:52, ly:72,
+        desc:'Pintu masuk tempat warga berkumpul untuk musyawarah, rapat, dan kegiatan sosial desa.' },
+      { id:'balaidesa-orang', nama:'Warga Berkumpul', lx:86, ly:80,
+        desc:'Warga desa berkumpul di balai untuk bermusyawarah. Di sinilah keputusan desa dibicarakan bersama.' },
+      { id:'balaidesa-pohon', nama:'Pohon Peneduh', lx:13, ly:74,
+        desc:'Pohon besar di halaman memberi keteduhan saat kegiatan desa berlangsung di luar ruangan.' }
+    ]
+  }
+};
+
+/* =========================================================
+   DATA PUZZLE
+   ========================================================= */
+const PUZZLE_DATA = [
+  { nama:'Rumah Sakit',  emoji:'🏥', fungsi:'Tempat berobat dan dirawat',       ket:'Untuk orang yang sedang sakit' },
+  { nama:'Sekolah',      emoji:'🏫', fungsi:'Tempat belajar dan bermain',        ket:'Untuk siswa menuntut ilmu' },
+  { nama:'Pasar',        emoji:'🏪', fungsi:'Tempat berjualan dan membeli',      ket:'Untuk jual beli kebutuhan sehari-hari' },
+  { nama:'Stasiun',      emoji:'🚉', fungsi:'Tempat naik dan turun kereta',      ket:'Untuk transportasi kereta api' },
+  { nama:'Kantor Pos',   emoji:'📮', fungsi:'Tempat mengirim surat dan paket',   ket:'Untuk layanan pos dan pengiriman' },
+  { nama:'Perpustakaan', emoji:'📚', fungsi:'Tempat membaca dan meminjam buku',  ket:'Untuk belajar dan literasi' }
+];
+
+/* =========================================================
+   DATA EVALUASI
+   ========================================================= */
+const SOAL = [
+  { emoji:'🏥', q:'Bangunan umum tempat orang sakit dirawat dan diobati adalah ....',
+    o:['Sekolah','Rumah Sakit','Pasar','Stasiun'], a:1,
+    e:'Rumah Sakit adalah tempat merawat orang sakit, ditandai dengan palang merah.' },
+  { emoji:'🏫', q:'Bangunan umum tempat siswa belajar dan menuntut ilmu adalah ....',
+    o:['Kantor Pos','Perpustakaan','Sekolah','Puskesmas'], a:2,
+    e:'Sekolah adalah tempat siswa belajar, bermain, dan menuntut ilmu.' },
+  { emoji:'🏪', q:'Bangunan umum tempat orang berjualan dan membeli barang disebut ....',
+    o:['Pasar','Stasiun','Balai Desa','Rumah Sakit'], a:0,
+    e:'Pasar adalah tempat jual beli barang kebutuhan sehari-hari.' },
+  { emoji:'🚉', q:'Bangunan umum tempat orang naik dan turun kereta api adalah ....',
+    o:['Bandara','Pelabuhan','Terminal','Stasiun'], a:3,
+    e:'Stasiun adalah tempat naik dan turun kereta api, memiliki peron dan loket tiket.' },
+  { emoji:'📮', q:'Bangunan umum tempat mengirim surat dan paket adalah ....',
+    o:['Kantor Pos','Puskesmas','Perpustakaan','Balai Desa'], a:0,
+    e:'Kantor Pos melayani pengiriman surat, paket, dan pembayaran tagihan.' },
+  { emoji:'📚', q:'Bangunan umum tempat membaca dan meminjam buku adalah ....',
+    o:['Sekolah','Perpustakaan','Pasar','Kantor Pos'], a:1,
+    e:'Perpustakaan adalah tempat membaca dan meminjam buku. Pengunjung harus tenang.' },
+  { emoji:'🏥', q:'Puskesmas adalah singkatan dari ....',
+    o:['Pusat Kesehatan Sekolah','Pusat Kerajinan Masyarakat','Pusat Kesehatan Masyarakat','Pusat Kebersihan Masyarakat'], a:2,
+    e:'Puskesmas = Pusat Kesehatan Masyarakat, ada di setiap kecamatan.' },
+  { emoji:'🏛️', q:'Balai desa biasanya digunakan untuk ....',
+    o:['Berobat dan imunisasi','Musyawarah dan kegiatan warga','Membeli sayur dan ikan','Naik turun kereta'], a:1,
+    e:'Balai desa dipakai untuk musyawarah, rapat, posyandu, dan kegiatan warga desa.' }
+];
+
+/* =========================================================
+   UTILITAS
+   ========================================================= */
+function formatOut(name, val){
+  switch(name){
+    case 'tempo':   return parseFloat(val) + '×';
+    case 'ukuran':  return Math.round(val * 100) + '%';
+    case 'kontras': return val ? 'Tinggi' : 'Normal';
+    case 'bantuan': return LABEL_BANTUAN[val] || '-';
+    case 'narasi':  return val ? 'Aktif' : 'Nonaktif';
+    default: return val;
+  }
+}
+
+function applyState(){
+  document.documentElement.style.fontSize = (16 * state.ukuran) + 'px';
+  document.body.classList.toggle('hc', state.kontras);
+  updateScience();
+  if(typeof tourIndex !== 'undefined' && tourIndex >= 0 && TOUR[state.bangunan]){
+    const steps = TOUR[state.bangunan].steps;
+    if(steps[tourIndex]) renderLabel(steps[tourIndex]);
+  }
+}
+
+function setVar(name, value){
+  state[name] = value;
+  document.querySelectorAll('[data-var="' + name + '"]').forEach(function(el){
+    if(el.type === 'checkbox'){ el.checked = !!value; } else { el.value = value; }
+  });
+  document.querySelectorAll('[data-out="' + name + '"]').forEach(function(el){
+    el.textContent = formatOut(name, value);
+  });
+  applyState();
+}
+
+document.addEventListener('input', function(e){
+  const v = e.target.dataset ? e.target.dataset.var : null;
+  if(!v) return;
+  const val = (e.target.type === 'checkbox') ? e.target.checked : parseFloat(e.target.value);
+  setVar(v, val);
+});
+
+document.getElementById('resetAkses').addEventListener('click', function(){
+  setVar('tempo', 1); setVar('ukuran', 1); setVar('kontras', false);
+  setVar('bantuan', 1); setVar('narasi', false);
+});
+
+function updateScience(){
+  const map = {
+    tempo: state.tempo !== 1, ukuran: state.ukuran !== 1,
+    kontras: state.kontras === true, bantuan: state.bantuan > 0, narasi: state.narasi === true
+  };
+  document.querySelectorAll('#sciList li').forEach(function(li){
+    li.classList.toggle('on', !!map[li.dataset.sci]);
+  });
+}
+
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  try{
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'id-ID';
+    u.rate = Math.max(0.5, Math.min(1.6, state.tempo));
+    const voices = window.speechSynthesis.getVoices();
+    const idVoice = voices.find(function(v){ return v.lang && v.lang.toLowerCase().indexOf('id') === 0; });
+    if(idVoice) u.voice = idVoice;
+    window.speechSynthesis.speak(u);
+  }catch(err){}
+}
+
+/* =========================================================
+   TAB NAVIGASI
+   ========================================================= */
+document.querySelectorAll('.tab').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.panel-section').forEach(function(s){ s.classList.remove('active'); });
+    btn.classList.add('active');
+    const target = document.getElementById(btn.dataset.target);
+    if(target) target.classList.add('active');
+    if(btn.dataset.target !== 'lab'){ stopTour(); }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+/* =========================================================
+   MODAL ZOOM MATERI
+   ========================================================= */
+const modalOverlay = document.getElementById('modalOverlay');
+const modalIllust  = document.getElementById('modalIllust');
+const modalKategori= document.getElementById('modalKategori');
+const modalTitle   = document.getElementById('modalTitle');
+const modalDesc    = document.getElementById('modalDesc');
+const modalFakta   = document.getElementById('modalFakta');
+const modalClose   = document.getElementById('modalClose');
+
+function openModal(card){
+  const svg = card.querySelector('.materi-svg');
+  const kategori = card.querySelector('.kategori');
+  const title = card.querySelector('h3');
+  const descs = card.querySelectorAll('.materi-body > p');
+  const fakta = card.querySelector('.fakta');
+
+  modalIllust.innerHTML = svg ? svg.outerHTML : '';
+  modalKategori.textContent = kategori ? kategori.textContent : '';
+  modalKategori.style.display = kategori ? 'inline-block' : 'none';
+  modalTitle.textContent = title ? title.textContent : '';
+
+  modalDesc.innerHTML = '';
+  descs.forEach(function(p){
+    if(p.classList.contains('fakta')) return;
+    const el = document.createElement('p');
+    el.textContent = p.textContent;
+    modalDesc.appendChild(el);
+  });
+
+  if(fakta){
+    modalFakta.textContent = fakta.textContent;
+    modalFakta.style.display = 'block';
+  } else {
+    modalFakta.style.display = 'none';
+  }
+
+  modalOverlay.classList.add('open');
+  modalOverlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  modalClose.focus();
+
+  if(state.narasi){
+    speak((title ? title.textContent : '') + '. ' +
+      Array.from(descs).map(function(p){ return p.textContent; }).join(' '));
+  }
+}
+
+function closeModal(){
+  modalOverlay.classList.remove('open');
+  modalOverlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if('speechSynthesis' in window){ window.speechSynthesis.cancel(); }
+}
+
+document.querySelectorAll('.materi-card').forEach(function(card){
+  card.addEventListener('click', function(){ openModal(card); });
+  card.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      openModal(card);
+    }
+  });
+});
+
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', function(e){
+  if(e.target === modalOverlay) closeModal();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && modalOverlay.classList.contains('open')) closeModal();
+});
+
+/* =========================================================
+   LAB MAYA
+   ========================================================= */
+let tourTimer = null, tourIndex = -1, touring = false;
+
+const stageEl     = document.getElementById('stage');
+const labelLayer  = document.getElementById('labelLayer');
+const narasiBox   = document.getElementById('narasiBox');
+const progressFill= document.getElementById('progressFill');
+const btnMulai    = document.getElementById('btnMulai');
+const btnLanjut   = document.getElementById('btnLanjut');
+const btnStop     = document.getElementById('btnStop');
+
+function switchBangunan(b){
+  state.bangunan = b;
+  document.querySelectorAll('#bangunanPick button').forEach(function(btn){
+    btn.classList.toggle('active', btn.dataset.bangunan === b);
+  });
+  // hide all SVGs, show the target
+  document.querySelectorAll('.stage-svg').forEach(function(svg){
+    svg.style.display = 'none';
+  });
+  const target = document.getElementById('svg-' + b);
+  if(target) target.style.display = '';
+
+  stopTour();
+  clearHighlight();
+  labelLayer.innerHTML = '';
+  progressFill.style.width = '0%';
+  narasiBox.innerHTML = 'Kamu memilih <b>' + TOUR[b].nama + '</b>. Tekan <b>Mulai Tur</b> untuk memulai panduan.';
+}
+
+document.querySelectorAll('#bangunanPick button').forEach(function(btn){
+  btn.addEventListener('click', function(){ switchBangunan(btn.dataset.bangunan); });
+});
+
+function clearHighlight(){
+  document.querySelectorAll('.stage-svg .part').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.stage-svg').forEach(function(s){ s.classList.remove('dim'); });
+}
+
+function startTour(){
+  stopTour();
+  tourIndex = 0;
+  touring = true;
+  document.querySelectorAll('.stage-svg').forEach(function(s){ s.classList.add('dim'); });
+  btnMulai.disabled = true; btnLanjut.disabled = false; btnStop.disabled = false;
+  runStep();
+}
+
+function runStep(){
+  const steps = TOUR[state.bangunan].steps;
+  if(!touring) return;
+  if(tourIndex >= steps.length){ finishTour(); return; }
+  const st = steps[tourIndex];
+  document.querySelectorAll('.stage-svg .part').forEach(function(p){ p.classList.remove('active'); });
+  const el = document.getElementById(st.id);
+  if(el) el.classList.add('active');
+  renderLabel(st); showNarasi(st);
+  if(state.narasi) speak(st.nama + '. ' + st.desc);
+  progressFill.style.width = (((tourIndex + 1) / steps.length) * 100) + '%';
+  tourTimer = setTimeout(function(){ tourIndex++; runStep(); }, 4500 / state.tempo);
+}
+
+function renderLabel(st){
+  labelLayer.innerHTML = '';
+  if(state.bantuan === 0) return;
+  const d = document.createElement('div');
+  d.className = 'part-label lvl' + state.bantuan;
+  let html = '<strong>' + st.nama + '</strong>';
+  if(state.bantuan === 3){ html += '<span class="lbl-desc">' + st.desc + '</span>'; }
+  d.innerHTML = html;
+  labelLayer.appendChild(d);
+  const W = stageEl.clientWidth, H = stageEl.clientHeight;
+  const w = d.offsetWidth, h = d.offsetHeight;
+  let leftPx = (st.lx / 100) * W, topPx = (st.ly / 100) * H;
+  leftPx = Math.max(w/2 + 4, Math.min(W - w/2 - 4, leftPx));
+  topPx  = Math.max(h/2 + 4, Math.min(H - h/2 - 4, topPx));
+  d.style.left = leftPx + 'px';
+  d.style.top  = topPx + 'px';
+}
+
+function showNarasi(st){
+  narasiBox.innerHTML = '<span class="n-title">📌 ' + st.nama + ' — ' + TOUR[state.bangunan].nama + '</span>' + st.desc;
+}
+
+function stopTour(){
+  if(tourTimer){ clearTimeout(tourTimer); tourTimer = null; }
+  touring = false;
+  btnMulai.disabled = false; btnLanjut.disabled = true; btnStop.disabled = true;
+}
+
+function finishTour(){
+  stopTour(); tourIndex = -1;
+  clearHighlight(); labelLayer.innerHTML = '';
+  progressFill.style.width = '100%';
+  narasiBox.innerHTML = '✅ <b>Tur selesai!</b> Kamu telah mengenal bagian-bagian ' + TOUR[state.bangunan].nama + '.';
+  if(state.narasi) speak('Tur selesai. Kamu telah mengenal bagian bagian ' + TOUR[state.bangunan].nama + '.');
+}
+
+btnMulai.addEventListener('click', startTour);
+btnStop.addEventListener('click', function(){
+  stopTour(); clearHighlight(); labelLayer.innerHTML = '';
+  narasiBox.innerHTML = 'Tur dihentikan. Tekan <b>Mulai Tur</b> untuk mengulang.';
+});
+btnLanjut.addEventListener('click', function(){
+  if(!touring) return;
+  if(tourTimer){ clearTimeout(tourTimer); tourTimer = null; }
+  tourIndex++; runStep();
+});
+
+/* =========================================================
+   PUZZLE
+   ========================================================= */
+const chipPool  = document.getElementById('chipPool');
+const slotGrid  = document.getElementById('slotGrid');
+const puzzleMsg = document.getElementById('puzzleMsg');
+
+function buildPuzzle(){
+  chipPool.innerHTML = ''; slotGrid.innerHTML = '';
+  puzzleMsg.classList.remove('show');
+  const shuffled = PUZZLE_DATA.slice().sort(function(){ return Math.random() - 0.5; });
+  shuffled.forEach(function(item){
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.dataset.name = item.nama;
+    chip.dataset.fungsi = item.fungsi;
+    chip.setAttribute('tabindex', '0');
+    chip.setAttribute('role', 'button');
+    chip.setAttribute('aria-label', 'Kartu bangunan ' + item.nama);
+    chip.innerHTML = '<span class="chip-emoji" aria-hidden="true">' + item.emoji + '</span><span>' + item.nama + '</span>';
+    chipPool.appendChild(chip);
+  });
+  PUZZLE_DATA.forEach(function(item){
+    const slot = document.createElement('div');
+    slot.className = 'slot';
+    const title = document.createElement('div');
+    title.className = 'slot-fungsi';
+    title.innerHTML = item.fungsi + '<small>' + item.ket + '</small>';
+    const dz = document.createElement('div');
+    dz.className = 'dropzone';
+    dz.dataset.fungsi = item.fungsi;
+    const ph = document.createElement('span');
+    ph.className = 'ph';
+    ph.textContent = 'Letakkan bangunan di sini';
+    dz.appendChild(ph);
+    slot.appendChild(title); slot.appendChild(dz);
+    slotGrid.appendChild(slot);
+  });
+}
+
+let dragChip = null, ghost = null, startX = 0, startY = 0, moved = false, offX = 0, offY = 0;
+
+document.addEventListener('pointerdown', function(e){
+  const chip = e.target.closest('.chip');
+  if(!chip || chip.classList.contains('locked')) return;
+  dragChip = chip; moved = false;
+  startX = e.clientX; startY = e.clientY;
+  const r = chip.getBoundingClientRect();
+  offX = e.clientX - r.left; offY = e.clientY - r.top;
+  document.addEventListener('pointermove', onPointerMove);
+  document.addEventListener('pointerup', onPointerUp);
+  document.addEventListener('pointercancel', onPointerUp);
+});
+
+function onPointerMove(e){
+  if(!dragChip) return;
+  if(!moved){
+    if(Math.hypot(e.clientX - startX, e.clientY - startY) < 7) return;
+    moved = true;
+    const r = dragChip.getBoundingClientRect();
+    ghost = dragChip.cloneNode(true);
+    ghost.classList.add('ghost');
+    ghost.style.width = r.width + 'px';
+    ghost.style.height = r.height + 'px';
+    document.body.appendChild(ghost);
+    dragChip.classList.add('dragging');
+  }
+  if(ghost){
+    ghost.style.left = (e.clientX - offX) + 'px';
+    ghost.style.top  = (e.clientY - offY) + 'px';
+  }
+}
+
+function onPointerUp(e){
+  document.removeEventListener('pointermove', onPointerMove);
+  document.removeEventListener('pointerup', onPointerUp);
+  document.removeEventListener('pointercancel', onPointerUp);
+  if(!dragChip) return;
+  const chip = dragChip;
+  if(!moved){
+    document.querySelectorAll('.chip.selected').forEach(function(c){ if(c !== chip) c.classList.remove('selected'); });
+    chip.classList.toggle('selected');
+    dragChip = null; return;
+  }
+  if(ghost){ ghost.remove(); ghost = null; }
+  chip.classList.remove('dragging');
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const zone = el ? el.closest('.dropzone') : null;
+  if(zone && !zone.classList.contains('filled')){
+    if(zone.dataset.fungsi === chip.dataset.fungsi){ placeChip(chip, zone); }
+    else { zone.classList.add('wrong'); setTimeout(function(){ zone.classList.remove('wrong'); }, 500); }
+  }
+  dragChip = null;
+}
+
+function placeChip(chip, zone){
+  chip.classList.add('locked');
+  chip.classList.remove('selected');
+  chip.removeAttribute('tabindex');
+  const ph = zone.querySelector('.ph');
+  if(ph) ph.remove();
+  zone.appendChild(chip);
+  zone.classList.add('filled');
+  checkPuzzleDone();
+}
+
+function checkPuzzleDone(){
+  const total = PUZZLE_DATA.length;
+  const filled = slotGrid.querySelectorAll('.dropzone.filled').length;
+  if(filled === total){
+    puzzleMsg.classList.add('show');
+    if(state.narasi) speak('Hebat! Semua bangunan berhasil dipasangkan dengan tepat.');
+  }
+}
+
+slotGrid.addEventListener('click', function(e){
+  const zone = e.target.closest('.dropzone');
+  if(!zone || zone.classList.contains('filled')) return;
+  const selected = document.querySelector('.chip.selected');
+  if(!selected) return;
+  if(zone.dataset.fungsi === selected.dataset.fungsi){ placeChip(selected, zone); }
+  else { zone.classList.add('wrong'); setTimeout(function(){ zone.classList.remove('wrong'); }, 500); }
+});
+
+chipPool.addEventListener('keydown', function(e){
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  if(e.key === 'Enter' || e.key === ' '){
+    e.preventDefault();
+    document.querySelectorAll('.chip.selected').forEach(function(c){ if(c !== chip) c.classList.remove('selected'); });
+    chip.classList.toggle('selected');
+  }
+});
+
+document.getElementById('btnResetPuzzle').addEventListener('click', buildPuzzle);
+
+/* =========================================================
+   EVALUASI
+   ========================================================= */
+const soalWrap = document.getElementById('soalWrap');
+const skorBox  = document.getElementById('skorBox');
+
+function buildEvaluasi(){
+  soalWrap.innerHTML = '';
+  skorBox.classList.remove('show');
+  document.getElementById('skorAngka').textContent = '0';
+  document.getElementById('skorPesan').textContent = '';
+  SOAL.forEach(function(item, i){
+    const wrap = document.createElement('div');
+    wrap.className = 'soal';
+    wrap.dataset.i = i;
+    const q = document.createElement('p');
+    q.className = 'soal-q';
+    q.innerHTML = '<span class="soal-emoji" aria-hidden="true">' + item.emoji + '</span><span>' + (i + 1) + '. ' + item.q + '</span>';
+    wrap.appendChild(q);
+    const opsi = document.createElement('div');
+    opsi.className = 'opsi';
+    item.o.forEach(function(opt, j){
+      const lbl = document.createElement('label');
+      const inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = 'soal' + i; inp.value = j;
+      const span = document.createElement('span');
+      span.textContent = String.fromCharCode(65 + j) + '. ' + opt;
+      lbl.appendChild(inp); lbl.appendChild(span);
+      opsi.appendChild(lbl);
+    });
+    wrap.appendChild(opsi);
+    const fb = document.createElement('div');
+    fb.className = 'fb';
+    wrap.appendChild(fb);
+    soalWrap.appendChild(wrap);
+  });
+}
+
+document.getElementById('btnPeriksa').addEventListener('click', function(){
+  let benar = 0;
+  SOAL.forEach(function(item, i){
+    const wrap = soalWrap.querySelector('.soal[data-i="' + i + '"]');
+    const picked = wrap.querySelector('input[name="soal' + i + '"]:checked');
+    const fb = wrap.querySelector('.fb');
+    wrap.querySelectorAll('.opsi label').forEach(function(l){ l.classList.remove('benar','salah'); });
+    if(!picked){
+      fb.className = 'fb show salah';
+      fb.textContent = '⚠️ Belum dijawab.';
+      return;
+    }
+    const idx = parseInt(picked.value, 10);
+    const labels = wrap.querySelectorAll('.opsi label');
+    if(idx === item.a){
+      benar++;
+      labels[idx].classList.add('benar');
+      fb.className = 'fb show benar';
+      fb.textContent = '✔️ Benar! ' + item.e;
+    }else{
+      labels[idx].classList.add('salah');
+      labels[item.a].classList.add('benar');
+      fb.className = 'fb show salah';
+      fb.textContent = '✘ Kurang tepat. Jawaban benar: ' + String.fromCharCode(65 + item.a) + '. ' + item.o[item.a] + '. ' + item.e;
+    }
+  });
+  document.getElementById('skorAngka').textContent = benar;
+  document.getElementById('skorTeks').textContent = 'dari ' + SOAL.length + ' soal';
+  const pesan = document.getElementById('skorPesan');
+  const persen = Math.round((benar / SOAL.length) * 100);
+  if(persen >= 85) pesan.textContent = '🌟 Luar biasa! Pemahamanmu sangat baik.';
+  else if(persen >= 60) pesan.textContent = '👍 Bagus! Pelajari kembali bagian yang masih salah.';
+  else pesan.textContent = '💪 Semangat! Baca ulang materi dan coba lagi.';
+  skorBox.classList.add('show');
+  skorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if(state.narasi) speak('Skor kamu ' + benar + ' dari ' + SOAL.length + ' soal.');
+});
+
+document.getElementById('btnUlangEvaluasi').addEventListener('click', buildEvaluasi);
+
+/* =========================================================
+   INIT
+   ========================================================= */
+(function init(){
+  setVar('tempo', state.tempo);
+  setVar('ukuran', state.ukuran);
+  setVar('kontras', state.kontras);
+  setVar('bantuan', state.bantuan);
+  setVar('narasi', state.narasi);
+  buildPuzzle();
+  buildEvaluasi();
+  switchBangunan('sekolah');
+  window.addEventListener('resize', function(){
+    if(tourIndex >= 0 && TOUR[state.bangunan]){
+      const st = TOUR[state.bangunan].steps[tourIndex];
+      if(st) renderLabel(st);
+    }
+  });
+})();
+</script>
+</body>
+</html>

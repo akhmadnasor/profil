@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MPI Metamorfosis — Petualangan Sains IPAS Kelas 5</title>
+<style>
+  :root{
+    --bg:#f2f6ff;
+    --card:#ffffff;
+    --primary:#4f46e5;
+    --primary-dark:#3730a3;
+    --primary-soft:#eef2ff;
+    --accent:#06b6d4;
+    --accent-soft:#e0f7fb;
+    --amber:#f59e0b;
+    --green:#10b981;
+    --green-soft:#ecfdf5;
+    --red:#ef4444;
+    --red-soft:#fef2f2;
+    --text:#1e293b;
+    --muted:#64748b;
+    --border:#e2e8f0;
+    --radius:18px;
+    --shadow:0 10px 30px rgba(79,70,229,.10);
+    --shadow-sm:0 4px 14px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+    background:
+      radial-gradient(circle at 8% 4%, #e0e7ff 0%, transparent 42%),
+      radial-gradient(circle at 95% 8%, #cffafe 0%, transparent 40%),
+      radial-gradient(circle at 50% 100%, #fef3c7 0%, transparent 45%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    line-height:1.65;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  /* ============ TOP BAR ============ */
+  .topbar{
+    position:sticky;top:0;z-index:80;
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding:10px 18px;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(12px);
+    border-bottom:2px solid #e0e7ff;
+    box-shadow:0 4px 20px rgba(79,70,229,.06);
+  }
+  .brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .logo{
+    width:46px;height:46px;border-radius:14px;
+    display:grid;place-items:center;font-size:24px;
+    background:linear-gradient(135deg,#6366f1,#06b6d4);
+    box-shadow:0 6px 16px rgba(79,70,229,.35);
+  }
+  .brand h1{font-size:17px;font-weight:800;letter-spacing:.2px;color:var(--primary-dark);line-height:1.1;}
+  .brand p{font-size:11px;color:var(--muted);font-weight:600;}
+  .nav{display:flex;gap:7px;flex-wrap:wrap;margin-left:auto;}
+  .nav-btn{
+    border:2px solid var(--border);background:#fff;color:var(--text);
+    padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;
+    cursor:pointer;transition:.18s;white-space:nowrap;font-family:inherit;
+  }
+  .nav-btn:hover{border-color:#a5b4fc;background:var(--primary-soft);transform:translateY(-2px);}
+  .nav-btn.active{background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(79,70,229,.35);}
+  .nav-btn.guru{background:#fff7ed;border-color:#fed7aa;color:#b45309;}
+  .nav-btn.guru:hover{background:#ffedd5;}
+
+  /* ============ LAYOUT ============ */
+  main{max-width:1180px;margin:0 auto;padding:22px 16px 60px;}
+  .page{display:none;animation:fade .35s ease;}
+  .page.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+  .card{
+    background:var(--card);border-radius:var(--radius);
+    box-shadow:var(--shadow);border:1px solid #eef2ff;
+    padding:22px;margin-bottom:18px;
+  }
+  .section-title{
+    font-size:20px;font-weight:800;color:var(--primary-dark);
+    display:flex;align-items:center;gap:10px;margin-bottom:6px;
+  }
+  .section-sub{font-size:13.5px;color:var(--muted);margin-bottom:16px;}
+
+  /* ============ HERO / LANDING ============ */
+  .hero{
+    position:relative;overflow:hidden;
+    border-radius:26px;padding:38px 28px 34px;
+    background:linear-gradient(135deg,#eef2ff 0%,#e0f2fe 45%,#fef3c7 100%);
+    border:1px solid #dbeafe;
+    box-shadow:var(--shadow);
+    text-align:center;
+    margin-bottom:20px;
+  }
+  .hero .stars{position:absolute;inset:0;pointer-events:none;font-size:22px;opacity:.55;}
+  .hero .stars span{position:absolute;animation:float 4s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-12px) rotate(8deg);}}
+  .hero h2{
+    font-size:clamp(24px,4.4vw,40px);font-weight:900;letter-spacing:-.5px;
+    background:linear-gradient(120deg,#4338ca,#0891b2,#f59e0b);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    margin-bottom:8px;position:relative;z-index:2;
+  }
+  .hero p.lead{font-size:15px;color:#475569;max-width:640px;margin:0 auto 6px;position:relative;z-index:2;}
+  .hero .mascot{font-size:60px;line-height:1;margin:10px 0 4px;position:relative;z-index:2;animation:float 3.4s ease-in-out infinite;}
+  .badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px;position:relative;z-index:2;}
+  .badge{
+    background:#fff;border:1.5px solid #c7d2fe;color:#4338ca;
+    padding:5px 13px;border-radius:999px;font-size:12px;font-weight:800;
+    box-shadow:var(--shadow-sm);
+  }
+  .badge.cyan{border-color:#a5f3fc;color:#0e7490;background:#ecfeff;}
+  .badge.amber{border-color:#fde68a;color:#b45309;background:#fffbeb;}
+
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+  .menu-card{
+    background:#fff;border:2px solid #eef2ff;border-radius:20px;padding:20px 16px;
+    text-align:center;cursor:pointer;transition:.22s;box-shadow:var(--shadow-sm);
+    position:relative;overflow:hidden;
+  }
+  .menu-card:hover{transform:translateY(-6px);border-color:#a5b4fc;box-shadow:0 16px 34px rgba(79,70,229,.16);}
+  .menu-card .ic{font-size:38px;display:block;margin-bottom:8px;}
+  .menu-card h3{font-size:15.5px;font-weight:800;color:var(--primary-dark);margin-bottom:4px;}
+  .menu-card p{font-size:12px;color:var(--muted);line-height:1.5;}
+  .menu-card::after{
+    content:'';position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(90deg,#6366f1,#06b6d4);
+  }
+
+  /* ============ CONTENT BLOCKS ============ */
+  .pill{
+    display:inline-block;background:var(--primary-soft);color:#4338ca;
+    border:1.5px solid #c7d2fe;font-size:11.5px;font-weight:800;
+    padding:3px 11px;border-radius:999px;margin:0 6px 6px 0;
+  }
+  .pill.green{background:var(--green-soft);color:#047857;border-color:#a7f3d0;}
+  .pill.amber{background:#fffbeb;color:#b45309;border-color:#fde68a;}
+  .pill.cyan{background:#ecfeff;color:#0e7490;border-color:#a5f3fc;}
+
+  .materi h3{
+    font-size:17px;font-weight:800;color:var(--primary-dark);
+    margin:26px 0 10px;padding-left:12px;border-left:5px solid var(--accent);line-height:1.3;
+  }
+  .materi h3:first-child{margin-top:0;}
+  .materi h4{font-size:15px;font-weight:800;color:#0f766e;margin:16px 0 6px;}
+  .materi p{margin-bottom:11px;font-size:14.6px;text-align:justify;color:#334155;}
+  .materi ul,.materi ol{margin:0 0 13px 22px;font-size:14.6px;color:#334155;}
+  .materi li{margin-bottom:6px;}
+  .materi b,.materi strong{color:#312e81;}
+  .callout{
+    background:linear-gradient(135deg,#eef2ff,#ecfeff);
+    border-left:6px solid var(--primary);
+    border-radius:14px;padding:14px 16px;margin:16px 0;font-size:14px;color:#3730a3;
+  }
+  .callout.warn{background:linear-gradient(135deg,#fffbeb,#fef2f2);border-left-color:var(--amber);color:#92400e;}
+  .callout.green{background:linear-gradient(135deg,#ecfdf5,#f0fdfa);border-left-color:var(--green);color:#065f46;}
+  .mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px;margin:14px 0;}
+  .mini{
+    background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:14px;
+    box-shadow:var(--shadow-sm);
+  }
+  .mini .t{font-weight:800;font-size:13.5px;color:var(--primary-dark);margin-bottom:5px;display:flex;gap:7px;align-items:center;}
+  .mini p{font-size:12.8px;color:var(--muted);margin:0;text-align:left;line-height:1.55;}
+
+  .tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;overflow:hidden;border-radius:14px;}
+  .tbl th{background:linear-gradient(135deg,#4f46e5,#0891b2);color:#fff;padding:11px 12px;text-align:left;font-weight:800;font-size:13px;}
+  .tbl td{padding:10px 12px;border-bottom:1px solid var(--border);background:#fff;vertical-align:top;}
+  .tbl tr:nth-child(even) td{background:#f8faff;}
+
+  /* ============ LAB ============ */
+  .lab-split{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start;}
+  @media(max-width:900px){.lab-split{grid-template-columns:1fr;}}
+  .ctrl-group{margin-bottom:16px;}
+  .ctrl-group label{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;color:#334155;margin-bottom:7px;gap:8px;}
+  .ctrl-group .val{
+    background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;
+    font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;white-space:nowrap;
+  }
+  input[type=range]{
+    -webkit-appearance:none;width:100%;height:9px;border-radius:999px;
+    background:linear-gradient(90deg,#c7d2fe,#a5f3fc);outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+    background:#fff;border:4px solid var(--primary);cursor:pointer;
+    box-shadow:0 3px 10px rgba(79,70,229,.4);transition:.15s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12);}
+  input[type=range]::-moz-range-thumb{
+    width:22px;height:22px;border-radius:50%;background:#fff;border:4px solid var(--primary);cursor:pointer;
+  }
+  input[type=range]:disabled{opacity:.55;}
+  .hintline{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.45;}
+
+  .btn{
+    border:none;border-radius:14px;padding:12px 20px;font-size:14px;font-weight:800;
+    cursor:pointer;transition:.18s;font-family:inherit;display:inline-flex;
+    align-items:center;justify-content:center;gap:8px;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn:active{transform:translateY(0);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .btn-primary{background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;box-shadow:0 8px 20px rgba(79,70,229,.32);}
+  .btn-green{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 8px 20px rgba(16,185,129,.3);}
+  .btn-amber{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;box-shadow:0 8px 20px rgba(245,158,11,.3);}
+  .btn-ghost{background:#fff;color:var(--primary-dark);border:2px solid #c7d2fe;}
+  .btn-ghost:hover{background:var(--primary-soft);}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+
+  .readouts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;}
+  .ro{background:linear-gradient(135deg,#f8faff,#eef2ff);border:1.5px solid #e0e7ff;border-radius:14px;padding:10px 12px;text-align:center;}
+  .ro .k{font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .ro .v{font-size:19px;font-weight:900;color:var(--primary-dark);}
+  .status-box{
+    margin-top:12px;padding:13px 15px;border-radius:14px;font-size:13.5px;font-weight:700;
+    background:#f8faff;border:2px dashed #c7d2fe;color:#4338ca;min-height:52px;line-height:1.5;
+  }
+  .status-box.ok{background:var(--green-soft);border-color:#6ee7b7;color:#065f46;border-style:solid;}
+  .status-box.bad{background:var(--red-soft);border-color:#fca5a5;color:#991b1b;border-style:solid;}
+  .status-box.warn{background:#fffbeb;border-color:#fcd34d;color:#92400e;border-style:solid;}
+
+  canvas{width:100%;height:auto;display:block;border-radius:16px;background:#fff;box-shadow:var(--shadow-sm);}
+  .canvas-wrap{margin-bottom:14px;}
+
+  /* ============ PUZZLE ============ */
+  .puzzle-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:860px){.puzzle-split{grid-template-columns:1fr;}}
+  .panel-head{
+    font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:7px;
+  }
+  .bank{display:flex;flex-direction:column;gap:10px;min-height:80px;}
+  .piece{
+    background:linear-gradient(135deg,#ffffff,#f5f8ff);
+    border:2px solid #c7d2fe;border-radius:15px;padding:12px 13px;
+    font-size:13px;font-weight:700;color:#312e81;cursor:grab;
+    box-shadow:var(--shadow-sm);transition:.18s;user-select:none;line-height:1.45;
+  }
+  .piece:hover{border-color:var(--primary);transform:translateX(4px);box-shadow:0 8px 18px rgba(79,70,229,.18);}
+  .piece.selected{border-color:var(--accent);background:linear-gradient(135deg,#ecfeff,#e0f2fe);transform:scale(1.02);box-shadow:0 0 0 4px rgba(6,182,212,.2);}
+  .piece.dragging{opacity:.45;}
+  .piece.locked{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#34d399;color:#065f46;cursor:default;}
+
+  .slots{display:flex;flex-direction:column;gap:10px;}
+  .slot{
+    display:flex;align-items:center;gap:11px;min-height:62px;
+    border:2.5px dashed #cbd5e1;border-radius:15px;padding:9px 12px;
+    background:#fbfdff;transition:.18s;
+  }
+  .slot .num{
+    flex:0 0 34px;height:34px;border-radius:11px;display:grid;place-items:center;
+    font-weight:900;font-size:14px;color:#fff;
+    background:linear-gradient(135deg,#94a3b8,#64748b);
+  }
+  .slot .ph{font-size:12.5px;color:#94a3b8;font-weight:600;font-style:italic;}
+  .slot.filled{border-style:solid;border-color:#34d399;background:linear-gradient(135deg,#ecfdf5,#f0fdfa);}
+  .slot.filled .num{background:linear-gradient(135deg,#10b981,#059669);}
+  .slot.filled .ph{color:#065f46;font-style:normal;font-weight:700;}
+  .slot.over{border-color:var(--accent);background:#ecfeff;transform:scale(1.02);}
+  .slot.wrong{animation:shake .4s;border-color:var(--red);background:var(--red-soft);}
+  @keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-9px);}40%{transform:translateX(9px);}60%{transform:translateX(-6px);}80%{transform:translateX(6px);}}
+
+  /* ============ EVALUASI ============ */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
+  .field label{display:block;font-size:12.5px;font-weight:800;color:#334155;margin-bottom:6px;}
+  .field input{
+    width:100%;padding:12px 14px;border-radius:13px;border:2px solid var(--border);
+    font-size:14px;font-family:inherit;outline:none;transition:.18s;background:#fbfdff;
+  }
+  .field input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px rgba(79,70,229,.12);}
+  .field.full{grid-column:1/-1;}
+
+  .quiz-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .stat{
+    display:flex;align-items:center;gap:7px;background:#f8faff;border:2px solid #e0e7ff;
+    padding:8px 14px;border-radius:999px;font-weight:800;font-size:13px;color:#3730a3;
+  }
+  .stat.timer{border-color:#a5f3fc;background:#ecfeff;color:#0e7490;}
+  .stat.timer.danger{border-color:#fca5a5;background:#fef2f2;color:#b91c1c;animation:pulse 1s infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+
+  .progressbar{height:11px;background:#e8edf9;border-radius:999px;overflow:hidden;margin-bottom:18px;}
+  .progressbar > div{height:100%;background:linear-gradient(90deg,#4f46e5,#06b6d4);border-radius:999px;transition:width .4s;}
+
+  .q-box{
+    background:linear-gradient(135deg,#f8faff,#eef2ff);
+    border:2px solid #e0e7ff;border-radius:18px;padding:18px;margin-bottom:16px;
+  }
+  .q-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;}
+  .q-text{font-size:16px;font-weight:700;color:#1e293b;line-height:1.6;}
+  .q-img{width:100%;max-height:250px;object-fit:contain;border-radius:14px;margin:12px 0;border:2px solid #e0e7ff;background:#fff;}
+
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .opt{
+    display:flex;align-items:flex-start;gap:12px;background:#fff;
+    border:2.5px solid var(--border);border-radius:15px;padding:13px 15px;
+    cursor:pointer;transition:.18s;font-size:14.3px;font-weight:600;color:#334155;text-align:left;
+    font-family:inherit;line-height:1.5;
+  }
+  .opt:hover:not(:disabled){border-color:#a5b4fc;background:var(--primary-soft);transform:translateX(4px);}
+  .opt .letter{
+    flex:0 0 30px;height:30px;border-radius:10px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#e0e7ff,#c7d2fe);color:#4338ca;font-weight:900;font-size:13.5px;
+  }
+  .opt.correct{border-color:#34d399;background:linear-gradient(135deg,#ecfdf5,#d1fae5);}
+  .opt.correct .letter{background:linear-gradient(135deg,#10b981,#059669);color:#fff;}
+  .opt.wrong{border-color:#fca5a5;background:linear-gradient(135deg,#fef2f2,#fee2e2);}
+  .opt.wrong .letter{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;}
+  .opt:disabled{cursor:default;}
+
+  .feedback{
+    margin-top:15px;padding:14px 16px;border-radius:15px;font-size:14px;font-weight:700;line-height:1.6;
+  }
+  .feedback.ok{background:var(--green-soft);border:2px solid #6ee7b7;color:#065f46;}
+  .feedback.no{background:var(--red-soft);border:2px solid #fca5a5;color:#991b1b;}
+
+  .result-hero{
+    text-align:center;padding:30px 20px;border-radius:22px;
+    background:linear-gradient(135deg,#eef2ff,#e0f2fe,#fef3c7);
+    border:1px solid #dbeafe;margin-bottom:18px;
+  }
+  .result-hero .big{font-size:64px;line-height:1;margin-bottom:8px;animation:float 3s ease-in-out infinite;}
+  .result-hero h2{font-size:25px;font-weight:900;color:var(--primary-dark);margin-bottom:6px;}
+  .result-hero .sc{font-size:44px;font-weight:900;color:#4f46e5;line-height:1.1;}
+  .result-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:11px;margin-top:18px;}
+  .rs{background:#fff;border:2px solid #e0e7ff;border-radius:16px;padding:13px;text-align:center;}
+  .rs .k{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .rs .v{font-size:21px;font-weight:900;color:var(--primary-dark);}
+
+  .review-item{
+    border:2px solid var(--border);border-radius:16px;padding:15px;margin-bottom:12px;background:#fff;
+  }
+  .review-item .rq{font-weight:800;font-size:14.2px;margin-bottom:9px;color:#1e293b;line-height:1.55;}
+  .review-item .ra{font-size:13.4px;margin-bottom:5px;color:#334155;line-height:1.55;}
+  .review-item .ra b.ok{color:#047857;}
+  .review-item .ra b.no{color:#b91c1c;}
+  .review-item .rexp{
+    margin-top:9px;background:linear-gradient(135deg,#eef2ff,#ecfeff);border-left:5px solid var(--primary);
+    border-radius:12px;padding:11px 13px;font-size:13px;color:#3730a3;line-height:1.6;
+  }
+
+  /* ============ MODAL ============ */
+  .modal{
+    position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(5px);
+    display:none;align-items:center;justify-content:center;z-index:200;padding:18px;
+  }
+  .modal.show{display:flex;}
+  .modal-box{
+    background:#fff;border-radius:22px;padding:26px;max-width:430px;width:100%;
+    box-shadow:0 30px 70px rgba(15,23,42,.35);animation:pop .25s ease;
+  }
+  @keyframes pop{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .modal-box h3{font-size:18px;font-weight:900;color:var(--primary-dark);margin-bottom:6px;}
+  .modal-box p{font-size:13px;color:var(--muted);margin-bottom:14px;}
+  .modal-box input{
+    width:100%;padding:13px 15px;border-radius:13px;border:2px solid var(--border);
+    font-size:15px;font-family:inherit;outline:none;margin-bottom:8px;text-align:center;font-weight:800;letter-spacing:2px;
+  }
+  .modal-box input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(79,70,229,.12);}
+  .modal-err{color:var(--red);font-size:12.5px;font-weight:700;min-height:18px;margin-bottom:10px;text-align:center;}
+
+  /* ============ GURU PANEL ============ */
+  .guru-q{border:1.5px solid var(--border);border-radius:14px;padding:13px;margin-bottom:10px;background:#fbfdff;font-size:13.3px;}
+  .guru-q .gq{font-weight:800;color:#1e293b;margin-bottom:6px;line-height:1.5;}
+  .guru-q .ga{color:#047857;font-weight:800;}
+  .guru-q .gx{color:#475569;margin-top:6px;font-size:12.6px;line-height:1.55;}
+
+  /* ============ FOOTER ============ */
+  footer{
+    text-align:center;padding:26px 16px 34px;font-size:12.5px;color:var(--muted);
+    border-top:2px solid #e8edf9;background:rgba(255,255,255,.7);margin-top:20px;
+  }
+  footer b{color:var(--primary-dark);}
+  footer .dev{
+    display:inline-flex;align-items:center;gap:7px;margin-top:7px;
+    background:#fff;border:1.5px solid #c7d2fe;color:#4338ca;
+    padding:6px 15px;border-radius:999px;font-weight:800;
+  }
+
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:#f1f5f9;}
+  ::-webkit-scrollbar-thumb{background:#c7d2fe;border-radius:999px;}
+  ::-webkit-scrollbar-thumb:hover{background:#a5b4fc;}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">🦋</div>
+    <div>
+      <h1>Metamorfosis</h1>
+      <p>MPI IPAS · Fase C · Kelas 5</p>
+    </div>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" data-page="beranda">🏠 Beranda</button>
+    <button class="nav-btn" data-page="tujuan">🎯 Tujuan</button>
+    <button class="nav-btn" data-page="materi">📚 Materi</button>
+    <button class="nav-btn" data-page="lab">🔬 Lab Maya</button>
+    <button class="nav-btn" data-page="puzzle">🧩 Puzzle</button>
+    <button class="nav-btn" data-page="evaluasi">📝 Evaluasi</button>
+    <button class="nav-btn guru" id="btnGuru">👩‍🏫 Mode Guru</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ================= BERANDA ================= -->
+  <section class="page active" id="page-beranda">
+    <div class="hero">
+      <div class="stars">
+        <span style="top:12%;left:7%;">🚀</span>
+        <span style="top:20%;right:9%;animation-delay:.6s;">🪐</span>
+        <span style="bottom:16%;left:12%;animation-delay:1.1s;">💡</span>
+        <span style="bottom:22%;right:14%;animation-delay:.3s;">⭐</span>
+        <span style="top:52%;left:3%;animation-delay:1.5s;">🔭</span>
+        <span style="top:58%;right:4%;animation-delay:.9s;">✨</span>
+      </div>
+      <div class="mascot">🦋</div>
+      <h2>Petualangan Sains: Metamorfosis</h2>
+      <p class="lead">
+        Selamat datang, Peneliti Muda! Siap menjelajahi rahasia perubahan bentuk makhluk hidup?
+        Di sini kamu bisa membaca materi, bereksperimen di laboratorium maya, menyusun puzzle konsep,
+        dan menguji pemahamanmu — semuanya tanpa perlu login. 🚀
+      </p>
+      <div class="badges">
+        <span class="badge">📖 Materi Lengkap</span>
+        <span class="badge cyan">🔬 Lab Maya Interaktif</span>
+        <span class="badge amber">🧩 Puzzle Drag &amp; Drop</span>
+        <span class="badge">📝 10 Soal Evaluasi</span>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card" data-goto="tujuan">
+        <span class="ic">🎯</span>
+        <h3>Tujuan Pembelajaran</h3>
+        <p>Apa saja yang akan kamu kuasai setelah belajar materi ini?</p>
+      </div>
+      <div class="menu-card" data-goto="materi">
+        <span class="ic">📚</span>
+        <h3>Materi Pembelajaran</h3>
+        <p>Modul lengkap: pengertian, jenis, siklus, dan contoh metamorfosis.</p>
+      </div>
+      <div class="menu-card" data-goto="lab">
+        <span class="ic">🔬</span>
+        <h3>Lab Maya</h3>
+        <p>Geser slider dan amati proses metamorfosis secara langsung!</p>
+      </div>
+      <div class="menu-card" data-goto="puzzle">
+        <span class="ic">🧩</span>
+        <h3>Puzzle Konsep</h3>
+        <p>Susun 5 tahap berpikir ilmiah tentang metamorfosis.</p>
+      </div>
+      <div class="menu-card" data-goto="evaluasi">
+        <span class="ic">📝</span>
+        <h3>Soal &amp; Evaluasi</h3>
+        <p>Uji pemahamanmu dengan 10 soal berhadiah bintang! ⭐</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title">🌟 Cara Menggunakan Modul Ini</div>
+      <div class="mini-grid">
+        <div class="mini"><div class="t">1️⃣ Baca Tujuan</div><p>Pahami dulu apa yang akan kamu pelajari agar belajarmu terarah.</p></div>
+        <div class="mini"><div class="t">2️⃣ Pelajari Materi</div><p>Baca modul secara runtut. Catat istilah penting di buku catatanmu.</p></div>
+        <div class="mini"><div class="t">3️⃣ Coba Lab Maya</div><p>Ubah variabel, jalankan simulasi, dan amati hasilnya seperti ilmuwan.</p></div>
+        <div class="mini"><div class="t">4️⃣ Main Puzzle</div><p>Seret potongan konsep ke posisi yang tepat untuk menguji pemahaman.</p></div>
+        <div class="mini"><div class="t">5️⃣ Kerjakan Evaluasi</div><p>Isi nama &amp; kelasmu, lalu jawab 10 soal. Kumpulkan bintang sebanyak mungkin!</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TUJUAN ================= -->
+  <section class="page" id="page-tujuan">
+    <div class="card">
+      <div class="section-title">🎯 Tujuan Pembelajaran</div>
+      <div class="section-sub">Fase C · Kelas 5 · Mata Pelajaran IPAS · Topik: Metamorfosis</div>
+
+      <div class="callout green">
+        <b>Tujuan Utama:</b><br>
+        Peserta didik mampu menguasai konsep esensial pada materi <b>metamorfosis</b>,
+        menganalisis keterkaitan antarunsur secara kritis, serta menerapkannya dalam pemecahan masalah nyata.
+      </div>
+
+      <div class="mini-grid">
+        <div class="mini">
+          <div class="t">🧠 C1 — Mengingat</div>
+          <p>Menyebutkan pengertian metamorfosis dan istilah-istilah kunci (larva, nimfa, pupa, imago).</p>
+        </div>
+        <div class="mini">
+          <div class="t">🔍 C2 — Memahami</div>
+          <p>Menjelaskan perbedaan metamorfosis sempurna dan tidak sempurna beserta contohnya.</p>
+        </div>
+        <div class="mini">
+          <div class="t">⚙️ C3 — Menerapkan</div>
+          <p>Mengurutkan tahapan siklus hidup hewan bermetamorfosis dengan tepat.</p>
+        </div>
+        <div class="mini">
+          <div class="t">🔬 C4 — Menganalisis</div>
+          <p>Menganalisis pengaruh faktor lingkungan terhadap keberhasilan metamorfosis.</p>
+        </div>
+        <div class="mini">
+          <div class="t">💡 C5 — Mengevaluasi</div>
+          <p>Menilai dampak metamorfosis bagi keseimbangan ekosistem dan kehidupan manusia.</p>
+        </div>
+        <div class="mini">
+          <div class="t">🚀 C6 — Mencipta</div>
+          <p>Merancang solusi sederhana untuk menjaga kelestarian hewan bermetamorfosis.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:16px;font-weight:800;color:var(--primary-dark);margin:22px 0 10px;">❓ Pertanyaan Pemantik</h3>
+      <div class="mini-grid">
+        <div class="mini"><div class="t">1</div><p>Mengapa pemahaman mendalam mengenai metamorfosis sangat penting bagi kehidupan kita saat ini dan di masa depan?</p></div>
+        <div class="mini"><div class="t">2</div><p>Bagaimana konsep-konsep dasar dalam metamorfosis saling berinteraksi dan membentuk kesatuan sistem yang utuh?</p></div>
+        <div class="mini"><div class="t">3</div><p>Langkah konkret apa yang dapat kita lakukan untuk menerapkan pengetahuan ini dalam menghadapi tantangan di lingkungan sekitar?</p></div>
+      </div>
+
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-primary" data-goto="materi">📚 Lanjut ke Materi</button>
+        <button class="btn btn-ghost" data-goto="lab">🔬 Coba Lab Maya</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MATERI ================= -->
+  <section class="page" id="page-materi">
+    <div class="card materi">
+      <div class="section-title">📚 Modul Pembelajaran Mandiri: Metamorfosis</div>
+      <div class="section-sub">Mata Pelajaran IPAS · Fase C (Kelas 5) · Kurikulum Merdeka</div>
+      <div>
+        <span class="pill">📖 Literasi Sains</span>
+        <span class="pill green">🔬 Analisis Kausal</span>
+        <span class="pill amber">🌍 Penerapan Nyata</span>
+        <span class="pill cyan">🧩 Berpikir Kritis</span>
+      </div>
+
+      <h3>BAB I — Mengenal Metamorfosis</h3>
+
+      <h4>1.1 Apa Itu Metamorfosis?</h4>
+      <p>
+        Kata <b>metamorfosis</b> berasal dari bahasa Yunani, yaitu <i>meta</i> yang berarti
+        <b>berubah</b> dan <i>morphe</i> yang berarti <b>bentuk</b>. Jadi, metamorfosis adalah
+        proses perubahan bentuk dan struktur tubuh makhluk hidup secara bertahap, mulai dari
+        saat menetas dari telur hingga menjadi hewan dewasa. Perubahan ini bukan sekadar
+        bertambah besar, melainkan perubahan bentuk tubuh yang nyata dan menyeluruh.
+      </p>
+      <p>
+        Tidak semua hewan mengalami metamorfosis. Hewan yang mengalami metamorfosis umumnya
+        berasal dari kelompok <b>serangga (Insecta)</b> dan <b>amfibi</b> seperti katak.
+        Sebaliknya, hewan seperti ayam, kucing, sapi, dan ikan umumnya tidak mengalami
+        metamorfosis — anaknya hanya bertambah besar tanpa perubahan bentuk yang mencolok.
+      </p>
+
+      <h4>1.2 Mengapa Hewan Perlu Bermetamorfosis?</h4>
+      <p>Metamorfosis bukan sekadar proses biologis biasa. Proses ini memiliki banyak manfaat penting bagi kelangsungan hidup hewan:</p>
+      <ul>
+        <li><b>Menghindari persaingan makanan.</b> Larva (ulat) memakan daun, sedangkan kupu-kupu dewasa memakan nektar bunga. Karena makanannya berbeda, induk dan anaknya tidak berebut makanan yang sama.</li>
+        <li><b>Menyesuaikan diri dengan lingkungan berbeda.</b> Kecebong hidup di air dan bernapas dengan insang, sedangkan katak dewasa hidup di darat dan bernapas dengan paru-paru.</li>
+        <li><b>Memperbesar peluang bertahan hidup.</b> Bentuk larva yang kecil dan cepat berkembang memungkinkan spesies tetap lestari meskipun banyak dimakan pemangsa.</li>
+        <li><b>Membantu penyebaran ke wilayah baru.</b> Kupu-kupu dewasa dapat terbang jauh dan meletakkan telur di tempat baru, memperluas wilayah sebaran spesiesnya.</li>
+      </ul>
+
+      <div class="callout">
+        💡 <b>Ingat!</b> Metamorfosis terjadi karena adanya kerja <b>hormon</b> di dalam tubuh hewan.
+        Pada serangga, hormon <i>ekdison</i> memicu proses pergantian kulit (molting), sedangkan
+        hormon <i>juvenil</i> menentukan apakah hewan tetap menjadi larva atau berubah menjadi dewasa.
+      </div>
+
+      <h3>BAB II — Dua Jenis Metamorfosis</h3>
+
+      <h4>2.1 Metamorfosis Sempurna (Holometabola)</h4>
+      <p>
+        Metamorfosis sempurna adalah metamorfosis yang melalui <b>empat tahapan</b>, yaitu
+        <b>telur → larva → pupa (kepompong) → imago (hewan dewasa)</b>. Ciri paling khas dari
+        metamorfosis sempurna adalah adanya tahap <b>pupa</b>, yaitu tahap istirahat di mana
+        tubuh larva dirombak menjadi bentuk dewasa.
+      </p>
+      <p>
+        Pada metamorfosis sempurna, bentuk larva <b>sangat berbeda</b> dari bentuk hewan dewasanya.
+        Contoh hewan yang mengalami metamorfosis sempurna adalah <b>kupu-kupu, ngengat, lalat,
+        nyamuk, kumbang, lebah, dan semut</b>.
+      </p>
+
+      <h4>2.2 Metamorfosis Tidak Sempurna (Hemimetabola)</h4>
+      <p>
+        Metamorfosis tidak sempurna hanya melalui <b>tiga tahapan</b>, yaitu
+        <b>telur → nimfa → imago (hewan dewasa)</b>. Pada metamorfosis tidak sempurna
+        <b>tidak ada tahap pupa</b>. Hewan muda yang menetas dari telur disebut <b>nimfa</b>.
+      </p>
+      <p>
+        Nimfa memiliki bentuk yang <b>mirip dengan hewan dewasanya</b>, tetapi ukurannya lebih kecil
+        dan bagian tubuh tertentu (seperti sayap dan organ reproduksi) belum tumbuh sempurna. Setiap
+        kali nimfa berganti kulit, bentuknya semakin menyerupai hewan dewasa. Contoh hewan yang
+        mengalami metamorfosis tidak sempurna adalah <b>belalang, kecoa, jangkrik, capung,
+        wereng, dan kepik</b>.
+      </p>
+
+      <h4>2.3 Tabel Perbandingan</h4>
+      <table class="tbl">
+        <tr>
+          <th>Aspek</th>
+          <th>Metamorfosis Sempurna</th>
+          <th>Metamorfosis Tidak Sempurna</th>
+        </tr>
+        <tr><td><b>Tahapan</b></td><td>Telur → Larva → Pupa → Imago</td><td>Telur → Nimfa → Imago</td></tr>
+        <tr><td><b>Tahap pupa</b></td><td>Ada</td><td>Tidak ada</td></tr>
+        <tr><td><b>Bentuk hewan muda</b></td><td>Sangat berbeda dari dewasa</td><td>Mirip dengan dewasa</td></tr>
+        <tr><td><b>Nama hewan muda</b></td><td>Larva</td><td>Nimfa</td></tr>
+        <tr><td><b>Contoh</b></td><td>Kupu-kupu, lalat, nyamuk, lebah, kumbang</td><td>Belalang, kecoa, capung, wereng, jangkrik</td></tr>
+      </table>
+
+      <h3>BAB III — Contoh Siklus Hidup Lengkap</h3>
+
+      <h4>3.1 Siklus Hidup Kupu-Kupu (Metamorfosis Sempurna)</h4>
+      <ol>
+        <li><b>Telur 🥚</b> — Kupu-kupu betina meletakkan telur di permukaan daun yang menjadi makanan ulat. Telur menetas setelah 3–5 hari. Telur yang gagal menetas biasanya dimakan semut atau parasit.</li>
+        <li><b>Larva / Ulat 🐛</b> — Tahap ini disebut tahap "makan besar". Ulat sangat rakus memakan daun untuk mengumpulkan energi dan nutrisi. Selama fase ini ulat beberapa kali berganti kulit (molting).</li>
+        <li><b>Pupa / Kepompong 🟤</b> — Setelah cukup makan, ulat mencari tempat aman, menggantung, lalu berubah menjadi kepompong. Dari luar tampak diam, tetapi di dalamnya terjadi <b>perombakan organ tubuh secara besar-besaran</b> menjadi bentuk kupu-kupu.</li>
+        <li><b>Imago (Kupu-Kupu Dewasa) 🦋</b> — Kepompong pecah dan keluarlah kupu-kupu dewasa. Kupu-kupu dewasa memakan nektar bunga dan bertugas berkembang biak, lalu siklus berulang kembali.</li>
+      </ol>
+
+      <h4>3.2 Siklus Hidup Katak (Amfibi)</h4>
+      <p>
+        Katak juga mengalami perubahan bentuk yang sangat mencolok dan sering dikelompokkan
+        sebagai metamorfosis sempurna. Tahapannya: <b>telur → kecebong (berudu) → katak muda →
+        katak dewasa</b>.
+      </p>
+      <ul>
+        <li><b>Telur</b> diletakkan di air dan dilindungi lendir.</li>
+        <li><b>Kecebong</b> hidup di air, bernapas dengan <b>insang</b>, dan memiliki ekor untuk berenang.</li>
+        <li><b>Katak muda</b> mulai tumbuh kaki, insang digantikan <b>paru-paru</b>, dan ekornya perlahan memendek.</li>
+        <li><b>Katak dewasa</b> hidup di darat maupun air, bernapas dengan paru-paru dan kulit, serta tidak memiliki ekor.</li>
+      </ul>
+
+      <h4>3.3 Siklus Hidup Belalang (Metamorfosis Tidak Sempurna)</h4>
+      <p>
+        Belalang meletakkan telurnya di dalam tanah. Setelah menetas, keluarlah <b>nimfa</b>
+        yang bentuknya sudah mirip belalang dewasa, tetapi belum memiliki sayap yang lengkap
+        dan ukuran tubuhnya kecil. Nimfa tumbuh dengan cara berganti kulit beberapa kali.
+        Setelah pergantian kulit terakhir, terbentuklah <b>belalang dewasa</b> yang bersayap
+        lengkap dan siap berkembang biak.
+      </p>
+
+      <h3>BAB IV — Peran Metamorfosis dalam Kehidupan</h3>
+      <p>
+        Metamorfosis memiliki peran besar dalam menjaga keseimbangan ekosistem. Kupu-kupu dan
+        lebah dewasa berperan sebagai <b>penyerbuk bunga</b>, sehingga membantu tanaman
+        menghasilkan buah dan biji. Ulat dan nimfa menjadi <b>sumber makanan</b> bagi burung
+        dan hewan lain. Bahkan, ulat sutra (larva dari ngengat <i>Bombyx mori</i>) menghasilkan
+        serat sutra yang bernilai ekonomi tinggi bagi manusia.
+      </p>
+      <p>
+        Namun, tidak semua hewan bermetamorfosis bersifat menguntungkan. Nyamuk mengalami
+        metamorfosis sempurna dan larvanya hidup di air. Nyamuk dewasa dapat menularkan
+        penyakit seperti demam berdarah dan malaria. Oleh karena itu, memahami siklus hidup
+        nyamuk sangat penting untuk merancang strategi pemberantasan penyakit, misalnya dengan
+        menguras tempat penampungan air agar larva nyamuk tidak berkembang.
+      </p>
+
+      <div class="callout warn">
+        ⚠️ <b>Studi Kasus:</b> Jika salah satu tahap metamorfosis terganggu — misalnya kepompong
+        kupu-kupu terkena jamur karena lingkungan terlalu lembap — maka kupu-kupu dewasa tidak akan
+        terbentuk. Akibatnya, jumlah penyerbuk berkurang dan hasil panen buah di sekitar area itu
+        bisa menurun. Inilah contoh <b>hubungan sebab-akibat</b> dalam ekosistem.
+      </div>
+
+      <h3>BAB V — Rangkuman &amp; Refleksi</h3>
+      <div class="mini-grid">
+        <div class="mini"><div class="t">🧠 Inti 1</div><p>Metamorfosis adalah perubahan bentuk hewan dari larva/nimfa hingga dewasa, dipengaruhi hormon dan faktor lingkungan.</p></div>
+        <div class="mini"><div class="t">🔍 Inti 2</div><p>Metamorfosis sempurna (telur–larva–pupa–imago) memiliki tahap pupa; metamorfosis tidak sempurna (telur–nimfa–imago) tidak memilikinya.</p></div>
+        <div class="mini"><div class="t">🌍 Inti 3</div><p>Metamorfosis membantu hewan menghindari persaingan makanan dan menyesuaikan diri dengan lingkungan berbeda.</p></div>
+        <div class="mini"><div class="t">🔬 Inti 4</div><p>Keberhasilan metamorfosis dipengaruhi oleh ketersediaan nutrisi, suhu, kelembapan, dan kestabilan lingkungan.</p></div>
+      </div>
+
+      <h4>📔 Glosarium</h4>
+      <ul>
+        <li><b>Larva</b> — Bentuk muda hewan pada metamorfosis sempurna, sangat berbeda dari bentuk dewasanya (contoh: ulat).</li>
+        <li><b>Nimfa</b> — Bentuk muda hewan pada metamorfosis tidak sempurna, mirip hewan dewasa tetapi belum bersayap lengkap.</li>
+        <li><b>Pupa</b> — Tahap kepompong, tempat terjadinya perombakan tubuh larva menjadi bentuk dewasa.</li>
+        <li><b>Imago</b> — Tahap hewan dewasa yang sudah mampu berkembang biak.</li>
+        <li><b>Molting</b> — Proses pergantian kulit (eksoskeleton) pada serangga agar tubuhnya dapat tumbuh.</li>
+        <li><b>Holometabola</b> — Kelompok serangga yang mengalami metamorfosis sempurna.</li>
+        <li><b>Hemimetabola</b> — Kelompok serangga yang mengalami metamorfosis tidak sempurna.</li>
+        <li><b>Kausalitas</b> — Hubungan sebab dan akibat antara dua peristiwa atau lebih.</li>
+      </ul>
+
+      <div class="callout green">
+        ✅ <b>Refleksi Belajar:</b> Setelah membaca modul ini, coba tuliskan di buku catatanmu:
+        (1) Apa hal baru yang kamu pelajari? (2) Bagian mana yang masih sulit dipahami?
+        (3) Contoh metamorfosis apa yang pernah kamu lihat di lingkungan rumahmu?
+      </div>
+
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="btn btn-primary" data-goto="lab">🔬 Lanjut ke Lab Maya</button>
+        <button class="btn btn-ghost" data-goto="puzzle">🧩 Main Puzzle</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LAB MAYA ================= -->
+  <section class="page" id="page-lab">
+    <div class="card">
+      <div class="section-title">🔬 Laboratorium Maya &amp; Simulasi Digital: Metamorfosis</div>
+      <div class="section-sub">
+        Simulasi interaktif untuk mengeksplorasi hubungan antarparameter, menguji hipotesis,
+        dan mengamati respon sistem secara visual pada topik metamorfosis.
+      </div>
+
+      <div class="callout">
+        <b>📋 Petunjuk Percobaan:</b><br>
+        1. Atur nilai <b>Intensitas Stimulus</b> untuk memberikan rangsangan pada sistem metamorfosis.<br>
+        2. Ubah <b>Faktor Regulasi / Stabilitas</b> dan cermati bagaimana kondisi lingkungan memengaruhi hasil.<br>
+        3. Tentukan <b>Durasi Respon / Periode Pengamatan</b>, lalu tekan <b>▶ Jalankan Simulasi</b>.<br>
+        4. Amati perubahan pada kanvas dan grafik, lalu catat temuanmu!
+      </div>
+
+      <div class="lab-split">
+        <!-- KOLOM KIRI: KONTROL -->
+        <div class="card" style="margin:0;box-shadow:none;border:2px solid #e0e7ff;background:linear-gradient(135deg,#fbfdff,#f5f8ff);">
+          <div class="panel-head">🎛️ Panel Kontrol Variabel</div>
+
+          <div class="ctrl-group">
+            <label>💥 Intensitas Stimulus <span class="val" id="valStim">60 Poin</span></label>
+            <input type="range" id="sliderStim" min="10" max="100" step="5" value="60">
+            <div class="hintline">Besar stimulus utama (ketersediaan nutrisi &amp; hormon) yang diaplikasikan pada model sistem metamorfosis.</div>
+          </div>
+
+          <div class="ctrl-group">
+            <label>⚖️ Faktor Regulasi / Stabilitas <span class="val" id="valReg">50 %</span></label>
+            <input type="range" id="sliderReg" min="0" max="100" step="5" value="50">
+            <div class="hintline">Kemampuan sistem mempertahankan keseimbangan dinamis saat menerima stimulus.</div>
+          </div>
+
+          <div class="ctrl-group">
+            <label>⏱️ Durasi Respon / Pengamatan <span class="val" id="valDur">20 Detik</span></label>
+            <input type="range" id="sliderDur" min="5" max="60" step="5" value="20">
+            <div class="hintline">Rentang waktu pemantauan respon keluaran sistem.</div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="btnRunSim" style="flex:1;">▶ Jalankan Simulasi</button>
+            <button class="btn btn-ghost" id="btnResetSim">↺ Reset</button>
+          </div>
+
+          <div class="readouts">
+            <div class="ro"><div class="k">Progres</div><div class="v" id="roProg">0%</div></div>
+            <div class="ro"><div class="k">Waktu</div><div class="v" id="roTime">0s</div></div>
+            <div class="ro"><div class="k">Laju</div><div class="v" id="roRate">-</div></div>
+            <div class="ro"><div class="k">Stabilitas</div><div class="v" id="roStab">-</div></div>
+          </div>
+
+          <div class="status-box" id="simStatus">Tekan <b>▶ Jalankan Simulasi</b> untuk memulai percobaan.</div>
+        </div>
+
+        <!-- KOLOM KANAN: VISUAL -->
+        <div>
+          <div class="canvas-wrap">
+            <canvas id="stageCanvas" width="900" height="430"></canvas>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="chartCanvas" width="900" height="190"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini-grid" style="margin-top:18px;">
+        <div class="mini">
+          <div class="t">🔗 Prinsip Kausalitas Ilmiah</div>
+          <p>Perubahan nilai stimulus akan menghasilkan perubahan keluaran sistem secara langsung dan terukur.</p>
+        </div>
+        <div class="mini">
+          <div class="t">⚖️ Kesetimbangan Sistem Dinamis</div>
+          <p>Faktor regulasi yang optimal menjaga sistem tetap stabil meskipun menerima stimulus besar.</p>
+        </div>
+        <div class="mini">
+          <div class="t">🔬 Verifikasi Empiris</div>
+          <p>Data hasil pengamatan pada grafik digunakan untuk membuktikan kebenaran teori pada modul materi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PUZZLE ================= -->
+  <section class="page" id="page-puzzle">
+    <div class="card">
+      <div class="section-title">🧩 Tantangan Puzzle Drag &amp; Drop: Rangkai Konsep Metamorfosis</div>
+      <div class="section-sub">
+        Seret (drag) setiap kotak istilah konsep ke posisi slot target yang benar untuk menyusun
+        struktur alur logis secara runtut. Di perangkat sentuh, cukup <b>ketuk potongan</b> lalu
+        <b>ketuk slot</b> tujuan.
+      </div>
+
+      <div class="quiz-top" style="margin-bottom:14px;">
+        <div class="stat">✅ Tersusun: <span id="pzDone">0</span> / 5</div>
+        <div class="stat timer">🎯 Percobaan: <span id="pzTry">0</span></div>
+        <div class="stat">⭐ Skor Puzzle: <span id="pzScore">0</span></div>
+      </div>
+
+      <div class="puzzle-split">
+        <div>
+          <div class="panel-head">📦 Bank Potongan Konsep</div>
+          <div class="bank" id="puzzleBank"></div>
+        </div>
+        <div>
+          <div class="panel-head">🎯 Papan Susunan (Slot Target)</div>
+          <div class="slots" id="puzzleSlots"></div>
+        </div>
+      </div>
+
+      <div class="status-box" id="puzzleStatus" style="margin-top:16px;">
+        Susun kelima potongan konsep sesuai urutan berpikir ilmiah yang benar.
+      </div>
+
+      <div class="btn-row" style="margin-top:14px;">
+        <button class="btn btn-amber" id="btnShufflePuzzle">🔀 Acak Ulang</button>
+        <button class="btn btn-ghost" id="btnResetPuzzle">↺ Reset Puzzle</button>
+        <button class="btn btn-ghost" id="btnHintPuzzle">💡 Petunjuk</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EVALUASI ================= -->
+  <section class="page" id="page-evaluasi">
+    <div class="card">
+      <div class="section-title">📝 Soal Latihan &amp; Evaluasi</div>
+      <div class="section-sub">10 soal pilihan ganda · Topik: Metamorfosis · Fase C Kelas 5</div>
+
+      <!-- FORM IDENTITAS -->
+      <div id="evalForm">
+        <div class="callout">
+          ✍️ <b>Isi identitasmu terlebih dahulu.</b> Nama, kelas, dan kunci evaluasi hanya diminta
+          saat kamu akan mengerjakan soal. Kamu tetap bebas menjelajahi materi, lab, dan puzzle
+          tanpa mengisi formulir ini.
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>👤 Nama Siswa</label>
+            <input type="text" id="inNama" placeholder="Tulis nama lengkapmu..." maxlength="40">
+          </div>
+          <div class="field">
+            <label>🏫 Kelas</label>
+            <input type="text" id="inKelas" placeholder="Contoh: 5A" maxlength="12">
+          </div>
+          <div class="field full">
+            <label>🔑 Kunci Evaluasi</label>
+            <input type="text" id="inKunci" placeholder="Masukkan kunci evaluasi dari gurumu..." maxlength="20">
+            <div class="hintline">Petunjuk untuk kelas ini: kunci evaluasi adalah <b>IPAS5</b> (atau <b>12345</b>).</div>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top:18px;">
+          <button class="btn btn-primary" id="btnStartQuiz">🚀 Mulai Kerjakan Soal</button>
+          <button class="btn btn-ghost" id="btnResetQuizData">🗑️ Hapus Progres Tersimpan</button>
+        </div>
+        <div class="status-box" id="evalMsg" style="margin-top:14px;">
+          Aturan: 10 soal · 3 nyawa ❤️❤️❤️ · waktu 45 detik per soal · nilai minimal kelulusan 75.
+        </div>
+      </div>
+
+      <!-- QUIZ AREA -->
+      <div id="quizArea" style="display:none;">
+        <div class="quiz-top">
+          <div class="stat">👤 <span id="qNama">-</span> · <span id="qKelas">-</span></div>
+          <div class="stat">📊 Soal <span id="qNum">1</span>/10</div>
+          <div class="stat">❤️ <span id="qLives">❤️❤️❤️</span></div>
+          <div class="stat">⭐ Skor: <span id="qScore">0</span></div>
+          <div class="stat timer" id="qTimerBox">⏱️ <span id="qTimer">45</span>s</div>
+        </div>
+        <div class="progressbar"><div id="qProgress" style="width:0%"></div></div>
+
+        <div class="q-box">
+          <div class="q-meta" id="qMeta"></div>
+          <div class="q-text" id="qText">-</div>
+          <img class="q-img" id="qImage" style="display:none;" alt="Stimulus soal">
+        </div>
+
+        <div class="options" id="qOptions"></div>
+        <div class="feedback" id="qFeedback" style="display:none;"></div>
+
+        <div class="btn-row" style="margin-top:18px;">
+          <button class="btn btn-primary" id="btnNextQ" style="display:none;">➡️ Soal Berikutnya</button>
+          <button class="btn btn-ghost" id="btnQuitQuiz">🚪 Keluar</button>
+        </div>
+      </div>
+
+      <!-- RESULT AREA -->
+      <div id="resultArea" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- ================= MODE GURU ================= -->
+  <section class="page" id="page-guru">
+    <div class="card">
+      <div class="section-title">👩‍🏫 Mode Guru — Panel Pemantauan</div>
+      <div class="section-sub">Menampilkan daftar soal, kunci jawaban, pembahasan, dan progres siswa tersimpan.</div>
+      <div id="guruContent"></div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button class="btn btn-ghost" data-goto="beranda">🏠 Kembali ke Beranda</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ MODAL KUNCI ============ -->
+<div class="modal" id="keyModal">
+  <div class="modal-box">
+    <h3>🔐 Akses Terkunci</h3>
+    <p id="keyModalDesc">Masukkan kunci untuk membuka bagian ini.</p>
+    <input type="text" id="keyModalInput" placeholder="@1" autocomplete="off">
+    <div class="modal-err" id="keyModalErr"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="keyModalOk" style="flex:1;">🔓 Buka</button>
+      <button class="btn btn-ghost" id="keyModalCancel">Batal</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>MPI Interaktif · <b>Metamorfosis</b> · IPAS Fase C Kelas 5 · Kurikulum Merdeka</div>
+  <div class="dev">👨‍💻 Dikembangkan oleh: <b>Administrator</b></div>
+  <div style="margin-top:8px;font-size:11.5px;color:#94a3b8;">© 2026 · Media Pembelajaran Interaktif — Selamat Belajar! 🦋</div>
+</footer>
+
+<script>
+/* ==========================================================================
+   1. NAVIGASI HALAMAN
+   ========================================================================== */
+const navButtons = document.querySelectorAll('.nav-btn[data-page]');
+const pages = document.querySelectorAll('.page');
+
+function goToPage(name){
+  pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+  navButtons.forEach(b => b.classList.toggle('active', b.dataset.page === name));
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(name === 'lab'){ drawStage(); drawChart(); }
+}
+navButtons.forEach(b => b.addEventListener('click', () => goToPage(b.dataset.page)));
+document.querySelectorAll('[data-goto]').forEach(el => {
+  el.addEventListener('click', () => goToPage(el.dataset.goto));
+});
+
+/* ==========================================================================
+   2. MODAL KUNCI (@1)
+   ========================================================================== */
+const keyModal = document.getElementById('keyModal');
+const keyModalInput = document.getElementById('keyModalInput');
+const keyModalErr = document.getElementById('keyModalErr');
+const keyModalDesc = document.getElementById('keyModalDesc');
+let keyCallback = null;
+
+function askKey(desc, cb){
+  keyModalDesc.innerHTML = desc;
+  keyModalInput.value = '';
+  keyModalErr.textContent = '';
+  keyModal.classList.add('show');
+  keyCallback = cb;
+  setTimeout(()=>keyModalInput.focus(), 120);
+}
+function closeKeyModal(){ keyModal.classList.remove('show'); keyCallback = null; }
+
+document.getElementById('keyModalOk').addEventListener('click', () => {
+  if(keyModalInput.value.trim() === '@1'){
+    const cb = keyCallback;
+    closeKeyModal();
+    if(cb) cb();
+  } else {
+    keyModalErr.textContent = '❌ Kunci salah! Coba lagi.';
+    keyModalInput.value = '';
+    keyModalInput.focus();
+  }
+});
+document.getElementById('keyModalCancel').addEventListener('click', closeKeyModal);
+keyModalInput.addEventListener('keydown', e => { if(e.key === 'Enter') document.getElementById('keyModalOk').click(); });
+keyModal.addEventListener('click', e => { if(e.target === keyModal) closeKeyModal(); });
+
+/* ==========================================================================
+   3. LAB MAYA — SIMULASI METAMORFOSIS
+   ========================================================================== */
+const stageCanvas = document.getElementById('stageCanvas');
+const stageCtx = stageCanvas.getContext('2d');
+const chartCanvas = document.getElementById('chartCanvas');
+const chartCtx = chartCanvas.getContext('2d');
+
+const sim = {
+  stimulus: 60,
+  regulasi: 50,
+  durasi: 20,
+  running: false,
+  progress: 0,
+  target: 0,
+  elapsed: 0,
+  history: [],
+  finished: false
+};
+
+const sliderStim = document.getElementById('sliderStim');
+const sliderReg  = document.getElementById('sliderReg');
+const sliderDur  = document.getElementById('sliderDur');
+const valStim = document.getElementById('valStim');
+const valReg  = document.getElementById('valReg');
+const valDur  = document.getElementById('valDur');
+const simStatus = document.getElementById('simStatus');
+const btnRunSim = document.getElementById('btnRunSim');
+
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function updateSliderLabels(){
+  valStim.textContent = sliderStim.value + ' Poin';
+  valReg.textContent  = sliderReg.value + ' %';
+  valDur.textContent  = sliderDur.value + ' Detik';
+}
+
+sliderStim.addEventListener('input', () => { sim.stimulus = +sliderStim.value; updateSliderLabels(); if(!sim.running) resetSim(false); });
+sliderReg.addEventListener('input',  () => { sim.regulasi  = +sliderReg.value;  updateSliderLabels(); if(!sim.running) resetSim(false); });
+sliderDur.addEventListener('input',  () => { sim.durasi    = +sliderDur.value;  updateSliderLabels(); if(!sim.running) resetSim(false); });
+
+function computeRate(){
+  return 0.25 + 0.75 * (sim.stimulus / 100);   // 0.25 – 1.00
+}
+function computeTarget(){
+  const rate = computeRate();
+  const durFactor = sim.durasi / 20;           // 0.25 – 3.00
+  return Math.min(1.15, rate * durFactor * 1.10);
+}
+function computeStabilityLabel(){
+  const r = sim.regulasi;
+  if(r >= 75) return {txt:'Sangat Stabil', color:'#059669'};
+  if(r >= 50) return {txt:'Stabil', color:'#0891b2'};
+  if(r >= 25) return {txt:'Kurang Stabil', color:'#d97706'};
+  return {txt:'Tidak Stabil', color:'#dc2626'};
+}
+
+function drawStage(){
+  const ctx = stageCtx, W = stageCanvas.width, H = stageCanvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  // Langit
+  const sky = ctx.createLinearGradient(0,0,0,H*0.75);
+  sky.addColorStop(0,'#eef2ff');
+  sky.addColorStop(0.55,'#e0f2fe');
+  sky.addColorStop(1,'#f0fdfa');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0,0,W,H);
+
+  // Awan dekoratif
+  ctx.fillStyle = 'rgba(255,255,255,.75)';
+  ctx.beginPath(); ctx.arc(120,72,26,0,Math.PI*2); ctx.arc(152,66,32,0,Math.PI*2); ctx.arc(188,76,24,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(720,58,22,0,Math.PI*2); ctx.arc(750,52,28,0,Math.PI*2); ctx.arc(782,62,20,0,Math.PI*2); ctx.fill();
+
+  // Matahari
+  ctx.fillStyle = 'rgba(253,224,71,.55)';
+  ctx.beginPath(); ctx.arc(830,58,34,0,Math.PI*2); ctx.fill();
+
+  // Tanah
+  const ground = ctx.createLinearGradient(0,H*0.62,0,H);
+  ground.addColorStop(0,'#bbf7d0');
+  ground.addColorStop(1,'#86efac');
+  ctx.fillStyle = ground;
+  ctx.fillRect(0, H*0.62, W, H*0.38);
+
+  // Panel panggung
+  ctx.save();
+  roundRect(ctx, 40, 30, W-80, H*0.60, 22);
+  ctx.fillStyle = 'rgba(255,255,255,.62)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(165,180,252,.7)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.restore();
+
+  const p = sim.progress;
+  const cx = W/2, cy = H*0.42;
+
+  // Lingkaran cahaya
+  const glow = ctx.createRadialGradient(cx, cy, 10, cx, cy, 135);
+  glow.addColorStop(0,'rgba(199,210,254,.85)');
+  glow.addColorStop(1,'rgba(199,210,254,0)');
+  ctx.fillStyle = glow;
+  ctx.beginPath(); ctx.arc(cx, cy, 135, 0, Math.PI*2); ctx.fill();
+
+  const bob = Math.sin(Date.now()/520) * 6;
+
+  // Gagal total
+  const failed = sim.finished && sim.regulasi < 20 && p > 0.25;
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if(failed){
+    ctx.font = '110px serif';
+    ctx.fillText('🥀', cx, cy + bob);
+    ctx.font = 'bold 22px Segoe UI, sans-serif';
+    ctx.fillStyle = '#dc2626';
+    ctx.fillText('SISTEM TIDAK STABIL — METAMORFOSIS GAGAL', cx, cy + 120);
+  } else if(p < 0.30){
+    ctx.font = '105px serif';
+    ctx.fillText('🥚', cx, cy + bob);
+    ctx.font = 'bold 20px Segoe UI, sans-serif';
+    ctx.fillStyle = '#4338ca';
+    ctx.fillText('Tahap 1 · TELUR', cx, cy + 118);
+  } else if(p < 0.62){
+    ctx.font = '105px serif';
+    ctx.fillText('🐛', cx, cy + bob);
+    ctx.font = 'bold 20px Segoe UI, sans-serif';
+    ctx.fillStyle = '#4338ca';
+    ctx.fillText('Tahap 2 · LARVA (ULAT)', cx, cy + 118);
+  } else if(p < 0.88){
+    ctx.font = '105px serif';
+    ctx.fillText('🟤', cx, cy + bob);
+    ctx.font = 'bold 20px Segoe UI, sans-serif';
+    ctx.fillStyle = '#4338ca';
+    ctx.fillText('Tahap 3 · PUPA (KEPOMPONG)', cx, cy + 118);
+  } else {
+    ctx.font = '105px serif';
+    ctx.fillText('🦋', cx, cy + bob);
+    ctx.font = 'bold 20px Segoe UI, sans-serif';
+    ctx.fillStyle = '#4338ca';
+    ctx.fillText('Tahap 4 · IMAGO (DEWASA)', cx, cy + 118);
+  }
+
+  // ---- NODE TAHAPAN DI BAWAH ----
+  const panelY = H*0.64, panelH = H*0.31;
+  ctx.save();
+  roundRect(ctx, 40, panelY, W-80, panelH, 20);
+  ctx.fillStyle = 'rgba(255,255,255,.88)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(165,180,252,.6)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.restore();
+
+  const nodes = [
+    {e:'🥚', l:'Telur',  p:0.00},
+    {e:'🐛', l:'Larva',  p:0.30},
+    {e:'🟤', l:'Pupa',   p:0.62},
+    {e:'🦋', l:'Imago',  p:0.88}
+  ];
+  const nx = [150, 350, 550, 750];
+  const ny = panelY + panelH*0.42;
+
+  // garis penghubung
+  ctx.strokeStyle = '#c7d2fe';
+  ctx.lineWidth = 6;
+  ctx.beginPath(); ctx.moveTo(nx[0], ny); ctx.lineTo(nx[3], ny); ctx.stroke();
+
+  ctx.strokeStyle = '#4f46e5';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  const lastIdx = nodes.reduce((acc,n,i)=> p >= n.p ? i : acc, 0);
+  ctx.moveTo(nx[0], ny);
+  ctx.lineTo(nx[Math.max(0,lastIdx)] === nx[0] ? nx[0] : nx[lastIdx], ny);
+  ctx.stroke();
+
+  nodes.forEach((n,i)=>{
+    const active = p >= n.p;
+    ctx.beginPath();
+    ctx.arc(nx[i], ny, 27, 0, Math.PI*2);
+    ctx.fillStyle = active ? '#4f46e5' : '#e2e8f0';
+    ctx.fill();
+    ctx.strokeStyle = active ? '#312e81' : '#cbd5e1';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.font = '25px serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(n.e, nx[i], ny + 1);
+
+    ctx.font = 'bold 14px Segoe UI, sans-serif';
+    ctx.fillStyle = active ? '#312e81' : '#94a3b8';
+    ctx.fillText(n.l, nx[i], ny + 50);
+  });
+
+  // indikator progres
+  ctx.textAlign = 'left';
+  ctx.font = 'bold 15px Segoe UI, sans-serif';
+  ctx.fillStyle = '#4338ca';
+  ctx.fillText('Progres Metamorfosis: ' + Math.round(Math.min(1, p)*100) + '%', 62, panelY - 14);
+}
+
+function drawChart(){
+  const ctx = chartCtx, W = chartCanvas.width, H = chartCanvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle = '#ffffff';
+  roundRect(ctx, 0,0,W,H,16);
+  ctx.fill();
+  ctx.strokeStyle = '#e0e7ff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  const padL = 78, padR = 32, padT = 40, padB = 42;
+  const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
+  const plotW = x1 - x0, plotH = y1 - y0;
+
+  ctx.fillStyle = '#4338ca';
+  ctx.font = 'bold 15px Segoe UI, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('📈 Grafik Progres Metamorfosis terhadap Waktu', 20, 26);
+
+  // grid horizontal
+  ctx.strokeStyle = '#eef2ff';
+  ctx.lineWidth = 1.5;
+  for(let i=0;i<=4;i++){
+    const yy = y0 + (plotH/4)*i;
+    ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x1, yy); ctx.stroke();
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 11px Segoe UI, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText((100 - i*25) + '%', x0 - 10, yy + 4);
+  }
+
+  // sumbu
+  ctx.strokeStyle = '#c7d2fe';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1);
+  ctx.stroke();
+
+  // label sumbu X
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 11px Segoe UI, sans-serif';
+  ctx.textAlign = 'center';
+  const maxT = Math.max(sim.durasi, 1);
+  for(let i=0;i<=4;i++){
+    const t = (maxT/4)*i;
+    const xx = x0 + (plotW/4)*i;
+    ctx.fillText(Math.round(t) + 's', xx, y1 + 20);
+  }
+  ctx.fillStyle = '#64748b';
+  ctx.font = 'bold 12px Segoe UI, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('Waktu →', x1, y1 + 36);
+
+  // garis target
+  if(sim.target > 0){
+    const yTarget = y1 - Math.min(1, sim.target) * plotH;
+    ctx.strokeStyle = '#fbbf24';
+    ctx.setLineDash([7,6]);
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(x0, yTarget); ctx.lineTo(x1, yTarget); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 11px Segoe UI, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Target akhir: ' + Math.round(Math.min(1,sim.target)*100) + '%', x0 + 8, yTarget - 7);
+  }
+
+  // kurva progres
+  if(sim.history.length > 1){
+    const grad = ctx.createLinearGradient(0, y0, 0, y1);
+    grad.addColorStop(0,'rgba(79,70,229,.30)');
+    grad.addColorStop(1,'rgba(79,70,229,0)');
+
+    ctx.beginPath();
+    ctx.moveTo(x0, y1);
+    sim.history.forEach(pt => {
+      const xx = x0 + (Math.min(pt.x, maxT) / maxT) * plotW;
+      const yy = y1 - Math.min(pt.y, 1) * plotH;
+      ctx.lineTo(xx, yy);
+    });
+    const lastX = x0 + (Math.min(sim.history[sim.history.length-1].x, maxT) / maxT) * plotW;
+    ctx.lineTo(lastX, y1);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    ctx.beginPath();
+    sim.history.forEach((pt, i) => {
+      const xx = x0 + (Math.min(pt.x, maxT) / maxT) * plotW;
+      const yy = y1 - Math.min(pt.y, 1) * plotH;
+      i === 0 ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy);
+    });
+    ctx.strokeStyle = '#4f46e5';
+    ctx.lineWidth = 3.5;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+
+    // titik akhir
+    const lx = x0 + (Math.min(sim.history[sim.history.length-1].x, maxT) / maxT) * plotW;
+    const ly = y1 - Math.min(sim.history[sim.history.length-1].y, 1) * plotH;
+    ctx.beginPath(); ctx.arc(lx, ly, 7, 0, Math.PI*2);
+    ctx.fillStyle = '#06b6d4'; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke();
+  } else {
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = 'italic 13px Segoe UI, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Jalankan simulasi untuk menampilkan data pengamatan...', (x0+x1)/2, (y0+y1)/2);
+  }
+}
+
+function updateReadouts(){
+  document.getElementById('roProg').textContent = Math.round(Math.min(1, sim.progress)*100) + '%';
+  document.getElementById('roTime').textContent = sim.elapsed.toFixed(1) + 's';
+  document.getElementById('roRate').textContent = computeRate().toFixed(2);
+  const st = computeStabilityLabel();
+  const roStab = document.getElementById('roStab');
+  roStab.textContent = sim.regulasi + '%';
+  roStab.style.color = st.color;
+}
+
+function resetSim(clearStatus = true){
+  sim.running = false;
+  sim.progress = 0;
+  sim.target = 0;
+  sim.elapsed = 0;
+  sim.history = [];
+  sim.finished = false;
+  btnRunSim.disabled = false;
+  btnRunSim.textContent = '▶ Jalankan Simulasi';
+  sliderStim.disabled = sliderReg.disabled = sliderDur.disabled = false;
+  updateReadouts();
+  drawStage();
+  drawChart();
+  if(clearStatus){
+    simStatus.className = 'status-box';
+    simStatus.innerHTML = 'Tekan <b>▶ Jalankan Simulasi</b> untuk memulai percobaan.';
+  }
+}
+
+btnRunSim.addEventListener('click', () => {
+  if(sim.running) return;
+  sim.running = true;
+  sim.finished = false;
+  sim.progress = 0;
+  sim.elapsed = 0;
+  sim.history = [];
+  sim.target = computeTarget();
+  btnRunSim.disabled = true;
+  btnRunSim.textContent = '⏳ Berjalan...';
+  sliderStim.disabled = sliderReg.disabled = sliderDur.disabled = true;
+  simStatus.className = 'status-box';
+  simStatus.innerHTML = '🔬 Simulasi sedang berjalan... amati perubahan bentuk pada kanvas dan perhatikan grafiknya!';
+
+  const startTime = performance.now();
+  const totalMs = sim.durasi * 1000;
+  let sampleAcc = 0;
+
+  function step(now){
+    if(!sim.running) return;
+    const elapsedMs = now - startTime;
+    const frac = Math.min(1, elapsedMs / totalMs);
+    sim.elapsed = elapsedMs / 1000;
+    sim.progress = sim.target * frac;
+
+    sampleAcc += 1;
+    if(sampleAcc % 3 === 0 || frac === 1){
+      sim.history.push({x: sim.elapsed, y: sim.progress});
+    }
+
+    updateReadouts();
+    drawStage();
+    drawChart();
+
+    if(frac < 1){
+      requestAnimationFrame(step);
+    } else {
+      sim.running = false;
+      sim.finished = true;
+      btnRunSim.disabled = false;
+      btnRunSim.textContent = '▶ Jalankan Lagi';
+      sliderStim.disabled = sliderReg.disabled = sliderDur.disabled = false;
+      finishSim();
+    }
+  }
+  requestAnimationFrame(step);
+});
+
+function finishSim(){
+  const p = Math.min(1, sim.progress);
+  const reg = sim.regulasi;
+  let cls = 'status-box', msg = '';
+
+  if(reg < 20){
+    cls += ' bad';
+    msg = '❌ <b>METAMORFOSIS GAGAL.</b> Faktor regulasi hanya ' + reg + '%. Sistem tidak mampu menjaga keseimbangan, sehingga proses perubahan bentuk terhenti dan hewan tidak berkembang dengan normal. ' +
+          '<br><b>Kesimpulan ilmiah:</b> kestabilan lingkungan adalah syarat mutlak keberhasilan metamorfosis.';
+  } else if(p >= 1 && reg >= 50){
+    cls += ' ok';
+    msg = '✅ <b>METAMORFOSIS BERHASIL SEMPURNA!</b> Dengan stimulus ' + sim.stimulus + ' poin dan regulasi ' + reg + '%, sistem mencapai tahap <b>Imago (dewasa)</b> dalam ' + sim.durasi + ' detik. ' +
+          '<br><b>Kesimpulan ilmiah:</b> stimulus tinggi yang didukung regulasi stabil menghasilkan metamorfosis yang cepat dan sehat.';
+  } else if(p >= 1 && reg < 50){
+    cls += ' warn';
+    msg = '⚠️ <b>METAMORFOSIS SELESAI, NAMUN KURANG OPTIMAL.</b> Proses mencapai tahap imago, tetapi regulasi hanya ' + reg + '% sehingga imago yang terbentuk berpotensi abnormal (sayap tidak sempurna / ukuran tubuh kecil). ' +
+          '<br><b>Kesimpulan ilmiah:</b> laju cepat tanpa kestabilan lingkungan menurunkan kualitas hasil metamorfosis.';
+  } else {
+    cls += ' warn';
+    msg = '⏳ <b>METAMORFOSIS BELUM SELESAI.</b> Dalam periode pengamatan ' + sim.durasi + ' detik, progres baru mencapai ' + Math.round(p*100) + '%. ' +
+          '<br><b>Analisis:</b> stimulus ' + sim.stimulus + ' poin terlalu lemah dan/atau durasi pengamatan terlalu singkat. ' +
+          'Cobalah naikkan <b>Intensitas Stimulus</b> dan perpanjang <b>Durasi Pengamatan</b>, lalu jalankan ulang!';
+  }
+  simStatus.className = cls;
+  simStatus.innerHTML = msg;
+}
+
+document.getElementById('btnResetSim').addEventListener('click', () => {
+  sliderStim.value = 60; sliderReg.value = 50; sliderDur.value = 20;
+  sim.stimulus = 60; sim.regulasi = 50; sim.durasi = 20;
+  updateSliderLabels();
+  resetSim(true);
+});
+
+/* ==========================================================================
+   4. PUZZLE DRAG & DROP
+   ========================================================================== */
+const PUZZLE_ITEMS = [
+  { id:'p1', slot:1, label:'1. Fondasi & Pengenalan Konsep (metamorfosis)',        hint:'Tahap dasar pemahaman istilah dan ruang lingkup' },
+  { id:'p2', slot:2, label:'2. Identifikasi Komponen & Unsur Kunci',                hint:'Mengenal elemen-elemen penting yang membentuk sistem' },
+  { id:'p3', slot:3, label:'3. Analisis Mekanisme & Hubungan Sebab-Akibat',         hint:'Menyelidiki bagaimana unsur-unsur saling berinteraksi' },
+  { id:'p4', slot:4, label:'4. Pengujian Konsep & Pembuktian Empiris',              hint:'Menerapkan pengujian melalui data dan eksperimen' },
+  { id:'p5', slot:5, label:'5. Penerapan Solusi & Refleksi Kontekstual',            hint:'Menghubungkan konsep dengan pemecahan masalah dunia nyata' }
+];
+
+const bankEl = document.getElementById('puzzleBank');
+const slotsEl = document.getElementById('puzzleSlots');
+const pzStatus = document.getElementById('puzzleStatus');
+const pzDone = document.getElementById('pzDone');
+const pzTry = document.getElementById('pzTry');
+const pzScore = document.getElementById('pzScore');
+
+let pzState = { placed:{}, attempts:0, score:0, selected:null };
+
+function displayLabel(label){ return label.replace(/^\d+\.\s*/, ''); }
+
+function renderPuzzle(){
+  // Bank
+  bankEl.innerHTML = '';
+  const remaining = PUZZLE_ITEMS.filter(it => !Object.values(pzState.placed).includes(it.id));
+  shuffle(remaining).forEach(it => {
+    const d = document.createElement('div');
+    d.className = 'piece';
+    d.draggable = true;
+    d.dataset.id = it.id;
+    d.textContent = displayLabel(it.label);
+    if(pzState.selected === it.id) d.classList.add('selected');
+
+    d.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', it.id);
+      d.classList.add('dragging');
+    });
+    d.addEventListener('dragend', () => d.classList.remove('dragging'));
+    d.addEventListener('click', () => {
+      pzState.selected = (pzState.selected === it.id) ? null : it.id;
+      renderPuzzle();
+    });
+    bankEl.appendChild(d);
+  });
+  if(remaining.length === 0){
+    const done = document.createElement('div');
+    done.style.cssText = 'text-align:center;color:#059669;font-weight:800;font-size:13.5px;padding:22px 8px;';
+    done.innerHTML = '🎉 Semua potongan sudah tersusun!';
+    bankEl.appendChild(done);
+  }
+
+  // Slots
+  slotsEl.innerHTML = '';
+  for(let i=1;i<=5;i++){
+    const slot = document.createElement('div');
+    slot.className = 'slot';
+    slot.dataset.slot = i;
+
+    const num = document.createElement('div');
+    num.className = 'num';
+    num.textContent = i;
+    slot.appendChild(num);
+
+    const ph = document.createElement('div');
+    ph.className = 'ph';
+
+    const placedId = pzState.placed[i];
+    if(placedId){
+      const item = PUZZLE_ITEMS.find(x => x.id === placedId);
+      ph.textContent = displayLabel(item.label);
+      slot.classList.add('filled');
+    } else {
+      ph.textContent = 'Letakkan potongan di sini...';
+    }
+    slot.appendChild(ph);
+
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      slot.classList.remove('over');
+      const id = e.dataTransfer.getData('text/plain');
+      tryPlace(id, i, slot);
+    });
+    slot.addEventListener('click', () => {
+      if(pzState.selected && !pzState.placed[i]) tryPlace(pzState.selected, i, slot);
+    });
+
+    slotsEl.appendChild(slot);
+  }
+
+  pzDone.textContent = Object.keys(pzState.placed).length;
+}
+
+function tryPlace(id, slotNum, slotEl){
+  if(!id || pzState.placed[slotNum]) return;
+  const item = PUZZLE_ITEMS.find(x => x.id === id);
+  if(!item) return;
+
+  pzState.attempts++;
+  pzTry.textContent = pzState.attempts;
+
+  if(item.slot === slotNum){
+    pzState.placed[slotNum] = id;
+    pzState.selected = null;
+    pzState.score += 20;
+    pzScore.textContent = pzState.score;
+    pzStatus.className = 'status-box ok';
+    pzStatus.innerHTML = '✅ <b>Tepat!</b> ' + item.hint + '. Lanjutkan menyusun potongan berikutnya!';
+    renderPuzzle();
+    checkPuzzleComplete();
+  } else {
+    slotEl.classList.add('wrong');
+    setTimeout(()=>slotEl.classList.remove('wrong'), 450);
+    pzStatus.className = 'status-box bad';
+    pzStatus.innerHTML = '❌ <b>Belum tepat.</b> Ingat alur berpikir ilmiah: mulai dari pengenalan konsep, lalu komponen, mekanisme, pengujian, dan diakhiri penerapan. ' +
+      (pzState.attempts % 3 === 0 ? '<br>💡 <b>Petunjuk:</b> ' + item.hint + '.' : '');
+    if(pzState.attempts % 3 === 0){
+      const wrongSlot = document.querySelector('.slot[data-slot="' + item.slot + '"]');
+      if(wrongSlot){ wrongSlot.style.boxShadow = '0 0 0 4px rgba(6,182,212,.35)'; setTimeout(()=>wrongSlot.style.boxShadow='', 1400); }
+    }
+    pzState.selected = null;
+    renderPuzzle();
+  }
+}
+
+function checkPuzzleComplete(){
+  if(Object.keys(pzState.placed).length === 5){
+    pzStatus.className = 'status-box ok';
+    pzStatus.innerHTML = '🏆 <b>LUAR BIASA!</b> Seluruh rangkaian konsep terpadu telah tersusun secara logis, akurat, dan runtut. ' +
+      'Skor puzzle kamu: <b>' + pzState.score + '</b> poin dengan ' + pzState.attempts + ' percobaan.';
+  }
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+document.getElementById('btnShufflePuzzle').addEventListener('click', () => {
+  pzState.placed = {}; pzState.selected = null;
+  renderPuzzle();
+  pzStatus.className = 'status-box';
+  pzStatus.innerHTML = '🔀 Potongan konsep telah diacak ulang. Susun kembali dengan teliti!';
+});
+
+document.getElementById('btnResetPuzzle').addEventListener('click', () => {
+  pzState = { placed:{}, attempts:0, score:0, selected:null };
+  pzDone.textContent = '0'; pzTry.textContent = '0'; pzScore.textContent = '0';
+  renderPuzzle();
+  pzStatus.className = 'status-box';
+  pzStatus.innerHTML = 'Susun kelima potongan konsep sesuai urutan berpikir ilmiah yang benar.';
+});
+
+document.getElementById('btnHintPuzzle').addEventListener('click', () => {
+  pzStatus.className = 'status-box warn';
+  pzStatus.innerHTML = '💡 <b>Petunjuk Umum:</b> Alur berpikir ilmiah selalu dimulai dari <b>pengenalan konsep</b> → <b>identifikasi komponen</b> → <b>analisis mekanisme sebab-akibat</b> → <b>pengujian &amp; pembuktian empiris</b> → <b>penerapan solusi dan refleksi</b>.';
+});
+
+renderPuzzle();
+
+/* ==========================================================================
+   5. EVALUASI — BANK SOAL METAMORFOSIS
+   ========================================================================== */
+const QUESTIONS = [
+  {
+    id:'Q1', icon:'🦋', level:'MOTS (C3)', bloom:'C2',
+    question:'Metamorfosis adalah ...',
+    options:[
+      'Perubahan bentuk tubuh hewan secara bertahap dari larva/nimfa hingga menjadi hewan dewasa',
+      'Perpindahan hewan dari satu tempat ke tempat lain untuk mencari makan',
+      'Perkembangbiakan hewan dengan cara bertelur di dalam tanah',
+      'Perubahan warna kulit hewan akibat terkena sinar matahari'
+    ],
+    correct:0,
+    hint:'Ingat arti kata "meta" (berubah) dan "morphe" (bentuk).',
+    explanation:'Metamorfosis berasal dari bahasa Yunani, "meta" = berubah dan "morphe" = bentuk. Jadi metamorfosis adalah perubahan bentuk dan struktur tubuh hewan secara bertahap mulai dari menetas hingga menjadi hewan dewasa. Proses ini umumnya terjadi pada serangga dan amfibi.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q2', icon:'🥚', level:'MOTS (C3)', bloom:'C2',
+    question:'Urutan tahapan metamorfosis sempurna pada kupu-kupu yang benar adalah ...',
+    options:[
+      'Telur → Larva → Pupa → Kupu-kupu dewasa',
+      'Telur → Nimfa → Kupu-kupu dewasa',
+      'Telur → Pupa → Larva → Kupu-kupu dewasa',
+      'Larva → Telur → Pupa → Kupu-kupu dewasa'
+    ],
+    correct:0,
+    hint:'Metamorfosis sempurna selalu melewati tahap kepompong.',
+    explanation:'Metamorfosis sempurna memiliki empat tahap: telur → larva (ulat) → pupa (kepompong) → imago (kupu-kupu dewasa). Tahap pupa adalah ciri khas metamorfosis sempurna.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q3', icon:'🦗', level:'MOTS (C3)', bloom:'C2',
+    question:'Kelompok hewan berikut yang mengalami metamorfosis TIDAK sempurna adalah ...',
+    options:[
+      'Kupu-kupu, lalat, dan nyamuk',
+      'Belalang, kecoa, dan capung',
+      'Katak, lebah, dan kumbang',
+      'Nyamuk, semut, dan ngengat'
+    ],
+    correct:1,
+    hint:'Metamorfosis tidak sempurna tidak memiliki tahap pupa.',
+    explanation:'Belalang, kecoa, capung, jangkrik, dan wereng mengalami metamorfosis tidak sempurna (telur → nimfa → imago) karena tidak melalui tahap pupa. Kupu-kupu, lalat, nyamuk, lebah, kumbang, semut, dan ngengat mengalami metamorfosis sempurna.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q4', icon:'🔍', level:'MOTS (C3)', bloom:'C2',
+    question:'Ciri utama nimfa pada belalang adalah ...',
+    options:[
+      'Bentuknya sangat berbeda dari belalang dewasa',
+      'Mirip belalang dewasa, tetapi sayap dan organ reproduksinya belum lengkap',
+      'Tubuhnya terbungkus kepompong yang keras',
+      'Hidup di dalam air dan bernapas dengan insang'
+    ],
+    correct:1,
+    hint:'Nimfa adalah "versi kecil" dari hewan dewasa.',
+    explanation:'Nimfa adalah hewan muda pada metamorfosis tidak sempurna. Bentuknya sudah mirip hewan dewasa, tetapi ukurannya lebih kecil dan sayap serta organ reproduksinya belum tumbuh sempurna. Nimfa tumbuh melalui beberapa kali pergantian kulit (molting).',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q5', icon:'⚖️', level:'MOTS (C3)', bloom:'C3',
+    question:'Perbedaan paling mendasar antara metamorfosis sempurna dan metamorfosis tidak sempurna adalah ...',
+    options:[
+      'Jumlah telur yang dihasilkan oleh hewan betina',
+      'Ada atau tidak adanya tahap pupa (kepompong)',
+      'Tempat hidup hewan dewasa',
+      'Warna tubuh hewan dewasa'
+    ],
+    correct:1,
+    hint:'Fokus pada satu tahapan yang hanya ada di salah satu jenis metamorfosis.',
+    explanation:'Perbedaan utama terletak pada keberadaan tahap pupa. Metamorfosis sempurna (telur–larva–pupa–imago) memiliki tahap pupa, sedangkan metamorfosis tidak sempurna (telur–nimfa–imago) tidak memiliki tahap pupa.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q6', icon:'📊', level:'MOTS (C3) · NUMERASI', bloom:'C3',
+    question:'Seekor kupu-kupu betina meletakkan 120 butir telur di sebuah tanaman. Sebanyak 25% telur gagal menetas karena dimakan semut. Berapa butir telur yang berhasil menetas?',
+    options:['30 butir','90 butir','95 butir','100 butir'],
+    correct:1,
+    hint:'Hitung dulu 25% dari 120, lalu kurangkan dari jumlah total.',
+    explanation:'Telur yang gagal menetas = 25% × 120 = 30 butir. Telur yang berhasil menetas = 120 − 30 = 90 butir. Jadi, ada 90 butir telur yang berhasil menetas.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q7', icon:'🐛', level:'MOTS (C3) · LITERASI', bloom:'C3',
+    question:'Mengapa larva (ulat) kupu-kupu sangat rakus memakan daun selama fase larvanya?',
+    options:[
+      'Agar kulitnya cepat berubah menjadi hijau',
+      'Untuk mengumpulkan energi dan nutrisi sebagai bekal berubah menjadi kupu-kupu dewasa',
+      'Agar dapat menakuti hewan pemangsa di sekitarnya',
+      'Untuk mempercepat pertumbuhan sayap yang sudah terbentuk sejak menetas'
+    ],
+    correct:1,
+    hint:'Ingat, tahap larva adalah "tahap makan besar".',
+    explanation:'Ulat makan daun sebanyak mungkin untuk mengumpulkan energi dan nutrisi. Cadangan energi inilah yang digunakan selama tahap pupa, ketika ulat tidak makan sama sekali tetapi tubuhnya dirombak menjadi kupu-kupu dewasa.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q8', icon:'🟤', level:'MOTS (C3) · LITERASI', bloom:'C3',
+    question:'Mengapa tahap pupa (kepompong) sering disebut sebagai "tahap istirahat", padahal hewan tidak benar-benar beristirahat?',
+    options:[
+      'Karena kupu-kupu dewasa tidak memerlukan makanan sama sekali',
+      'Karena dari luar tampak diam, tetapi di dalam pupa terjadi perombakan organ tubuh secara besar-besaran',
+      'Karena pupa tidak membutuhkan oksigen untuk bertahan hidup',
+      'Karena pupa dapat berpindah tempat dengan sangat cepat'
+    ],
+    correct:1,
+    hint:'Perhatikan apa yang terjadi di dalam kepompong, bukan di luarnya.',
+    explanation:'Dari luar, pupa memang tampak diam dan tidak bergerak. Namun di dalamnya sedang terjadi proses perombakan jaringan dan pembentukan organ tubuh kupu-kupu dewasa, seperti sayap, antena, dan alat reproduksi. Karena itu pupa disebut tahap istirahat, bukan tahap tidur.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q9', icon:'🌾', level:'HOTS (C4) · LITERASI', bloom:'C4',
+    question:'Pak Rudi menemukan banyak wereng di sawahnya. Wereng termasuk hewan yang mengalami metamorfosis tidak sempurna. Tahapan yang TIDAK ditemukan pada siklus hidup wereng adalah ...',
+    options:['Telur','Nimfa','Pupa','Imago (dewasa)'],
+    correct:2,
+    hint:'Ingat ciri khas metamorfosis tidak sempurna.',
+    explanation:'Wereng mengalami metamorfosis tidak sempurna dengan tahapan: telur → nimfa → imago. Karena itu, tahap pupa (kepompong) TIDAK ditemukan pada siklus hidup wereng. Petani harus memutus siklus ini, misalnya dengan menjaga kebersihan sawah dan menggunakan varietas padi yang tahan wereng.',
+    score:10, time:45, has_image:false, image_url:''
+  },
+  {
+    id:'Q10', icon:'🔬', level:'HOTS (C4) · LITERASI', bloom:'C4',
+    question:'Seorang siswa mengamati bahwa kepompong kupu-kupu yang diletakkan di tempat lembap dan berjamur gagal menetas, sedangkan kepompong di tempat kering dan hangat berhasil menetas. Kesimpulan yang paling tepat dari pengamatan tersebut adalah ...',
+    options:[
+      'Kupu-kupu hanya dapat menetas pada suhu yang sangat dingin',
+      'Faktor lingkungan, seperti kelembapan dan kebersihan, memengaruhi keberhasilan metamorfosis',
+      'Kepompong tidak memerlukan oksigen sama sekali untuk menetas',
+      'Metamorfosis kupu-kupu selalu gagal pada musim hujan'
+    ],
+    correct:1,
+    hint:'Bandingkan kondisi dua tempat: lembap-berjamur vs kering-hangat.',
+    explanation:'Perbedaan hasil pada dua kondisi menunjukkan bahwa faktor lingkungan (kelembapan, kebersihan, dan suhu) berpengaruh terhadap keberhasilan metamorfosis. Jamur dapat menyerang dan merusak jaringan di dalam kepompong sehingga kupu-kupu gagal terbentuk. Ini adalah contoh hubungan sebab-akibat dalam sains.',
+    score:10, time:45, has_image:false, image_url:''
+  }
+];
+
+/* ---------- STATE KUIS ---------- */
+let quiz = {
+  active:false, idx:0, score:0, lives:3, correctCount:0, wrongCount:0,
+  answers:[], locked:false, timeLeft:0, timerId:null,
+  nama:'', kelas:''
+};
+
+const evalForm = document.getElementById('evalForm');
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+const evalMsg = document.getElementById('evalMsg');
+
+document.getElementById('btnStartQuiz').addEventListener('click', () => {
+  const nama = document.getElementById('inNama').value.trim();
+  const kelas = document.getElementById('inKelas').value.trim();
+  const kunci = document.getElementById('inKunci').value.trim().toUpperCase();
+
+  if(!nama){ evalMsg.className='status-box bad'; evalMsg.innerHTML='⚠️ Nama siswa belum diisi!'; return; }
+  if(!kelas){ evalMsg.className='status-box bad'; evalMsg.innerHTML='⚠️ Kelas belum diisi!'; return; }
+  if(kunci !== 'IPAS5' && kunci !== '12345'){
+    evalMsg.className='status-box bad';
+    evalMsg.innerHTML='🔒 Kunci evaluasi salah. Tanyakan kunci kepada gurumu.';
+    return;
+  }
+
+  quiz.active = true;
+  quiz.idx = 0;
+  quiz.score = 0;
+  quiz.lives = 3;
+  quiz.correctCount = 0;
+  quiz.wrongCount = 0;
+  quiz.answers = [];
+  quiz.nama = nama;
+  quiz.kelas = kelas;
+
+  document.getElementById('qNama').textContent = nama;
+  document.getElementById('qKelas').textContent = kelas;
+
+  evalForm.style.display = 'none';
+  resultArea.style.display = 'none';
+  quizArea.style.display = 'block';
+  loadQuestion();
+});
+
+function updateHUD(){
+  document.getElementById('qNum').textContent = quiz.idx + 1;
+  document.getElementById('qScore').textContent = quiz.score;
+  document.getElementById('qLives').textContent = '❤️'.repeat(quiz.lives) + '🖤'.repeat(Math.max(0, 3 - quiz.lives));
+  document.getElementById('qProgress').style.width = ((quiz.idx) / QUESTIONS.length * 100) + '%';
+}
+
+function loadQuestion(){
+  const q = QUESTIONS[quiz.idx];
+  quiz.locked = false;
+  updateHUD();
+
+  const meta = document.getElementById('qMeta');
+  meta.innerHTML = '<span class="pill">' + (q.icon || '❓') + ' ' + q.level + '</span>' +
+                   '<span class="pill cyan">Level Bloom: ' + q.bloom + '</span>' +
+                   '<span class="pill amber">⭐ ' + q.score + ' poin</span>';
+
+  document.getElementById('qText').textContent = q.question;
+
+  const img = document.getElementById('qImage');
+  if(q.has_image && q.image_url){
+    img.src = q.image_url;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+    img.removeAttribute('src');
+  }
+
+  const optsEl = document.getElementById('qOptions');
+  optsEl.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span>';
+    b.addEventListener('click', () => answerQuestion(i));
+    optsEl.appendChild(b);
+  });
+
+  const fb = document.getElementById('qFeedback');
+  fb.style.display = 'none';
+  fb.className = 'feedback';
+  document.getElementById('btnNextQ').style.display = 'none';
+  document.getElementById('btnNextQ').textContent = (quiz.idx === QUESTIONS.length - 1) ? '🏁 Lihat Hasil' : '➡️ Soal Berikutnya';
+
+  startTimer(q.time || 45);
+}
+
+function startTimer(seconds){
+  clearInterval(quiz.timerId);
+  quiz.timeLeft = seconds;
+  const box = document.getElementById('qTimerBox');
+  const el = document.getElementById('qTimer');
+  el.textContent = seconds;
+  box.classList.remove('danger');
+
+  quiz.timerId = setInterval(() => {
+    quiz.timeLeft--;
+    el.textContent = quiz.timeLeft;
+    if(quiz.timeLeft <= 10) box.classList.add('danger');
+    if(quiz.timeLeft <= 0){
+      clearInterval(quiz.timerId);
+      if(!quiz.locked) answerQuestion(-1);
+    }
+  }, 1000);
+}
+
+function answerQuestion(selected){
+  if(quiz.locked) return;
+  quiz.locked = true;
+  clearInterval(quiz.timerId);
+  document.getElementById('qTimerBox').classList.remove('danger');
+
+  const q = QUESTIONS[quiz.idx];
+  const opts = document.querySelectorAll('#qOptions .opt');
+  opts.forEach(o => o.disabled = true);
+
+  const isCorrect = selected === q.correct;
+  const isTimeout = selected === -1;
+
+  if(isCorrect){
+    opts[q.correct].classList.add('correct');
+    quiz.score += q.score;
+    quiz.correctCount++;
+  } else {
+    if(!isTimeout && selected >= 0) opts[selected].classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+    quiz.wrongCount++;
+    quiz.lives = Math.max(0, quiz.lives - 1);
+  }
+
+  quiz.answers.push({
+    id:q.id, question:q.question, options:q.options,
+    selected:isTimeout ? null : selected,
+    correct:q.correct, isCorrect, explanation:q.explanation,
+    hint:q.hint, level:q.level, icon:q.icon
+  });
+
+  const fb = document.getElementById('qFeedback');
+  fb.style.display = 'block';
+
+  const motivasiBenar = ['🎉 Hebat! Jawabanmu tepat sekali!','🌟 Luar biasa! Kamu berpikir seperti ilmuwan!','👏 Mantap! Pengetahuanmu tentang metamorfosis makin tajam!'];
+  const motivasiSalah = ['💪 Jangan menyerah, coba pelajari lagi materinya!','🔍 Hampir benar! Baca kembali bagian materi terkait.','📚 Tetap semangat! Setiap kesalahan adalah jalan menuju paham.'];
+
+  if(isCorrect){
+    fb.className = 'feedback ok';
+    fb.innerHTML = '✅ <b>' + motivasiBenar[Math.floor(Math.random()*motivasiBenar.length)] + '</b><br>' +
+                   'Skor kamu bertambah <b>+' + q.score + '</b> poin.';
+  } else {
+    fb.className = 'feedback no';
+    fb.innerHTML = '❌ <b>' + (isTimeout ? 'Waktu habis!' : 'Jawaban belum tepat.') + '</b> ' +
+                   motivasiSalah[Math.floor(Math.random()*motivasiSalah.length)] +
+                   '<br>💡 <b>Petunjuk:</b> ' + q.hint +
+                   '<br><span style="font-size:12.5px;font-weight:600;color:#7f1d1d;">Penjelasan lengkap tersedia di menu <b>Pembahasan</b> (terkunci 🔐).</span>';
+  }
+
+  updateHUD();
+
+  if(quiz.lives <= 0){
+    document.getElementById('btnNextQ').style.display = 'inline-flex';
+    document.getElementById('btnNextQ').textContent = '😢 Lihat Hasil';
+    quiz.locked = true;
+    return;
+  }
+
+  document.getElementById('btnNextQ').style.display = 'inline-flex';
+}
+
+document.getElementById('btnNextQ').addEventListener('click', () => {
+  if(quiz.lives <= 0){
+    endQuiz();
+    return;
+  }
+  quiz.idx++;
+  if(quiz.idx >= QUESTIONS.length){
+    endQuiz();
+  } else {
+    loadQuestion();
+  }
+});
+
+document.getElementById('btnQuitQuiz').addEventListener('click', () => {
+  if(confirm('Keluar dari evaluasi? Progres soal saat ini akan hilang.')){
+    clearInterval(quiz.timerId);
+    quiz.active = false;
+    quizArea.style.display = 'none';
+    resultArea.style.display = 'none';
+    evalForm.style.display = 'block';
+    evalMsg.className = 'status-box';
+    evalMsg.innerHTML = 'Kamu keluar dari evaluasi. Isi kembali identitasmu untuk memulai ulang.';
+  }
+});
+
+function endQuiz(){
+  clearInterval(quiz.timerId);
+  quiz.active = false;
+  quizArea.style.display = 'none';
+  resultArea.style.display = 'block';
+
+  const maxScore = QUESTIONS.reduce((a,q)=>a+q.score, 0);
+  const percent = Math.round(quiz.score / maxScore * 100);
+  const lulus = percent >= 75;
+
+  let badge, badgeDesc, emo;
+  if(percent >= 90){ badge='🏆 MASTER METAMORFOSIS'; emo='🏆'; badgeDesc='Luar biasa! Kamu menguasai materi metamorfosis dengan sangat baik.'; }
+  else if(percent >= 75){ badge='🥇 PENELITI MUDA'; emo='🥇'; badgeDesc='Hebat! Kamu sudah memahami konsep metamorfosis dengan baik.'; }
+  else if(percent >= 60){ badge='🥈 PENGAMAT SAINS'; emo='🥈'; badgeDesc='Bagus! Pelajari kembali bagian yang masih keliru, ya.'; }
+  else { badge='🥉 PENJELAJAH PEMULA'; emo='🥉'; badgeDesc='Jangan menyerah! Baca ulang materi dan coba lagi. Kamu pasti bisa!'; }
+
+  resultArea.innerHTML = `
+    <div class="result-hero">
+      <div class="big">${emo}</div>
+      <h2>${lulus ? 'Selamat, Kamu Lulus! 🎉' : 'Belum Lulus, Ayo Coba Lagi! 💪'}</h2>
+      <div class="sc">${quiz.score} <span style="font-size:20px;color:#64748b;">/ ${maxScore}</span></div>
+      <p style="font-size:14px;color:#475569;margin-top:8px;">${badge} · Nilai: <b>${percent}</b> (KKM 75)</p>
+      <p style="font-size:13.5px;color:#64748b;margin-top:6px;">${badgeDesc}</p>
+      <div class="result-stats">
+        <div class="rs"><div class="k">Nama</div><div class="v" style="font-size:15px;">${escapeHtml(quiz.nama)}</div></div>
+        <div class="rs"><div class="k">Kelas</div><div class="v" style="font-size:15px;">${escapeHtml(quiz.kelas)}</div></div>
+        <div class="rs"><div class="k">Benar</div><div class="v" style="color:#059669;">${quiz.correctCount}</div></div>
+        <div class="rs"><div class="k">Salah</div><div class="v" style="color:#dc2626;">${quiz.wrongCount}</div></div>
+        <div class="rs"><div class="k">Nyawa</div><div class="v">${'❤️'.repeat(quiz.lives) || '—'}</div></div>
+        <div class="rs"><div class="k">Bintang</div><div class="v" style="color:#f59e0b;">${'⭐'.repeat(Math.max(1, Math.round(percent/20)))}</div></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnReviewLocked">🔐 Lihat Pembahasan</button>
+      <button class="btn btn-green" id="btnRetryQuiz">🔄 Kerjakan Ulang</button>
+      <button class="btn btn-ghost" id="btnBackHome">🏠 Beranda</button>
+    </div>
+    <div id="reviewContainer" style="margin-top:18px;"></div>
+  `;
+
+  saveProgress(quiz.nama, quiz.kelas, quiz.score, percent, badge);
+
+  document.getElementById('btnReviewLocked').addEventListener('click', () => {
+    askKey('Fitur <b>Pembahasan</b> terkunci. Masukkan kunci <b>@1</b> untuk membuka.', showReview);
+  });
+  document.getElementById('btnRetryQuiz').addEventListener('click', () => {
+    resultArea.style.display = 'none';
+    evalForm.style.display = 'block';
+    document.getElementById('inNama').value = quiz.nama;
+    document.getElementById('inKelas').value = quiz.kelas;
+    document.getElementById('inKunci').value = '';
+    evalMsg.className = 'status-box';
+    evalMsg.innerHTML = 'Isi kembali identitasmu untuk memulai evaluasi baru.';
+  });
+  document.getElementById('btnBackHome').addEventListener('click', () => {
+    resultArea.style.display = 'none';
+    evalForm.style.display = 'block';
+    goToPage('beranda');
+  });
+}
+
+function showReview(){
+  const container = document.getElementById('reviewContainer');
+  const letters = ['A','B','C','D'];
+  let html = '<div class="section-title" style="margin-bottom:12px;">🔓 Pembahasan Soal Evaluasi</div>';
+  quiz.answers.forEach((a, i) => {
+    html += `<div class="review-item">
+      <div class="rq">${i+1}. ${escapeHtml(a.question)}</div>`;
+    a.options.forEach((opt, j) => {
+      const isCorrect = j === a.correct;
+      const isChosen = j === a.selected;
+      let mark = '';
+      if(isCorrect) mark = ' <b class="ok">✔ (Kunci Jawaban)</b>';
+      else if(isChosen) mark = ' <b class="no">✘ (Jawabanmu)</b>';
+      html += `<div class="ra"><b>${letters[j]}.</b> ${escapeHtml(opt)}${mark}</div>`;
+    });
+    html += `<div class="rexp"><b>📖 Pembahasan:</b> ${escapeHtml(a.explanation)}</div>
+    </div>`;
+  });
+  container.innerHTML = html;
+  container.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ==========================================================================
+   6. MODE GURU
+   ========================================================================== */
+document.getElementById('btnGuru').addEventListener('click', () => {
+  askKey('Panel <b>Mode Guru</b> menampilkan kunci jawaban dan daftar soal. Masukkan kunci <b>@1</b>.', () => {
+    renderGuruPanel();
+    goToPage('guru');
+  });
+});
+
+function renderGuruPanel(){
+  const letters = ['A','B','C','D'];
+  let html = '';
+
+  const prog = localStorage.getItem('mpi_metamorfosis_progress');
+  html += '<div class="section-title" style="font-size:17px;">📊 Progres Siswa Tersimpan</div>';
+  if(prog){
+    const d = JSON.parse(prog);
+    html += `<div class="mini-grid">
+      <div class="mini"><div class="t">👤 Nama</div><p><b>${escapeHtml(d.nama)}</b></p></div>
+      <div class="mini"><div class="t">🏫 Kelas</div><p><b>${escapeHtml(d.kelas)}</b></p></div>
+      <div class="mini"><div class="t">⭐ Skor</div><p><b>${d.score} / 100</b> (${d.percent}%)</p></div>
+      <div class="mini"><div class="t">🏅 Badge</div><p><b>${escapeHtml(d.badge)}</b></p></div>
+      <div class="mini"><div class="t">🕒 Waktu</div><p>${escapeHtml(d.tanggal)}</p></div>
+    </div>`;
+  } else {
+    html += '<div class="status-box">Belum ada progres siswa yang tersimpan di perangkat ini.</div>';
+  }
+
+  html += '<div class="section-title" style="font-size:17px;margin-top:22px;">📋 Daftar Soal &amp; Kunci Jawaban</div>';
+  QUESTIONS.forEach((q, i) => {
+    html += `<div class="guru-q">
+      <div class="gq">${i+1}. ${q.icon || ''} ${escapeHtml(q.question)}</div>`;
+    q.options.forEach((o, j) => {
+      html += `<div style="margin-left:6px;${j===q.correct?'color:#047857;font-weight:800;':''}">${letters[j]}. ${escapeHtml(o)}${j===q.correct?' ✔':''}</div>`;
+    });
+    html += `<div class="ga">🔑 Kunci: ${letters[q.correct]}</div>
+      <div class="gx"><b>💡 Petunjuk:</b> ${escapeHtml(q.hint)}<br><b>📖 Pembahasan:</b> ${escapeHtml(q.explanation)}</div>
+    </div>`;
+  });
+
+  html += `<div class="callout" style="margin-top:16px;">
+    🔐 <b>Kunci akses:</b> Pembahasan &amp; Mode Guru = <b>@1</b> · Kunci Evaluasi siswa = <b>IPAS5</b> atau <b>12345</b>.
+  </div>`;
+
+  document.getElementById('guruContent').innerHTML = html;
+}
+
+/* ==========================================================================
+   7. LOCAL STORAGE
+   ========================================================================== */
+function saveProgress(nama, kelas, score, percent, badge){
+  const data = {
+    nama, kelas, score, percent, badge,
+    tanggal: new Date().toLocaleString('id-ID'),
+    topik: 'Metamorfosis'
+  };
+  localStorage.setItem('mpi_metamorfosis_progress', JSON.stringify(data));
+}
+
+document.getElementById('btnResetQuizData').addEventListener('click', () => {
+  localStorage.removeItem('mpi_metamorfosis_progress');
+  evalMsg.className = 'status-box warn';
+  evalMsg.innerHTML = '🗑️ Progres tersimpan berhasil dihapus.';
+});
+
+/* ==========================================================================
+   8. INISIALISASI
+   ========================================================================== */
+updateSliderLabels();
+updateReadouts();
+drawStage();
+drawChart();
+setInterval(() => { if(!sim.running) drawStage(); }, 900);
+
+/* Tampilkan gambar stimulus secara proporsional jika ada */
+document.getElementById('qImage').addEventListener('error', function(){
+  this.style.display = 'none';
+});
+</script>
+</body>
+</html>
